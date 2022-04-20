@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/ticketBuilder/static/css/main.ccd0c8c5.css",
+    "main.js": "/ticketBuilder/static/js/main.ff904fcf.js",
+    "static/js/787.e526c127.chunk.js": "/ticketBuilder/static/js/787.e526c127.chunk.js",
+    "index.html": "/ticketBuilder/index.html",
+    "main.ccd0c8c5.css.map": "/ticketBuilder/static/css/main.ccd0c8c5.css.map",
+    "main.ff904fcf.js.map": "/ticketBuilder/static/js/main.ff904fcf.js.map",
+    "787.e526c127.chunk.js.map": "/ticketBuilder/static/js/787.e526c127.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.ccd0c8c5.css",
+    "static/js/main.ff904fcf.js"
+  ]
+}
