@@ -1,6 +1,6 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "Ticket Builder",
+  "name": "Generate Tickets for internal use",
   "icons": [
     {
       "src": "favicon.ico",
