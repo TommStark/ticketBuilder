@@ -1,0 +1,117 @@
+import React, { useState, useEffect } from 'react';
+import { ThemeProvider, createTheme } from '@mui/material/styles';
+import TextField from '@mui/material/TextField';
+import Box from '@mui/material/Box';
+import LoadingButton from '@mui/lab/LoadingButton';
+import * as BackendAPI from  '../services/BackendAPI';
+import { useNavigate } from 'react-router-dom';
+import Cookies from 'js-cookie';
+
+const darkTheme = createTheme({
+    palette: {
+        mode: 'dark',
+    },
+});
+
+function App() {
+
+    const [isLoading, setIsLoading] = useState(false);
+    const [isDisabled , setIsDisabled] = useState(true);
+    const [email, setEmail] = useState();
+    const [password, setPassword] = useState();
+    const [authError, setAuthError] = useState(false);
+    const navigate = useNavigate();
+
+    const resetInput = () => {
+        setEmail('');
+        setPassword('');
+    };
+
+    useEffect(() => {
+        setAuthError(false);
+    },[email,password]);
+
+
+    const isFormValid = () => {  
+        return email && password;
+    };
+
+    useEffect(() => {
+        setIsDisabled(!!isFormValid());
+    },[isFormValid]);
+    
+    const validateUser = () => {
+        setIsLoading(true);
+        //TODO encriptar password
+        const requestParams = {
+            body: {
+                email,
+                password
+            },
+        };
+        BackendAPI.authentication(requestParams)
+            .then(response => {
+                const {author} = response.data;
+                Cookies.set('token', author.jwToken, { expires: 1 });
+                resetInput();
+                navigate('factory', {replace:true, state:{author}});
+            })
+            .catch( () => setAuthError(true));
+        setIsLoading(false);
+    };
+
+    return (
+        <ThemeProvider theme={darkTheme}>
+            <header className="App-header">
+                <Box
+                    sx={{
+                        width: 400,
+                        maxWidth: '90%',
+                        backgroundColor: '#a6aeb791',
+                        padding: '30px'
+                    }}>
+                    <h1 className="App" > login  </h1>
+                    <p aria-live='assertive'> 
+                        {authError
+                            ? 'error de autenticacion'
+                            :null
+                        }
+                    </p>
+                    <TextField
+                        id="filled-basic"
+                        label="email"
+                        variant="filled"
+                        value={email}
+                        onChange={(event) => {setEmail(event.target.value);}}
+                        fullWidth
+                        margin="normal"
+                    />
+
+                    <TextField
+                        id="filled-basic"
+                        label="password"
+                        variant="filled"
+                        value={password}
+                        onChange={(event) => {setPassword(event.target.value);}}
+                        fullWidth
+                        type='password'
+                        margin="normal"
+                    />
+
+                    <div className="App">
+                        <LoadingButton 
+                            loading={isLoading}
+                            variant="contained"
+                            disabled={!isDisabled}
+                            onClick={ () =>{ validateUser();}}
+                        > Log In
+                        </LoadingButton>
+                    </div>
+            
+                </Box>
+            </header>
+        </ThemeProvider>
+    );
+}
+
+export default App;

@@ -9,71 +9,81 @@ import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormLabel from '@mui/material/FormLabel';
 import LoadingButton from '@mui/lab/LoadingButton';
+import FormControl from '@mui/material/FormControl';
 const pjson = require('../../../package.json');
 
 
 function TicketBuilderForm(props) {
 
-const {project, handleChangeSelect, PRNumber, setPRNumber, ticketNumber, setTicketNumber,details,
-    setDetails,setChecks,isLoading,isDisabled,generateTicket
- } = props;
- const appVersion = pjson.version;
+    const {project, handleChangeSelect, PRNumber, setPRNumber, ticketNumber, setTicketNumber,details,
+        setDetails,setChecks,isLoading,isDisabled,generateTicket, author, projectsData
+    } = props;
+
+    const appVersion = pjson.version;
+
+    const MenuItems = React.useMemo(() => projectsData.map((project) => {
+        return <MenuItem value={project.name}> {`${project.icon} ${project.name}`}</MenuItem>;
+    }),[projectsData]); 
 
     return ( 
         <Box
             sx={{
-            width: 500,
-            maxWidth: '100%',
+                width: 500,
+                maxWidth: '90%',
             }}>
             <h1 className="App" > Ticket Builder <sup className='smallText'> v{appVersion}</sup> </h1>
-                <InputLabel id="demo-simple-select-label">Project*</InputLabel>
+            <FormControl fullWidth>
+                <InputLabel id="project">Project</InputLabel>
                 <Select
-                labelId="demo-simple-select-label"
-                id="demo-simple-select"
-                value={project}
-                label="project"
-                onChange={handleChangeSelect}
-                fullWidth
-                variant="filled"
-                >
-                <MenuItem value='mobile'> 📳 Mobile</MenuItem>
-                <MenuItem value='api'> 📡 API</MenuItem>
-                <MenuItem value='echo'> 🔳 ECHO</MenuItem>
-                <MenuItem value='vainilla'> 🥐 Vainilla</MenuItem>
-                <MenuItem value='library'> 📒 Library</MenuItem>
-                <MenuItem value='widget'> ⚙️ Widgets</MenuItem>
+                    labelId="project"
+                    id="demo-simple-select"
+                    value={project.name}
+                    label="Project"
+                    onChange={handleChangeSelect}
+                >   
+                    {
+                        MenuItems         
+                    }
                 </Select>
-            
-                <TextField
+            </FormControl>
+            <TextField
+                id="filled-basic"
+                label="Author"
+                variant="filled"
+                value={author}
+                fullWidth
+                disabled
+            />
+
+            <TextField
                 id="filled-basic"
                 label="PR Number"
                 variant="filled"
                 value={PRNumber}
                 onChange={(event) => setPRNumber(event.target.value)}
-                required
                 fullWidth
-                />
-            
-                <TextField
+                inputProps={{ inputMode: 'numeric', pattern: '[0-9]*' }}
+            />
+
+            <TextField
                 id="filled-basic"
                 label="Ticket Number"
                 variant="filled"
                 value={ticketNumber}
                 onChange={(event) => setTicketNumber(event.target.value)}
-                required
                 fullWidth
-                /> 
-                <TextField
+            /> 
+
+            <TextField
                 id="filled-basic"
                 label="Details"
                 variant="filled"
                 value={details}
                 onChange={(event) => setDetails(event.target.value)}
-                required
                 fullWidth
-                /> 
+            /> 
             
-            <FormLabel id="demo-row-radio-buttons-group-label">Checks*</FormLabel>
+            <FormLabel id="demo-row-radio-buttons-group-label">Checks</FormLabel>
             <RadioGroup
                 row
                 aria-labelledby="demo-row-radio-buttons-group-label"
@@ -86,13 +96,13 @@ const {project, handleChangeSelect, PRNumber, setPRNumber, ticketNumber, setTick
             </RadioGroup>
             
             <div className="App">
-            <LoadingButton 
-            loading={isLoading}
-            variant="contained"
-            disabled={!isDisabled}
-            onClick={ () => generateTicket()}
-            >Generate
-            </LoadingButton>
+                <LoadingButton 
+                    loading={isLoading}
+                    variant="contained"
+                    disabled={!isDisabled}
+                    onClick={ () => generateTicket()}
+                >Generate
+                </LoadingButton>
             </div>
             
         </Box> );
