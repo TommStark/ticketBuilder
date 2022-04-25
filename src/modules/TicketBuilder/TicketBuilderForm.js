@@ -1,4 +1,5 @@
 import * as React from 'react';
+import PropTypes from 'prop-types';
 import TextField from '@mui/material/TextField';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
@@ -10,26 +11,28 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import FormLabel from '@mui/material/FormLabel';
 import LoadingButton from '@mui/lab/LoadingButton';
 import FormControl from '@mui/material/FormControl';
+// eslint-disable-next-line no-undef
 const pjson = require('../../../package.json');
 
 
 function TicketBuilderForm(props) {
-
-    const {project, handleChangeSelect, PRNumber, setPRNumber, ticketNumber, setTicketNumber,details,
+    const {
+        project, handleChangeSelect, PRNumber, setPRNumber, ticketNumber, setTicketNumber,details,
         setDetails,setChecks,isLoading,isDisabled,generateTicket, author, projectsData
     } = props;
 
     const appVersion = pjson.version;
 
-    const MenuItems = React.useMemo(() => projectsData.map((project) => {
-        return <MenuItem value={project.name}> {`${project.icon} ${project.name}`}</MenuItem>;
+    // eslint-disable-next-line react/prop-types
+    const MenuItems = React.useMemo(() => projectsData.map((project,index) => {
+        return <MenuItem key={ `${index}${project.name}` } value={project.name}> {`${project.icon} ${project.name}`} </MenuItem>;
     }),[projectsData]); 
 
     return ( 
         <Box
             sx={{
-                width: 500,
-                maxWidth: '90%',
+                width    : 500,
+                maxWidth : '90%',
             }}>
             <h1 className="App" > Ticket Builder <sup className='smallText'> v{appVersion}</sup> </h1>
             <FormControl fullWidth>
@@ -108,4 +111,33 @@ function TicketBuilderForm(props) {
         </Box> );
 }
 
+TicketBuilderForm.defaultProps = {
+    project      : {},
+    projectsData : {},
+};
+
+TicketBuilderForm.propTypes = {
+    project: PropTypes.shape({
+        name : PropTypes.string,
+        icon : PropTypes.string,
+
+    }),
+    projectsData: PropTypes.arrayOf(PropTypes.shape({
+        name : PropTypes.string,
+        icon : PropTypes.string,
+
+    })),
+    isLoading          : PropTypes.bool.isRequired,
+    isDisabled         : PropTypes.bool.isRequired,
+    setPRNumber        : PropTypes.func.isRequired,
+    setDetails         : PropTypes.func.isRequired,
+    setChecks          : PropTypes.func.isRequired,
+    generateTicket     : PropTypes.func.isRequired,
+    setTicketNumber    : PropTypes.func.isRequired,
+    handleChangeSelect : PropTypes.func.isRequired,
+    author             : PropTypes.string.isRequired,
+    ticketNumber       : PropTypes.string.isRequired,
+    PRNumber           : PropTypes.string.isRequired,
+    details            : PropTypes.string.isRequired,
+};
 export default TicketBuilderForm;

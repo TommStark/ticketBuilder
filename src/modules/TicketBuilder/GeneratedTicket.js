@@ -1,4 +1,5 @@
 import * as React from 'react';
+import PropTypes from 'prop-types';
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import Snackbar from '@mui/material/Snackbar';
@@ -14,7 +15,6 @@ const Alert = React.forwardRef(function Alert(props, ref) {
 });
 
 function GeneratedTicket(props) {
-
     const { ticket, isOpen, handleClick, reset, PrintTicket, handleClose, ticketId }= props;
 
     return ( 
@@ -51,11 +51,30 @@ function GeneratedTicket(props) {
             </Box>
             <Snackbar open={isOpen} autoHideDuration={2000} onClose={handleClose}>
                 <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
-                  Copied!
+                    Copied!
                 </Alert>
             </Snackbar>
         </>
     );
 }
+
+GeneratedTicket.propTypes = {
+    ticket: PropTypes.shape({
+        id          : PropTypes.string,
+        pr          : PropTypes.string,
+        vpdc        : PropTypes.string,
+        projectName : PropTypes.string,
+        detailsText : PropTypes.string,
+        check       : PropTypes.string,
+        author      : PropTypes.string
+
+    }).isRequired,
+    isOpen      : PropTypes.bool.isRequired,
+    handleClick : PropTypes.func.isRequired,
+    reset       : PropTypes.func.isRequired,
+    PrintTicket : PropTypes.func.isRequired,
+    handleClose : PropTypes.func.isRequired,
+    ticketId    : PropTypes.string.isRequire,
+};
 
 export default GeneratedTicket;

@@ -6,15 +6,15 @@ import LoadingButton from '@mui/lab/LoadingButton';
 import * as BackendAPI from  '../services/BackendAPI';
 import { useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
+import gtag, { install } from 'ga-gtag';
 
 const darkTheme = createTheme({
     palette: {
         mode: 'dark',
     },
 });
-
+install('G-PCTGS2X60L');
 function App() {
-
     const [isLoading, setIsLoading] = useState(false);
     const [isDisabled , setIsDisabled] = useState(true);
     const [email, setEmail] = useState();
@@ -53,8 +53,9 @@ function App() {
             .then(response => {
                 const {author} = response.data;
                 Cookies.set('token', author.jwToken, { expires: 1 });
+                gtag('event', 'login', { 'Author': `${email}` });
                 resetInput();
-                navigate('factory', {replace:true, state:{author}});
+                navigate('factory', {replace: true, state: {author}});
             })
             .catch( () => setAuthError(true));
         setIsLoading(false);
@@ -65,10 +66,10 @@ function App() {
             <header className="App-header">
                 <Box
                     sx={{
-                        width: 400,
-                        maxWidth: '90%',
-                        backgroundColor: '#a6aeb791',
-                        padding: '30px'
+                        width           : 400,
+                        maxWidth        : '90%',
+                        backgroundColor : '#a6aeb791',
+                        padding         : '30px'
                     }}>
                     <h1 className="App" > login  </h1>
                     <p aria-live='assertive'> 

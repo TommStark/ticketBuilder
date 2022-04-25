@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react' ;
-import './App.css';
+import '../App.css';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
-import TicketBuilderForm from './modules/TicketBuilder/TicketBuilderForm';
-import GeneratedTicket from './modules/TicketBuilder/GeneratedTicket';
-import * as BackendAPI from  './services/BackendAPI';
+import TicketBuilderForm from './TicketBuilder/TicketBuilderForm';
+import GeneratedTicket from './TicketBuilder/GeneratedTicket';
+import * as BackendAPI from  '../services/BackendAPI';
 import { useLocation } from 'react-router-dom';
+import gtag from 'ga-gtag';
 
 const darkTheme = createTheme({
     palette: {
@@ -15,11 +16,11 @@ const darkTheme = createTheme({
 function App() {
     const {state} = useLocation();
     const {name} = state.author;
-    const [project, setproject] = useState('');
-    const [PRNumber, setPRNumber] = useState();
-    const [ticketNumber, setTicketNumber] = useState();
-    const [details, setDetails] = useState();
-    const [checks, setChecks] = useState();
+    const [project, setproject] = useState();
+    const [PRNumber, setPRNumber] = useState('');
+    const [ticketNumber, setTicketNumber] = useState('');
+    const [details, setDetails] = useState('');
+    const [checks, setChecks] = useState('');
     const [ticket, setTicket] = useState();
     const [isLoading, setIsLoading] = useState(false);
     const [isOpen, setIsOpen] = useState(false);
@@ -27,7 +28,7 @@ function App() {
     const [ticketId, setTicketId] = useState('');
     const [projectsData,SetprojectsData] = useState([]);
     const author = name;
-  
+
     function getProjects(){
         BackendAPI.getProjects()
             .then(res => {
@@ -42,6 +43,7 @@ function App() {
     },[getMenuItems]);
 
     const handleClick = () => {
+        gtag('event', 'ClickCopyBtn', {  'Author': `${author}` });
         setIsOpen(true);
     };
 
@@ -54,6 +56,7 @@ function App() {
 
     const handleChangeSelect = (event) => {
         const data = projectsData.filter(project => project.name === event.target.value);
+        console.log(data[0]);
         setproject(data[0]);
     };
 
@@ -62,7 +65,7 @@ function App() {
     };
 
     const reset = () =>{
-        setproject(' ');
+        setproject('');
         setPRNumber('');
         setTicketNumber('');
         setDetails('');
@@ -77,29 +80,30 @@ function App() {
         const {author,checks, details, prLink, ticketLink} = ticket;
 
         const ticketTemplate = {
-            pr : `PR:  🐛  ${prLink}`,
-            vpdc :`Ticket:  🎟  ${ticketLink}`,
+            pr          : `PR:  🐛  ${prLink}`,
+            vpdc        : `Ticket:  🎟  ${ticketLink}`,
             projectName : `Project: ${project.icon} ${project.name}`,
             detailsText : `Details: 📃 ${details}`,
-            check : `Checks : 🔎 /${checks}`,
-            author: `Author: 🧙🏼‍♂️ ${author}`
+            check       : `Checks : 🔎 /${checks}`,
+            author      : `Author: 🧙🏼‍♂️ ${author}`
         };
         return ticketTemplate;
     };
-
+    
     const generateTicket = () =>{
         setIsLoading(true);
         const requestParams = {
             body: {
-                prLink: `https://github.com/Demeure/${project.path}/pull/${PRNumber}`,
-                ticketLink:`https://kognitiv.atlassian.net/browse/VPDC-${ticketNumber}`,
-                project: project._id,
+                prLink     : `https://github.com/Demeure/${project.path}/pull/${PRNumber}`,
+                ticketLink : `https://kognitiv.atlassian.net/browse/VPDC-${ticketNumber}`,
+                project    : project._id,
                 details,
                 checks
             },
         };
         BackendAPI.postTicketData(requestParams)
             .then(response => {
+                gtag('event', 'postTicketData', { ...requestParams.body, project: project.name });
                 setTicketId(response.data.ticket._id);
                 setTicket(getTicket(response.data.ticket));
                 BackendAPI.pushTicketToAuthor(response.data.ticket._id);

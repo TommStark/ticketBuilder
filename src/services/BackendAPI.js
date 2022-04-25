@@ -28,8 +28,8 @@ export const pushTicketToProject = (params) => axios
     .then((response) => response)
     .catch((err) => { throw new Error(err); });
 
-export const isLogin = () => axios
-    .get(backend.isLogin())
+export const isLogin = (params) => axios
+    .put(backend.isLogin(),params.body)
     .then((response) => response)
     .catch((err) => { throw new Error(err); });
 
