@@ -102,7 +102,7 @@ function Login({authenticate}) {
                         }
                     </p>
                     <TextField
-                        id="filled-basic"
+                        id="filled-basic-email"
                         label="email"
                         variant="filled"
                         value={email}
@@ -112,7 +112,7 @@ function Login({authenticate}) {
                     />
 
                     <TextField
-                        id="filled-basic"
+                        id="filled-basic-pass"
                         label="password"
                         variant="filled"
                         value={password}

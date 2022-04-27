@@ -46,7 +46,7 @@ function TicketBuilderForm(props) {
                 </Select>
             </FormControl>
             <TextField
-                id="filled-basic"
+                id="filled-basic-author"
                 label="Author"
                 variant="filled"
                 value={author}
@@ -55,7 +55,7 @@ function TicketBuilderForm(props) {
             />
 
             <TextField
-                id="filled-basic"
+                id="filled-basic-pr"
                 label="PR Number"
                 variant="filled"
                 value={PRNumber}
@@ -65,7 +65,7 @@ function TicketBuilderForm(props) {
             />
 
             <TextField
-                id="filled-basic"
+                id="filled-basic-ticket"
                 label="Ticket Number"
                 variant="filled"
                 value={ticketNumber}
@@ -74,7 +74,7 @@ function TicketBuilderForm(props) {
             /> 
 
             <TextField
-                id="filled-basic"
+                id="filled-basic-details"
                 label="Details"
                 variant="filled"
                 value={details}
