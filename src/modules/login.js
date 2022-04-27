@@ -36,6 +36,7 @@ function Login({authenticate}) {
     useEffect(() => {
         setAuthError(false);
     },[email,password]);
+    
 
 
     const isFormValid = () => {  
@@ -48,13 +49,13 @@ function Login({authenticate}) {
     
     const validateUser = () => {
         setIsLoading(true);
-        //TODO encriptar password
         const requestParams = {
             body: {
                 email,
                 password
             },
         };
+        
         BackendAPI.authentication(requestParams)
             .then(response => {
                 const {author} = response.data;
@@ -64,10 +65,24 @@ function Login({authenticate}) {
                 authenticate();
                 resetInput();
                 navigate('factory', {replace: true});
+                setIsLoading(false);
             })
-            .catch( () => setAuthError(true));
-        setIsLoading(false);
+            .catch( () => {
+                setIsLoading(false);
+                setAuthError(true);});
     };
+    useEffect(() => {
+        const listener = event => {
+            if (event.code === 'Enter' || event.code === 'NumpadEnter') {
+                event.preventDefault();
+                validateUser();
+            }
+        };
+        document.addEventListener('keydown', listener);
+        return () => {
+            document.removeEventListener('keydown', listener);
+        };
+    }, [email,password]);
 
     return (
         <ThemeProvider theme={darkTheme}>
