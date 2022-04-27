@@ -1,29 +1,13 @@
-/* eslint-disable no-debugger */
-/* eslint-disable no-constant-condition */
-/* eslint-disable no-unused-vars */
-import React, { useState, useEffect, useMemo } from 'react' ;
+
+import React, { useState, useEffect} from 'react' ;
 import './App.css';
 import TicketBuilderContainer from './modules/TicketBuilder/TicketBuilderContainer';
 import Login  from './modules/login';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import * as BackendAPI from  './services/BackendAPI';
+import { HashRouter as Router, Route, Routes } from 'react-router-dom';
 import Error from './modules/Error';
 import Nav from './modules/Nav';
 import StatsContainer from './modules/Stats/StatsContainer';
 import Cookies from 'js-cookie';
-
-
-// const providerUser = useMemo(() => ({user, setUser}),[user, setUser]);
-
-// function getLoggedIn (){
-//     BackendAPI.isLogin()
-//         .then(res => {
-//             setIsLoggedIn(res.data.logged_in);
-//         })
-//         .catch(() => setIsLoggedIn(false) );
-// }
-// const getMenuItems = React.useMemo(() => getLoggedIn, [] );
-
 
 function App() {
     const [user, setUser] = useState(localStorage.getItem('user'));

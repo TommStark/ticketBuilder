@@ -1,5 +1,5 @@
-/* eslint-disable react/prop-types */
 import React, { useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import TextField from '@mui/material/TextField';
 import Box from '@mui/material/Box';
@@ -15,7 +15,7 @@ const darkTheme = createTheme({
     },
 });
 install('G-PCTGS2X60L');
-function App({authenticate}) {
+function Login({authenticate}) {
     const [isLoading, setIsLoading] = useState(false);
     const [isDisabled , setIsDisabled] = useState(true);
     const [email, setEmail] = useState();
@@ -122,5 +122,7 @@ function App({authenticate}) {
         </ThemeProvider>
     );
 }
-
-export default App;
+Login.propTypes = {
+    authenticate: PropTypes.func.isRequired,
+};
+export default Login;

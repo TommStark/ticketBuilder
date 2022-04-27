@@ -1,9 +1,5 @@
-/* eslint-disable react/prop-types */
-/* eslint-disable no-unused-vars */
 import * as React from 'react';
 import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
-import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
 import PropTypes from 'prop-types';
 import Stack from '@mui/material/Stack';
@@ -13,6 +9,7 @@ import DoneIcon from '@mui/icons-material/Done';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
+import OutboxIcon from '@mui/icons-material/Outbox';
 
 const Alert = React.forwardRef(function Alert(props, ref) {
     return < MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
@@ -34,7 +31,9 @@ const style = {
 };
 
 export default function Modalticket(props) {
-    const { ticket, isOpen, handleClick, PrintTicket, handleClose, ticketId,handleModalClosed, isModalopen }= props;
+    const { ticket, isOpen, handleClick, PrintTicket, handleClose, handleModalClosed, isModalopen }= props;
+
+    const [isdiscordOpen, setIsDicordOpen] = React.useState(false);
 
     return (
         <div>
@@ -50,6 +49,15 @@ export default function Modalticket(props) {
                     >
                         { isModalopen && PrintTicket()}
                         <Stack spacing={2} direction="row">
+                            <Tooltip title="Send to Discord">
+                                <IconButton 
+                                    variant="contained"
+                                    color = 'secondary'
+                                    onClick={ () => {setIsDicordOpen(true);}}
+                                >
+                                    <OutboxIcon/>
+                                </IconButton>
+                            </Tooltip>
                             <Tooltip title="Copy to clipboard">
                                 <IconButton 
                                     aria-label="copy" 
@@ -65,9 +73,14 @@ export default function Modalticket(props) {
                             </Tooltip>
                         </Stack>
                     </Box>
-                    <Snackbar open={isOpen} autoHideDuration={2000} onClose={handleClose}>
+                    <Snackbar open={isOpen} autoHideDuration={1400} onClose={handleClose}>
                         <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
                     Copied!
+                        </Alert>
+                    </Snackbar>
+                    <Snackbar open={isdiscordOpen} autoHideDuration={1400} onClose={() => setIsDicordOpen(false)}>
+                        <Alert onClose={() => setIsDicordOpen(false)} severity="info" sx={{ width: '100%' }}>
+                    Aguanta, todavia falta para eso!
                         </Alert>
                     </Snackbar>
                 </>
@@ -75,3 +88,27 @@ export default function Modalticket(props) {
         </div>
     );
 }
+Modalticket.defaultProps ={
+    ticket: {}
+};
+
+Modalticket.propTypes = {
+    ticket: PropTypes.shape({
+        id          : PropTypes.string,
+        pr          : PropTypes.string,
+        vpdc        : PropTypes.string,
+        projectName : PropTypes.string,
+        detailsText : PropTypes.string,
+        check       : PropTypes.string,
+        author      : PropTypes.string
+
+    }),
+    isOpen            : PropTypes.bool.isRequired,
+    handleClick       : PropTypes.func.isRequired,
+    reset             : PropTypes.func.isRequired,
+    PrintTicket       : PropTypes.func.isRequired,
+    handleClose       : PropTypes.func.isRequired,
+    handleModalClosed : PropTypes.func.isRequired,
+    isModalopen       : PropTypes.bool.isRequired,
+    author            : PropTypes.string.isRequired,
+};

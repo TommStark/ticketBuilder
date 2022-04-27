@@ -1,4 +1,3 @@
-/* eslint-disable react/prop-types */
 import React, { useState, useEffect } from 'react' ;
 import '../../App.css';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
@@ -27,7 +26,6 @@ function TicketBuilderContainer() {
     const [isLoading, setIsLoading] = useState(false);
     const [isOpen, setIsOpen] = useState(false);
     const [isDisabled , setIsDisabled] = useState(true);
-    const [ticketId, setTicketId] = useState('');
     const [projectsData,SetprojectsData] = useState([]);
     const author = Cookies.get('author');
     const navigate = useNavigate();
@@ -91,19 +89,18 @@ function TicketBuilderContainer() {
         setTicket('');
         setIsLoading(false);
         setIsDisabled(true);
-        setTicketId('');
     };
 
     const getTicket = (ticket) => {
-        const {author,checks, details, prLink, ticketLink} = ticket;
+        const {checks, details, prLink, ticketLink} = ticket;
 
         const ticketTemplate = {
-            pr          : `PR:  🐛  ${prLink}`,
-            vpdc        : `Ticket:  🎟  ${ticketLink}`,
-            projectName : `Project: ${project.icon} ${project.name}`,
-            detailsText : `Details: 📃 ${details}`,
-            check       : `Checks : 🔎 /${checks}`,
-            author      : `Author: 🧙🏼‍♂️ ${author}`
+            pr          : `PR      : 🐛 ${prLink}`,
+            vpdc        : `Ticket  : 🎟 ${ticketLink}`,
+            projectName : `Project : ${project.icon} ${project.name}`,
+            detailsText : `Details : 📃 ${details}`,
+            check       : `Checks  : 🔎 /${checks}`,
+            author      : `Author  : 🧙🏼‍♂️ ${author}`
         };
         return ticketTemplate;
     };
@@ -122,12 +119,12 @@ function TicketBuilderContainer() {
         BackendAPI.postTicketData(requestParams)
             .then(response => {
                 gtag('event', 'postTicketData', { ...requestParams.body, project: project.name });
-                setTicketId(response.data.ticket._id);
                 setTicket(getTicket(response.data.ticket));
                 BackendAPI.pushTicketToAuthor(response.data.ticket._id);
                 BackendAPI.pushTicketToProject( { ticket: response.data.ticket._id, body: { projectId: project._id } } );
                 handleModalOpen();
             });
+        setIsLoading(false);
     };
 
     const PrintTicket = () =>{
@@ -177,9 +174,9 @@ function TicketBuilderContainer() {
                                 reset={reset}
                                 PrintTicket={PrintTicket}
                                 handleClose={handleClose}
-                                ticketId={ticketId}
                                 isModalopen={isModalopen}
                                 handleModalClosed={handleModalClosed}
+                                author={author}
                             />
                         </>
                         :null
