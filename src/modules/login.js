@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import React, { useState, useEffect } from 'react';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import TextField from '@mui/material/TextField';
@@ -14,13 +15,18 @@ const darkTheme = createTheme({
     },
 });
 install('G-PCTGS2X60L');
-function App() {
+function App({authenticate}) {
     const [isLoading, setIsLoading] = useState(false);
     const [isDisabled , setIsDisabled] = useState(true);
     const [email, setEmail] = useState();
     const [password, setPassword] = useState();
     const [authError, setAuthError] = useState(false);
     const navigate = useNavigate();
+    const isUserAuth  = JSON.parse(localStorage.getItem('user'));
+
+    useEffect(()=>{
+        isUserAuth && navigate('factory', {replace: true});
+    },[]);
 
     const resetInput = () => {
         setEmail('');
@@ -53,9 +59,11 @@ function App() {
             .then(response => {
                 const {author} = response.data;
                 Cookies.set('token', author.jwToken, { expires: 1 });
+                Cookies.set('author', author.name, { expires: 1 });
                 gtag('event', 'login', { 'Author': `${email}` });
+                authenticate();
                 resetInput();
-                navigate('factory', {replace: true, state: {author}});
+                navigate('factory', {replace: true});
             })
             .catch( () => setAuthError(true));
         setIsLoading(false);
@@ -74,7 +82,7 @@ function App() {
                     <h1 className="App" > login  </h1>
                     <p aria-live='assertive'> 
                         {authError
-                            ? 'error de autenticacion'
+                            ? 'bad credentials <-----urgente un diseñador xD'
                             :null
                         }
                     </p>

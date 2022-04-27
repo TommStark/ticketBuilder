@@ -11,19 +11,14 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import FormLabel from '@mui/material/FormLabel';
 import LoadingButton from '@mui/lab/LoadingButton';
 import FormControl from '@mui/material/FormControl';
-// eslint-disable-next-line no-undef
-const pjson = require('../../../package.json');
 
 
 function TicketBuilderForm(props) {
     const {
         project, handleChangeSelect, PRNumber, setPRNumber, ticketNumber, setTicketNumber,details,
-        setDetails,setChecks,isLoading,isDisabled,generateTicket, author, projectsData
+        setDetails,setChecks,isLoading,isDisabled,generateTicket, author, projectsData, checks
     } = props;
-
-    const appVersion = pjson.version;
-
-    // eslint-disable-next-line react/prop-types
+    
     const MenuItems = React.useMemo(() => projectsData.map((project,index) => {
         return <MenuItem key={ `${index}${project.name}` } value={project.name}> {`${project.icon} ${project.name}`} </MenuItem>;
     }),[projectsData]); 
@@ -34,18 +29,19 @@ function TicketBuilderForm(props) {
                 width    : 500,
                 maxWidth : '90%',
             }}>
-            <h1 className="App" > Ticket Builder <sup className='smallText'> v{appVersion}</sup> </h1>
+            <h1 className="App" > Ticket Builder  </h1>
             <FormControl fullWidth>
                 <InputLabel id="project">Project</InputLabel>
                 <Select
                     labelId="project"
-                    id="demo-simple-select"
-                    value={project.name}
+                    id="projectSelector"
+                    value={project}
                     label="Project"
                     onChange={handleChangeSelect}
+                    defaultValue=""
                 >   
                     {
-                        MenuItems         
+                        MenuItems
                     }
                 </Select>
             </FormControl>
@@ -92,6 +88,7 @@ function TicketBuilderForm(props) {
                 aria-labelledby="demo-row-radio-buttons-group-label"
                 name="row-radio-buttons-group"
                 onChange={(event) => setChecks(event.target.value)}
+                value={checks}
             >
                 <FormControlLabel value="1" control={<Radio />} label="1" />
                 <FormControlLabel value="2" control={<Radio />} label="2" />
@@ -112,17 +109,13 @@ function TicketBuilderForm(props) {
 }
 
 TicketBuilderForm.defaultProps = {
-    project      : {},
+    project      : '',
     projectsData : {},
 };
 
 TicketBuilderForm.propTypes = {
-    project: PropTypes.shape({
-        name : PropTypes.string,
-        icon : PropTypes.string,
-
-    }),
-    projectsData: PropTypes.arrayOf(PropTypes.shape({
+    project      : PropTypes.string,
+    projectsData : PropTypes.arrayOf(PropTypes.shape({
         name : PropTypes.string,
         icon : PropTypes.string,
 
@@ -139,5 +132,6 @@ TicketBuilderForm.propTypes = {
     ticketNumber       : PropTypes.string.isRequired,
     PRNumber           : PropTypes.string.isRequired,
     details            : PropTypes.string.isRequired,
+    checks             : PropTypes.string.isRequired,
 };
 export default TicketBuilderForm;

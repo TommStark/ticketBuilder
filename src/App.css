@@ -16,3 +16,26 @@
 .smallText {
   font-size: calc(5px + 1vmin);
 }
+
+.navbar {
+  width: 100%;
+  display: flex;
+  position: fixed;
+  justify-content: space-around;
+  align-items: center;
+  color: #fff;
+  background-color: #266798;
+}
+
+.navbar .nav-links {
+  width: 40%;
+  display: flex;
+  justify-content: space-around;
+  list-style: none;
+}
+
+.navbar .nav-links>a{
+  color: #fff;
+  text-decoration: none;
+}
+

@@ -1,11 +1,13 @@
+/* eslint-disable react/prop-types */
 import React, { useState, useEffect } from 'react' ;
-import '../App.css';
+import '../../App.css';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
-import TicketBuilderForm from './TicketBuilder/TicketBuilderForm';
-import GeneratedTicket from './TicketBuilder/GeneratedTicket';
-import * as BackendAPI from  '../services/BackendAPI';
-import { useLocation } from 'react-router-dom';
+import TicketBuilderForm from './TicketBuilderForm';
+import * as BackendAPI from  '../../services/BackendAPI';
 import gtag from 'ga-gtag';
+import Cookies from 'js-cookie';
+import { useNavigate } from 'react-router-dom';
+import Modalticket from './Ticket';
 
 const darkTheme = createTheme({
     palette: {
@@ -13,21 +15,36 @@ const darkTheme = createTheme({
     },
 });
 
-function App() {
-    const {state} = useLocation();
-    const {name} = state.author;
-    const [project, setproject] = useState();
+
+function TicketBuilderContainer() {
+    const [project, setproject] = useState({});
+    const [projectName, setProjectName] = useState('');
     const [PRNumber, setPRNumber] = useState('');
     const [ticketNumber, setTicketNumber] = useState('');
     const [details, setDetails] = useState('');
-    const [checks, setChecks] = useState('');
+    const [checks, setChecks] = useState('1');
     const [ticket, setTicket] = useState();
     const [isLoading, setIsLoading] = useState(false);
     const [isOpen, setIsOpen] = useState(false);
     const [isDisabled , setIsDisabled] = useState(true);
     const [ticketId, setTicketId] = useState('');
     const [projectsData,SetprojectsData] = useState([]);
-    const author = name;
+    const author = Cookies.get('author');
+    const navigate = useNavigate();
+    const isUserAuth  = JSON.parse(localStorage.getItem('user'));
+    const [isModalopen, setIsModalOpen] = React.useState(false);
+
+
+    const handleModalOpen = () => setIsModalOpen(true);
+
+    const handleModalClosed = () => {
+        reset();
+        setIsModalOpen(false);
+    };
+
+    useEffect(()=>{
+        !isUserAuth && navigate('/ticketBuilder', {replace: true});
+    },[]);
 
     function getProjects(){
         BackendAPI.getProjects()
@@ -56,20 +73,21 @@ function App() {
 
     const handleChangeSelect = (event) => {
         const data = projectsData.filter(project => project.name === event.target.value);
-        console.log(data[0]);
+        setProjectName(data[0].name);
         setproject(data[0]);
     };
 
-    const isFormValid = () => {  
-        return project && PRNumber && ticketNumber && details && checks;
+    const isFormValid = () => {
+        return project?.name && PRNumber && ticketNumber && details && checks;
     };
-
+    
     const reset = () =>{
-        setproject('');
+        setproject({});
+        setProjectName('');
+        setChecks('1');
         setPRNumber('');
         setTicketNumber('');
         setDetails('');
-        setChecks('');
         setTicket('');
         setIsLoading(false);
         setIsDisabled(true);
@@ -108,6 +126,7 @@ function App() {
                 setTicket(getTicket(response.data.ticket));
                 BackendAPI.pushTicketToAuthor(response.data.ticket._id);
                 BackendAPI.pushTicketToProject( { ticket: response.data.ticket._id, body: { projectId: project._id } } );
+                handleModalOpen();
             });
     };
 
@@ -131,38 +150,43 @@ function App() {
     return (
         <ThemeProvider theme={darkTheme}>
             <header className="App-header">
-                { !ticket
-                    ? 
-                    <TicketBuilderForm
-                        project={project}
-                        handleChangeSelect={handleChangeSelect}
-                        PRNumber={PRNumber}
-                        setPRNumber={setPRNumber}
-                        ticketNumber={ticketNumber}
-                        setTicketNumber={setTicketNumber}
-                        details={details}
-                        setDetails={setDetails}
-                        setChecks={setChecks}
-                        isLoading={isLoading}
-                        isDisabled={isDisabled}
-                        generateTicket={generateTicket}
-                        author={author}
-                        projectsData={projectsData}
-                    />
-                    :
-                    <GeneratedTicket
-                        ticket={ticket}
-                        isOpen={isOpen}
-                        handleClick={handleClick}
-                        reset={reset}
-                        PrintTicket={PrintTicket}
-                        handleClose={handleClose}
-                        ticketId={ticketId}
-                    />
+                {
+                    isUserAuth ?
+                        <>
+                            <TicketBuilderForm
+                                project={projectName}
+                                handleChangeSelect={handleChangeSelect}
+                                PRNumber={PRNumber}
+                                setPRNumber={setPRNumber}
+                                ticketNumber={ticketNumber}
+                                setTicketNumber={setTicketNumber}
+                                details={details}
+                                setDetails={setDetails}
+                                setChecks={setChecks}
+                                isLoading={isLoading}
+                                isDisabled={isDisabled}
+                                generateTicket={generateTicket}
+                                author={author}
+                                projectsData={projectsData}
+                                checks={checks}
+                            />
+                            <Modalticket
+                                ticket={ticket}
+                                isOpen={isOpen}
+                                handleClick={handleClick}
+                                reset={reset}
+                                PrintTicket={PrintTicket}
+                                handleClose={handleClose}
+                                ticketId={ticketId}
+                                isModalopen={isModalopen}
+                                handleModalClosed={handleModalClosed}
+                            />
+                        </>
+                        :null
                 }
             </header>
         </ThemeProvider>
     );
 }
 
-export default App;
+export default TicketBuilderContainer;

@@ -26,17 +26,17 @@ module.exports = {
     rules: {
         'indent'          : ['warn', 4, { 'SwitchCase': 1 }],
         'linebreak-style' : [
-            'error','unix'
+            'warn','unix'
         ],
         'quotes': [
-            'error',
+            'warn',
             'single'
         ],
         semi: [
-            'error',
+            'warn',
             'always'
         ],
-        'object-curly-newline'                            : ['error',{ 'multiline': true, 'consistent': true }],
+        'object-curly-newline'                            : ['warn',{ 'multiline': true, 'consistent': true }],
         'react/jsx-indent-props'                          : ['warn', 4],
         'jsx-a11y/label-has-associated-control'           : 'off',
         'jsx-a11y/no-noninteractive-element-interactions' : 'off',
@@ -47,8 +47,8 @@ module.exports = {
         'import/no-cycle'                                 : 0,
         'react/prop-types'                                : [2, { 'ignore': ['qaData', 'trackingData', 'marketing'] }],
         'camelcase'                                       : [0, {'allow': ['^UNSAFE_']}],
-        'padded-blocks'                                   : ['error', { 'switches': 'never', 'blocks': 'never', 'classes': 'always' }],
-        'key-spacing'                                     : ['error', {
+        'padded-blocks'                                   : ['warn', { 'switches': 'never', 'blocks': 'never', 'classes': 'always' }],
+        'key-spacing'                                     : ['warn', {
             'align': {
                 'beforeColon' : true,
                 'afterColon'  : true,
