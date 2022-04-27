@@ -1,13 +1,13 @@
 {
   "files": {
-    "main.css": "/ticketBuilder/static/css/main.ccd0c8c5.css",
-    "main.js": "/ticketBuilder/static/js/main.f566d1eb.js",
+    "main.css": "/ticketBuilder/static/css/main.bd28e56d.css",
+    "main.js": "/ticketBuilder/static/js/main.72b5b7ac.js",
     "index.html": "/ticketBuilder/index.html",
-    "main.ccd0c8c5.css.map": "/ticketBuilder/static/css/main.ccd0c8c5.css.map",
-    "main.f566d1eb.js.map": "/ticketBuilder/static/js/main.f566d1eb.js.map"
+    "main.bd28e56d.css.map": "/ticketBuilder/static/css/main.bd28e56d.css.map",
+    "main.72b5b7ac.js.map": "/ticketBuilder/static/js/main.72b5b7ac.js.map"
   },
   "entrypoints": [
-    "static/css/main.ccd0c8c5.css",
-    "static/js/main.f566d1eb.js"
+    "static/css/main.bd28e56d.css",
+    "static/js/main.72b5b7ac.js"
   ]
 }
