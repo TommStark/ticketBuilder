@@ -6,7 +6,8 @@ import * as BackendAPI from  '../../services/BackendAPI';
 import gtag from 'ga-gtag';
 import Cookies from 'js-cookie';
 import { useNavigate } from 'react-router-dom';
-import Modalticket from './Ticket';
+// eslint-disable-next-line no-undef
+const pjson = require('../../../package.json');
 
 const darkTheme = createTheme({
     palette: {
@@ -22,23 +23,14 @@ function TicketBuilderContainer() {
     const [ticketNumber, setTicketNumber] = useState('');
     const [details, setDetails] = useState('');
     const [checks, setChecks] = useState('1');
-    const [ticket, setTicket] = useState();
     const [isLoading, setIsLoading] = useState(false);
-    const [isOpen, setIsOpen] = useState(false);
     const [isDisabled , setIsDisabled] = useState(true);
     const [projectsData,SetprojectsData] = useState([]);
     const author = Cookies.get('author');
     const navigate = useNavigate();
     const isUserAuth  = JSON.parse(localStorage.getItem('user'));
-    const [isModalopen, setIsModalOpen] = React.useState(false);
+    const [isdiscordOpen, setIsDicordOpen] = React.useState(false);
 
-
-    const handleModalOpen = () => setIsModalOpen(true);
-
-    const handleModalClosed = () => {
-        reset();
-        setIsModalOpen(false);
-    };
 
     useEffect(()=>{
         !isUserAuth && navigate('/ticketBuilder', {replace: true});
@@ -57,18 +49,6 @@ function TicketBuilderContainer() {
         getMenuItems();
     },[getMenuItems]);
 
-    const handleClick = () => {
-        gtag('event', 'ClickCopyBtn', {  'Author': `${author}` });
-        setIsOpen(true);
-    };
-
-    const handleClose = (_event, reason) => {
-        if (reason === 'clickaway') {
-            return;
-        }
-        setIsOpen(false);
-    };
-
     const handleChangeSelect = (event) => {
         const data = projectsData.filter(project => project.name === event.target.value);
         setProjectName(data[0].name);
@@ -86,7 +66,6 @@ function TicketBuilderContainer() {
         setPRNumber('');
         setTicketNumber('');
         setDetails('');
-        setTicket('');
         setIsLoading(false);
         setIsDisabled(true);
     };
@@ -94,14 +73,15 @@ function TicketBuilderContainer() {
     const getTicket = (ticket) => {
         const {checks, details, prLink, ticketLink} = ticket;
 
-        return {
-            pr          : `PR      : 🐛 ${prLink}`,
-            vpdc        : `Ticket  : 🎟 ${ticketLink}`,
-            projectName : `Project : ${project.icon} ${project.name}`,
-            detailsText : `Details : 📃 ${details}`,
-            check       : `Checks  : 🔎 /${checks}`,
-            author      : `Author  : 🧙🏼‍♂️ ${author}`
-        };
+        return ({
+            pr           : prLink,
+            vpdc         : ticketLink,
+            project      : project.name,
+            projectColor : project.color,
+            details,
+            checks,
+            version      : pjson.version
+        });
     };
     
     const generateTicket = () =>{
@@ -118,25 +98,19 @@ function TicketBuilderContainer() {
         BackendAPI.postTicketData(requestParams)
             .then(response => {
                 gtag('event', 'postTicketData', { ...requestParams.body, project: project.name });
-                setTicket(getTicket(response.data.ticket));
+
+                const plainTicket = getTicket(response.data.ticket);
                 BackendAPI.pushTicketToAuthor(response.data.ticket._id);
                 BackendAPI.pushTicketToProject( { ticket: response.data.ticket._id, body: { projectId: project._id } } );
-                handleModalOpen();
+                BackendAPI.sendToDiscordChannel({body: {'ticket': plainTicket}})
+                    .then(() => {
+                        gtag('event', 'ClickSentToDiscord', {  'Author': `${author}` });
+                        setIsDicordOpen(true);
+                        reset();
+                    })
+                    .catch(err => {err;});
             });
         setIsLoading(false);
-    };
-
-    const PrintTicket = () =>{
-        return (
-            <p>
-                {ticket.pr} <br/>
-                {ticket.vpdc} <br/>
-                {ticket.projectName} <br/>
-                {ticket.detailsText} <br/>
-                {ticket.check} <br />
-                {`Author: 🧙🏼‍♂️ ${author}`} <br />
-            </p>
-        );
     };
 
     useEffect(() => {
@@ -165,17 +139,8 @@ function TicketBuilderContainer() {
                                 author={author}
                                 projectsData={projectsData}
                                 checks={checks}
-                            />
-                            <Modalticket
-                                ticket={ticket}
-                                isOpen={isOpen}
-                                handleClick={handleClick}
-                                reset={reset}
-                                PrintTicket={PrintTicket}
-                                handleClose={handleClose}
-                                isModalopen={isModalopen}
-                                handleModalClosed={handleModalClosed}
-                                author={author}
+                                isdiscordOpen={isdiscordOpen}
+                                setIsDicordOpen={setIsDicordOpen}
                             />
                         </>
                         :null

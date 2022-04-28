@@ -36,3 +36,8 @@ export const getProjects = () => axios
     .get(backend.getProjects())
     .then((response) => response)
     .catch((err) => { throw new Error(err); });
+
+export const sendToDiscordChannel = (params) => axios
+    .put(backend.sendToDiscordChannel(),params.body)
+    .then((response) => response)
+    .catch((err) => { throw new Error(err); });

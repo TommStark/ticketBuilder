@@ -4,11 +4,12 @@ import { useNavigate } from 'react-router-dom';
 import gtag from 'ga-gtag';
 import { Button } from '@mui/material';
 
-function Error() {
+// eslint-disable-next-line react/prop-types
+function Error({logOut}) {
     const navigate = useNavigate();
 
     function handleOnclick (){
-        localStorage.removeItem('user');
+        logOut;
         gtag('event', 'ErroPage', { 'ERROR': 'link to home' });
         navigate('/ticketBuilder', {replace: true});
     }

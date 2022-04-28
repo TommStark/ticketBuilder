@@ -28,7 +28,6 @@ function App() {
         localStorage.removeItem('user');
     }
 
-
     return (
         <Router>
             {user ? <Nav logOut={() => logOut()}/> : null}
@@ -47,7 +46,7 @@ function App() {
                     element={<StatsContainer />
                     }>
                 </Route>
-                <Route path='*' element={<Error />} />
+                <Route path='*' element={<Error logOut={() => logOut()}/>} />
             </Routes>
         </Router>
     );
