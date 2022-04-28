@@ -62,7 +62,7 @@ function TicketBuilderContainer() {
         setIsOpen(true);
     };
 
-    const handleClose = (event, reason) => {
+    const handleClose = (_event, reason) => {
         if (reason === 'clickaway') {
             return;
         }
@@ -94,7 +94,7 @@ function TicketBuilderContainer() {
     const getTicket = (ticket) => {
         const {checks, details, prLink, ticketLink} = ticket;
 
-        const ticketTemplate = {
+        return {
             pr          : `PR      : 🐛 ${prLink}`,
             vpdc        : `Ticket  : 🎟 ${ticketLink}`,
             projectName : `Project : ${project.icon} ${project.name}`,
@@ -102,7 +102,6 @@ function TicketBuilderContainer() {
             check       : `Checks  : 🔎 /${checks}`,
             author      : `Author  : 🧙🏼‍♂️ ${author}`
         };
-        return ticketTemplate;
     };
     
     const generateTicket = () =>{
