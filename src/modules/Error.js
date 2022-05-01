@@ -16,16 +16,22 @@ function Error({logOut}) {
 
 
     return ( 
-        <header className="App-header">
-            <Box
-                sx={{ p: 2, }}
-            >
-                <h1>Error Page</h1>
-                <Button 
-                    variant="contained"
-                    onClick={() => handleOnclick() }> To Home </Button>
-            </Box>
-        </header>
+        <div className="gradient__bg">
+            <header className="App-header">
+                <Box
+                    sx={{ p: 2, }}
+                >
+                    <h1 className='gradient__text txt-align'>Error Page</h1>
+
+                    <div className='txt-align' >
+                        <Button 
+                            variant="contained"
+                            color = 'secondary'
+                            onClick={() => handleOnclick() }> Home </Button>
+                    </div>
+                </Box>
+            </header>
+        </div>
     );
 }
 export default Error;

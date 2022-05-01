@@ -13,6 +13,4 @@ const instance = axios.create({
     headers,
 });
 
-// instance.defaults.headers.common['Authorization'] = Cookies.get('token');
-
 export default instance;

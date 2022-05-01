@@ -7,6 +7,7 @@ import { HashRouter as Router, Route, Routes } from 'react-router-dom';
 import Error from './modules/Error';
 import Nav from './modules/Nav';
 import StatsContainer from './modules/Stats/StatsContainer';
+import TicketListContainer from './modules/TicketList/TicketListContainer';
 import Cookies from 'js-cookie';
 
 function App() {
@@ -29,27 +30,33 @@ function App() {
     }
 
     return (
-        <Router>
-            {user ? <Nav logOut={() => logOut()}/> : null}
-            <Routes>
-                <Route 
-                    path="/ticketBuilder"  
-                    element={ <Login authenticate={() => setUser(true)} />
-                    }/>
-                <Route
-                    path="/ticketBuilder/factory"
-                    element={<TicketBuilderContainer />
-                    }>
-                </Route>
-                <Route
-                    path="/ticketBuilder/stats"
-                    element={<StatsContainer />
-                    }>
-                </Route>
-                <Route path='*' element={<Error logOut={() => logOut()}/>} />
-            </Routes>
-        </Router>
+        <div className="gradient__bg">
+            <Router>
+                {user ? <Nav logOut={() => logOut()}/> : null}
+                <Routes>
+                    <Route 
+                        path="/ticketBuilder"  
+                        element={ <Login authenticate={() => setUser(true)} />
+                        }/>
+                    <Route
+                        path="/ticketBuilder/factory"
+                        element={<TicketBuilderContainer />
+                        }>
+                    </Route>
+                    <Route
+                        path="/ticketBuilder/stats"
+                        element={<StatsContainer />
+                        }>
+                    </Route>
+                    <Route
+                        path="/ticketBuilder/tickets"
+                        element={<TicketListContainer />
+                        }>
+                    </Route>
+                    <Route path='*' element={<Error logOut={() => logOut()}/>} />
+                </Routes>
+            </Router>
+        </div>
     );
 }
-
 export default App;

@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react' ;
 import '../../App.css';
-import { ThemeProvider, createTheme } from '@mui/material/styles';
 import TicketBuilderForm from './TicketBuilderForm';
 import * as BackendAPI from  '../../services/BackendAPI';
 import gtag from 'ga-gtag';
@@ -8,13 +7,6 @@ import Cookies from 'js-cookie';
 import { useNavigate } from 'react-router-dom';
 // eslint-disable-next-line no-undef
 const pjson = require('../../../package.json');
-
-const darkTheme = createTheme({
-    palette: {
-        mode: 'dark',
-    },
-});
-
 
 function TicketBuilderContainer() {
     const [project, setproject] = useState({});
@@ -25,13 +17,14 @@ function TicketBuilderContainer() {
     const [checks, setChecks] = useState('1');
     const [isLoading, setIsLoading] = useState(false);
     const [isDisabled , setIsDisabled] = useState(true);
-    const [projectsData,SetprojectsData] = useState([]);
+    const [projectsData,SetprojectsData] = useState();
     const author = Cookies.get('author');
     const navigate = useNavigate();
     const isUserAuth  = JSON.parse(localStorage.getItem('user'));
     const [isdiscordOpen, setIsDicordOpen] = React.useState(false);
+    const [isDataLoading, setIsDataLoading]=React.useState(true);
 
-
+    
     useEffect(()=>{
         !isUserAuth && navigate('/ticketBuilder', {replace: true});
     },[]);
@@ -39,15 +32,19 @@ function TicketBuilderContainer() {
     function getProjects(){
         BackendAPI.getProjects()
             .then(res => {
-                SetprojectsData(res.data.tickets);
+                if(res.data){
+                    SetprojectsData(res.data);
+                    setIsDataLoading(false);
+                }
+            })
+            .catch(() => {
+                window.location.reload();
             });
     }
 
-    const getMenuItems = React.useMemo(() => getProjects, [] );
-
     useEffect(() =>{
-        getMenuItems();
-    },[getMenuItems]);
+        getProjects();
+    },[]);
 
     const handleChangeSelect = (event) => {
         const data = projectsData.filter(project => project.name === event.target.value);
@@ -118,35 +115,34 @@ function TicketBuilderContainer() {
     },[isFormValid]);
 
     return (
-        <ThemeProvider theme={darkTheme}>
-            <header className="App-header">
-                {
-                    isUserAuth ?
-                        <>
-                            <TicketBuilderForm
-                                project={projectName}
-                                handleChangeSelect={handleChangeSelect}
-                                PRNumber={PRNumber}
-                                setPRNumber={setPRNumber}
-                                ticketNumber={ticketNumber}
-                                setTicketNumber={setTicketNumber}
-                                details={details}
-                                setDetails={setDetails}
-                                setChecks={setChecks}
-                                isLoading={isLoading}
-                                isDisabled={isDisabled}
-                                generateTicket={generateTicket}
-                                author={author}
-                                projectsData={projectsData}
-                                checks={checks}
-                                isdiscordOpen={isdiscordOpen}
-                                setIsDicordOpen={setIsDicordOpen}
-                            />
-                        </>
-                        :null
-                }
-            </header>
-        </ThemeProvider>
+        <header className="App-header">
+            {
+                isUserAuth && author ?
+                    <>
+                        <TicketBuilderForm
+                            project={projectName}
+                            handleChangeSelect={handleChangeSelect}
+                            PRNumber={PRNumber}
+                            setPRNumber={setPRNumber}
+                            ticketNumber={ticketNumber}
+                            setTicketNumber={setTicketNumber}
+                            details={details}
+                            setDetails={setDetails}
+                            setChecks={setChecks}
+                            isLoading={isLoading}
+                            isDisabled={isDisabled}
+                            generateTicket={generateTicket}
+                            author={author}
+                            projectsData={projectsData}
+                            checks={checks}
+                            isdiscordOpen={isdiscordOpen}
+                            setIsDicordOpen={setIsDicordOpen}
+                            isDataLoading={isDataLoading}
+                        />
+                    </>
+                    :null
+            }
+        </header>
     );
 }
 

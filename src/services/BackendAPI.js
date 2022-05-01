@@ -41,3 +41,13 @@ export const sendToDiscordChannel = (params) => axios
     .put(backend.sendToDiscordChannel(),params.body)
     .then((response) => response)
     .catch((err) => { throw new Error(err); });
+
+export const getProjectByUsers = () => axios
+    .get(backend.getProjectByUsers())
+    .then((response) => response)
+    .catch((err) => { throw new Error(err); });
+
+export const getTicketsByAuthor = () => axios
+    .get(backend.getTicketsByAuthor())
+    .then((response) => response)
+    .catch((err) => { throw new Error(err); });

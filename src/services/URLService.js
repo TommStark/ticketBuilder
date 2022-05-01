@@ -14,6 +14,10 @@ const getProjects = () => ('/project');
 
 const sendToDiscordChannel = () => ('/discBot');
 
+const getProjectByUsers = () => ('/project/by/author');
+
+const getTicketsByAuthor = () =>('/ticket/by/author');
+
 export const backend = {
     getUserById,
     postTicketData,
@@ -22,5 +26,7 @@ export const backend = {
     isLogin,
     getProjects,
     pushTicketToProject,
-    sendToDiscordChannel
+    sendToDiscordChannel,
+    getProjectByUsers,
+    getTicketsByAuthor
 };

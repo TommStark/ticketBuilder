@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { ThemeProvider, createTheme } from '@mui/material/styles';
 import TextField from '@mui/material/TextField';
 import Box from '@mui/material/Box';
 import LoadingButton from '@mui/lab/LoadingButton';
@@ -9,11 +8,6 @@ import { useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
 import gtag, { install } from 'ga-gtag';
 
-const darkTheme = createTheme({
-    palette: {
-        mode: 'dark',
-    },
-});
 install('G-PCTGS2X60L');
 function Login({authenticate}) {
     const [isLoading, setIsLoading] = useState(false);
@@ -85,16 +79,17 @@ function Login({authenticate}) {
     }, [email,password]);
 
     return (
-        <ThemeProvider theme={darkTheme}>
+        <div className='gradient__bg'>
             <header className="App-header">
                 <Box
                     sx={{
                         width           : 400,
                         maxWidth        : '90%',
-                        backgroundColor : '#a6aeb791',
-                        padding         : '30px'
+                        backgroundColor : 'white',
+                        padding         : '30px',
+                        borderRadius    : '5%'
                     }}>
-                    <h1 className="App" > login  </h1>
+                    <h1 className="gradient__text txt-align" > Login  </h1>
                     <p aria-live='assertive'> 
                         {authError
                             ? 'bad credentials <-----urgente un diseñador xD'
@@ -122,11 +117,12 @@ function Login({authenticate}) {
                         margin="normal"
                     />
 
-                    <div className="App">
+                    <div className="txt-align">
                         <LoadingButton 
                             loading={isLoading}
                             variant="contained"
                             disabled={!isDisabled}
+                            color = 'secondary'
                             onClick={ () =>{ validateUser();}}
                         > Log In
                         </LoadingButton>
@@ -134,7 +130,7 @@ function Login({authenticate}) {
             
                 </Box>
             </header>
-        </ThemeProvider>
+        </div>
     );
 }
 Login.propTypes = {
