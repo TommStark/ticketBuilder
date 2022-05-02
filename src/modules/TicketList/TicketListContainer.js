@@ -8,7 +8,7 @@ import Avatar from '@mui/material/Avatar';
 import Typography from '@mui/material/Typography';
 import CircularProgress from '@mui/material/CircularProgress';
 
-function StatsContainer() {
+function TicketListContainer() {
     const [tickets, SetTickets]=useState([]);
     const [isLoading, setIsLoading]=useState(true);
 
@@ -16,7 +16,7 @@ function StatsContainer() {
         BackendAPI.getTicketsByAuthor()
             .then(res => {
                 if(res.data){
-                    SetTickets(res.data.tickets);
+                    SetTickets((res.data.tickets).reverse());
                     setIsLoading(false);
                 }
             })
@@ -43,7 +43,8 @@ function StatsContainer() {
                     display        : 'flex',
                     flexWrap       : 'wrap',
                     justifyContent : 'center',
-                    width          : 900
+                    width          : 900,
+                    flexDirection  : 'row-reverse',
                 }}>
                     {tickets &&
                     tickets.map( (ticket,index) => 
@@ -64,6 +65,7 @@ function StatsContainer() {
                                         <p><strong>Jira:</strong>        : <a href={ticket.prLink}>{ticket.ticketLink.substring(0,45)}</a>...</p>
                                         <p><strong>Details:</strong>     : {ticket.details.substring(0,35)}...</p>
                                         <p><strong>Checks:</strong>     : {ticket.checks}</p>
+                                        <p><strong>Merged:</strong> {ticket.isDone ? `Yes on ${formatDate(ticket.end_date)}` : 'No yet'}</p>
                                     </Typography>
                                 </CardContent>
                             </Card>
@@ -85,4 +87,4 @@ function StatsContainer() {
     );
 }
 
-export default StatsContainer;
+export default TicketListContainer;

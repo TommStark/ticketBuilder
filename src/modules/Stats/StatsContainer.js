@@ -55,7 +55,6 @@ function StatsContainer() {
                 }
             })
             .catch(() => {
-                window.location.reload();
                 setIsLoadin(false);
             });
     }
