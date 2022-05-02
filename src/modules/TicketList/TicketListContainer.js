@@ -16,7 +16,7 @@ function TicketListContainer() {
         BackendAPI.getTicketsByAuthor()
             .then(res => {
                 if(res.data){
-                    SetTickets((res.data.tickets).reverse());
+                    SetTickets(res.data.tickets);
                     setIsLoading(false);
                 }
             })
@@ -57,7 +57,6 @@ function TicketListContainer() {
                     display        : 'flex',
                     flexWrap       : 'wrap',
                     justifyContent : 'center',
-                    flexDirection  : 'row-reverse',
                     width          : 900
                 }}>
                     {tickets &&
@@ -79,7 +78,6 @@ function TicketListContainer() {
                                         <p><strong>Jira:</strong>        : <a href={ticket.prLink}>{ticket.ticketLink.substring(0,45)}</a>...</p>
                                         <p><strong>Details:</strong>     : {ticket.details.substring(0,35)}...</p>
                                         <p><strong>Checks:</strong>     : {ticket.checks}</p>
-                                        <p><strong>Merged:</strong> {ticket.isDone ? `Yes on ${formatDate(ticket.end_date)}` : 'No yet'}</p>
                                     </Typography>
                                 </CardContent>
                             </Card>
