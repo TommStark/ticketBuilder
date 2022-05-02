@@ -16,7 +16,7 @@ function StatsContainer() {
         BackendAPI.getTicketsByAuthor()
             .then(res => {
                 if(res.data){
-                    SetTickets(res.data.tickets);
+                    SetTickets((res.data.tickets).reverse());
                     setIsLoading(false);
                 }
             })
@@ -43,6 +43,7 @@ function StatsContainer() {
                     display        : 'flex',
                     flexWrap       : 'wrap',
                     justifyContent : 'center',
+                    flexDirection  : 'row-reverse',
                     width          : 900
                 }}>
                     {tickets &&
@@ -64,6 +65,7 @@ function StatsContainer() {
                                         <p><strong>Jira:</strong>        : <a href={ticket.prLink}>{ticket.ticketLink.substring(0,45)}</a>...</p>
                                         <p><strong>Details:</strong>     : {ticket.details.substring(0,35)}...</p>
                                         <p><strong>Checks:</strong>     : {ticket.checks}</p>
+                                        <p><strong>Merged:</strong> {ticket.isDone ? `Yes on ${formatDate(ticket.end_date)}` : 'No yet'}</p>
                                     </Typography>
                                 </CardContent>
                             </Card>

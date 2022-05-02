@@ -68,7 +68,7 @@ function TicketBuilderContainer() {
     };
 
     const getTicket = (ticket) => {
-        const {checks, details, prLink, ticketLink} = ticket;
+        const {checks, details, prLink, ticketLink, _id} = ticket;
 
         return ({
             pr           : prLink,
@@ -77,7 +77,8 @@ function TicketBuilderContainer() {
             projectColor : project.color,
             details,
             checks,
-            version      : pjson.version
+            version      : pjson.version,
+            id           : _id,
         });
     };
     
