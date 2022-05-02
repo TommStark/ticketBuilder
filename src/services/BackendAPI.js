@@ -1,4 +1,4 @@
-import axios from './AxiosInstance';
+import axios from './Instance';
 // eslint-disable-next-line no-undef
 const { backend } = require('./URLService');
 

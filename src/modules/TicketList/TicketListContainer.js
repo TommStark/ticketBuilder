@@ -8,7 +8,7 @@ import Avatar from '@mui/material/Avatar';
 import Typography from '@mui/material/Typography';
 import CircularProgress from '@mui/material/CircularProgress';
 
-function StatsContainer() {
+function TicketListContainer() {
     const [tickets, SetTickets]=useState([]);
     const [isLoading, setIsLoading]=useState(true);
 
@@ -30,6 +30,20 @@ function StatsContainer() {
 
     function formatDate(date){
         return date.split('T')[0];
+    }
+
+    function renderNoTicketsTxt(){
+        if(tickets.length === 0){
+            return  <h1 className='gradient__text'>You do not have tickets yet</h1>;
+        }
+        return null;
+    }
+
+    function renderGhostCard(){
+        if(tickets.length % 2 === 1){
+            return <Card sx={{ width: 400, maxWidth: 400, margin: '1vh', borderRadius: '5%', padding: '1vh', backgroundColor: 'transparent' }}/>;
+        }
+        return null;
     }
 
     return ( 
@@ -73,18 +87,14 @@ function StatsContainer() {
                     )
                     }
                     {
-                        tickets.length === 0
-                            ? <h1 className='gradient__text'>You do not have tickets yet</h1>
-                            : null
+                        renderNoTicketsTxt()
                     }
                     {
-                        (tickets.length % 2 === 1)
-                            ? <Card sx={{ width: 400, maxWidth: 400, margin: '1vh', borderRadius: '5%', padding: '1vh', backgroundColor: 'transparent' }}/>
-                            : null
+                        renderGhostCard()
                     }
                 </Box>}
         </header>
     );
 }
 
-export default StatsContainer;
+export default TicketListContainer;
