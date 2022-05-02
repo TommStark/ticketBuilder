@@ -64,13 +64,6 @@ function StatsContainer() {
         getProjectByUsers();
     },[]);
 
-    function renderNoTicketsTxt(){
-        if(tickets.length === 0){
-            return  <h1 className='gradient__text'>You do not have tickets yet</h1>;
-        }
-        return null;
-    }
-
     return ( 
         <header className="App-header">
             {
@@ -78,98 +71,92 @@ function StatsContainer() {
                     ?   
                     <CircularProgress color="secondary"  size='5rem'/>
                     :(
-                        <Box sx={{
-                            display        : 'flex',
-                            justifyContent : 'center',
-                        }}>
-                            {                        
-                                tickets.length && (
-                                    <>
-                                        <Box
-                                            sx={{
-                                                width           : 400,
-                                                maxWidth        : '90%',
-                                                backgroundColor : 'white',
-                                                padding         : '30px',
-                                                borderRadius    : '5%',
-                                                margin          : '1vh'
-                                            }}>
-                                            <div style={{ display: 'flex',flexDirection: 'column' }}>
-                                                <h1 className='txt-align'>Pie chart</h1>
-                                                <div style={{display: 'flex',flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>
-                                                    <PieChart width={250} height={200}>
-                                                        <Pie
-                                                            data={ProjectsByUser}
-                                                            cx="50%"
-                                                            cy="50%"
-                                                            labelLine={false}
-                                                            label={renderCustomizedLabel}
-                                                            outerRadius={80}
-                                                            innerRadius={50}
-                                                            fill="#8884d8"
-                                                            dataKey="value"
-                                                        >
-                                                            {ProjectsByUser?.map((_entry, index) => (
-                                                                <Cell key={`cell-${index}`} fill={colors[index % colors.length]} />
-                                                            ))}
-                                                        </Pie>
-                                                    </PieChart>
-                                                </div>
-                                                <div style={{display: 'flex',flexDirection: 'column'}}>
-                                                    {ProjectsByUser.map((p) => {
-                                                        return (<>
-                                                            <div style={{display: 'flex',margin: '.5vh'}}>
-                                                                <div className='box' style={{background: p.color}}/>
-                                                                <div> &nbsp; {p.name} &nbsp; &nbsp; &nbsp;{p.value}</div>
-                                                            </div>
-                                                        </>);
-                                                    })}
-                                                </div>
-                                            </div>
-                                        </Box>
-                                        <Box
-                                            sx={{
-                                                width           : 400,
-                                                maxWidth        : '90%',
-                                                backgroundColor : 'transparent',
-                                                padding         : '30px',
-                                                borderRadius    : '5%',
-                                                margin          : '1vh'
-                                            }}>
-                                        </Box>
-                                        <Box
-                                            sx={{
-                                                width           : 400,
-                                                maxWidth        : '90%',
-                                                backgroundColor : 'white',
-                                                padding         : '30px',
-                                                borderRadius    : '5%',
-                                                margin          : '1vh'
-                                            }}>
-                                            <h1 className='txt-align'>Radar Chart</h1>
-                                            <RadarChart
-                                                cx='43.5%'
-                                                cy='43.5%'
-                                                outerRadius={110}
-                                                width={400}
-                                                height={400}
-                                                data={graph}
-                                            >
-                                                <PolarGrid />
-                                                <PolarAngleAxis dataKey="subject" />
-                                                <PolarRadiusAxis />
-                                                <Radar name="You" dataKey="A" stroke="#8884d8" fill="#8884d8" fillOpacity={0.7} />
-                                                <Radar name="The team" dataKey="B" stroke="#82ca9d" fill="#82ca9d" fillOpacity={0.3} />
-                                                <Legend />
-                                            </RadarChart>
-                                        </Box>
-                                    </>
-                                )
-                            }
-                            {
-                                renderNoTicketsTxt()
-                            }
-                        </Box>
+                        tickets.length === 0
+                            ? <h1 className='gradient__text'>You do not have tickets yet</h1>
+                            : 
+                            <Box sx={{
+                                display        : 'flex',
+                                justifyContent : 'center',
+                            }}>
+                                <Box
+                                    sx={{
+                                        width           : 400,
+                                        maxWidth        : '90%',
+                                        backgroundColor : 'white',
+                                        padding         : '30px',
+                                        borderRadius    : '5%',
+                                        margin          : '1vh'
+                                    }}>
+                                    <div style={{ display: 'flex',flexDirection: 'column' }}>
+                                        <h1 className='txt-align'>Pie chart</h1>
+                                        <div style={{display: 'flex',flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>
+                                            <PieChart width={250} height={200}>
+                                                <Pie
+                                                    data={ProjectsByUser}
+                                                    cx="50%"
+                                                    cy="50%"
+                                                    labelLine={false}
+                                                    label={renderCustomizedLabel}
+                                                    outerRadius={80}
+                                                    innerRadius={50}
+                                                    fill="#8884d8"
+                                                    dataKey="value"
+                                                >
+                                                    {ProjectsByUser?.map((entry, index) => (
+                                                        <Cell key={`cell-${index}`} fill={colors[index % colors.length]} />
+                                                    ))}
+                                                </Pie>
+                                            </PieChart>
+                                        </div>
+                                        <div style={{display: 'flex',flexDirection: 'column'}}>
+                                            {ProjectsByUser.map((p) => {
+                                                return (<>
+                                                    <div style={{display: 'flex',margin: '.5vh'}}>
+                                                        <div className='box' style={{background: p.color}}/>
+                                                        <div> &nbsp; {p.name} &nbsp; &nbsp; &nbsp;{p.value}</div>
+                                                    </div>
+                                                </>);
+                                            })}
+                                        </div>
+                                    </div>
+                                </Box>
+                                <Box
+                                    sx={{
+                                        width           : 400,
+                                        maxWidth        : '90%',
+                                        backgroundColor : 'transparent',
+                                        padding         : '30px',
+                                        borderRadius    : '5%',
+                                        margin          : '1vh'
+                                    }}>
+                                </Box>
+                                <Box
+                                    sx={{
+                                        width           : 400,
+                                        maxWidth        : '90%',
+                                        backgroundColor : 'white',
+                                        padding         : '30px',
+                                        borderRadius    : '5%',
+                                        margin          : '1vh'
+                                    }}>
+                                    <h1 className='txt-align'>Radar Chart</h1>
+                                    <RadarChart
+                                        cx='43.5%'
+                                        cy='43.5%'
+                                        outerRadius={110}
+                                        width={400}
+                                        height={400}
+                                        data={graph}
+                                    >
+                                        <PolarGrid />
+                                        <PolarAngleAxis dataKey="subject" />
+                                        <PolarRadiusAxis />
+                                        <Radar name="You" dataKey="A" stroke="#8884d8" fill="#8884d8" fillOpacity={0.7} />
+                                        <Radar name="The team" dataKey="B" stroke="#82ca9d" fill="#82ca9d" fillOpacity={0.3} />
+                                        <Legend />
+                                    </RadarChart>
+                                </Box>
+                            </Box>
                     )
                     
             }

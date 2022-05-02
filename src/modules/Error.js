@@ -9,7 +9,7 @@ function Error({logOut}) {
     const navigate = useNavigate();
 
     function handleOnclick (){
-        logOut();
+        logOut;
         gtag('event', 'ErroPage', { 'ERROR': 'link to home' });
         navigate('/ticketBuilder', {replace: true});
     }

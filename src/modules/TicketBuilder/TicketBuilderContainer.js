@@ -47,7 +47,7 @@ function TicketBuilderContainer() {
     },[]);
 
     const handleChangeSelect = (event) => {
-        const data = projectsData.filter(pro => pro.name === event.target.value);
+        const data = projectsData.filter(project => project.name === event.target.value);
         setProjectName(data[0].name);
         setproject(data[0]);
     };
@@ -68,15 +68,15 @@ function TicketBuilderContainer() {
     };
 
     const getTicket = (ticket) => {
-        const {checksT, detailsT, prLink, ticketLink, _id} = ticket;
+        const {checks, details, prLink, ticketLink, _id} = ticket;
 
         return ({
             pr           : prLink,
             vpdc         : ticketLink,
             project      : project.name,
             projectColor : project.color,
-            details      : detailsT,
-            checks       : checksT,
+            details,
+            checks,
             version      : pjson.version,
             id           : _id,
         });
@@ -106,9 +106,7 @@ function TicketBuilderContainer() {
                         setIsDicordOpen(true);
                         reset();
                     })
-                    .catch(() => {
-                        gtag('event', 'ClickSentToDiscord_FAILED', {  'Author': `${author}` });
-                    });
+                    .catch(err => {err;});
             });
         setIsLoading(false);
     };

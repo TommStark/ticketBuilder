@@ -24,8 +24,8 @@ function TicketBuilderForm(props) {
         setDetails,setChecks,isLoading,isDisabled,generateTicket, author, projectsData, checks, isdiscordOpen, setIsDicordOpen, isDataLoading
     } = props;
 
-    const MenuItems = React.useMemo(() => projectsData?.map((projectMemo,index) => {
-        return <MenuItem key={ `${index}${projectMemo.name}` } value={projectMemo.name}> {`${projectMemo.icon} ${projectMemo.name}`} </MenuItem>;
+    const MenuItems = React.useMemo(() => projectsData?.map((project,index) => {
+        return <MenuItem key={ `${index}${project.name}` } value={project.name}> {`${project.icon} ${project.name}`} </MenuItem>;
     }),[projectsData]); 
 
     return ( 
