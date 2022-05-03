@@ -21,7 +21,6 @@ function TicketListContainer() {
                 }
             })
             .catch(() => {
-                window.location.reload();
                 setIsLoading(false);});
     }
     useEffect(() =>{
