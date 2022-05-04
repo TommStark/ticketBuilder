@@ -55,6 +55,7 @@ function Login({authenticate}) {
                 const {author} = response.data;
                 Cookies.set('token', author.jwToken, { expires: 1 });
                 Cookies.set('author', author.name, { expires: 1 });
+                Cookies.set('img', author.img, { expires: 1 });
                 gtag('event', 'login', { 'Author': `${email}` });
                 authenticate();
                 resetInput();

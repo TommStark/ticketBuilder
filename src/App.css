@@ -15,7 +15,7 @@ a {
 }
 
 .App-header {
-  min-height: 90vh;
+  min-height: 70vh;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -141,7 +141,6 @@ a {
 .navbar-menu_container button {
   padding: 0.5rem 1rem;
   color: #fff;
-  background: #FF4820;
   font-family: var(--font-family);
   font-weight: 500;
   font-size: 18px;
@@ -186,6 +185,8 @@ a {
 
 .txt-align{
   text-align: center;
+  font-family: 'roboto';
+  margin-bottom: 3vh;
 
 }.box {
   display: inline-block;
