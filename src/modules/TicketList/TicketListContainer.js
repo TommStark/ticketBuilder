@@ -33,7 +33,7 @@ function TicketListContainer() {
 
     function renderGhostBox(){
         if (tickets.length % 2 === 1){
-            return <Card sx={{ width: 400, maxWidth: 400, margin: '1vh', borderRadius: '5%', padding: '1vh', backgroundColor: 'transparent' }}/>;
+            return <Card sx={{ width: 400, maxWidth: 400, margin: '1vh', borderRadius: '20px', padding: '1vh', backgroundColor: 'transparent' }}/>;
         }
         return null;
     }
@@ -61,7 +61,7 @@ function TicketListContainer() {
                         }}>
                             {tickets &&
                     tickets.map( (ticket,index) => 
-                        <Card sx={{ width: 400, maxWidth: 400, margin: '1vh', borderRadius: '5%', padding: '1vh' }} key={ticket.id + index}>
+                        <Card sx={{ width: 400, maxWidth: 400, margin: '1vh', borderRadius: '20px', padding: '1vh' }} key={ticket.id + index}>
                             <CardHeader
                                 avatar={
                                     <Avatar sx={{ bgcolor: ticket.project.color }} aria-label={ticket.author.name}>

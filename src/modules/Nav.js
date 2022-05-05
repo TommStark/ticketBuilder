@@ -16,7 +16,6 @@ const pjson = require('../../package.json');
 export default function Nav({logOut}){
     const appVersion = pjson.version;
     const avatarImg = Cookies.get('img');
-    console.log(avatarImg);
     const [anchorEl, setAnchorEl] = React.useState(null);
 
     const handleMenu = (event) => {
@@ -30,10 +29,11 @@ export default function Nav({logOut}){
     return(
         <div className="navbar">
             <div className='navbar-sign'>
-                <p><div>v{appVersion}</div></p> 
+                <p>v{appVersion}</p> 
             </div>
             <div className="navbar-links">
                 <div className='navbar-links_container'>
+                    {/* <p><Link to="ticketBuilder/admin">Admin</Link></p> */}
                     <p><Link to="ticketBuilder/factory">Builder</Link></p>
                     <p><Link to="ticketBuilder/tickets">Tickets</Link></p>
                     <p><Link to="ticketBuilder/stats">Stats</Link></p>

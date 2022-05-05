@@ -99,7 +99,7 @@ function StatsContainer() {
                                             maxWidth        : '90%',
                                             backgroundColor : 'white',
                                             padding         : '30px',
-                                            borderRadius    : '5%',
+                                            borderRadius    : '20px',
                                             margin          : '1vh'
                                         }}>
                                         <div style={{ display: 'flex',flexDirection: 'column' }}>
@@ -157,7 +157,7 @@ function StatsContainer() {
                                             maxWidth        : '90%',
                                             backgroundColor : 'transparent',
                                             padding         : '30px',
-                                            borderRadius    : '5%',
+                                            borderRadius    : '20px',
                                             margin          : '1vh'
                                         }}>
                                     </Box>
@@ -167,7 +167,7 @@ function StatsContainer() {
                                             maxWidth        : '90%',
                                             backgroundColor : 'white',
                                             padding         : '30px',
-                                            borderRadius    : '5%',
+                                            borderRadius    : '20px',
                                             margin          : '1vh'
                                         }}>
                                         <h1 className='txt-align'>Amount of tickets by projects</h1>

@@ -9,6 +9,7 @@ import Nav from './modules/Nav';
 import StatsContainer from './modules/Stats/StatsContainer';
 import TicketListContainer from './modules/TicketList/TicketListContainer';
 import Cookies from 'js-cookie';
+import AdminPanel from './modules/admin/AdminPanel';
 import '@fontsource/roboto/300.css';
 import '@fontsource/roboto/400.css';
 import '@fontsource/roboto/500.css';
@@ -55,6 +56,11 @@ function App() {
                     <Route
                         path="/ticketBuilder/tickets"
                         element={<TicketListContainer />
+                        }>
+                    </Route>
+                    <Route
+                        path="/ticketBuilder/admin"
+                        element={<AdminPanel />
                         }>
                     </Route>
                     <Route path='*' element={<Error logOut={() => logOut()}/>} />

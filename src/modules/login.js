@@ -88,7 +88,7 @@ function Login({authenticate}) {
                         maxWidth        : '90%',
                         backgroundColor : 'white',
                         padding         : '30px',
-                        borderRadius    : '5%'
+                        borderRadius    : '20px'
                     }}>
                     <h1 className="gradient__text txt-align" > Login  </h1>
                     <p aria-live='assertive'> 

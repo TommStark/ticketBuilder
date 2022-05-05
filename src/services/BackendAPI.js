@@ -51,3 +51,24 @@ export const getTicketsByAuthor = () => axios
     .get(backend.getTicketsByAuthor())
     .then((response) => response)
     .catch((err) => { throw new Error(err); });
+
+export const getAllProjects = () => axios
+    .get(backend.getAllProjects())
+    .then((response) => response)
+    .catch((err) => { throw new Error(err); });
+
+export const updateProjectStatus = (params) => axios
+    .post(backend.updateProjectStatus(),params.body)
+    .then((response) => response)
+    .catch((err) => { throw new Error(err); });
+
+export const sendProjectStatus = () => axios
+    .post(backend.sendProjectStatus())
+    .then((response) => response)
+    .catch((err) => { throw new Error(err); });
+
+export const scanChannel = () => axios
+    .post(backend.scanChannel())
+    .then((response) => response)
+    .catch((err) => { throw new Error(err); });
+    

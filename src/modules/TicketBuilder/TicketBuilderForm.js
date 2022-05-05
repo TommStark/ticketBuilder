@@ -14,6 +14,7 @@ import FormControl from '@mui/material/FormControl';
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
 import CircularProgress from '@mui/material/CircularProgress';
+import SendIcon from '@mui/icons-material/Send';
 
 const Alert = React.forwardRef(function Alert(props, ref) {
     return < MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
@@ -44,7 +45,7 @@ function TicketBuilderForm(props) {
                                 maxWidth        : '90%',
                                 backgroundColor : 'white',
                                 padding         : '30px',
-                                borderRadius    : '5%',
+                                borderRadius    : '20px',
                             }}>
                             <h1 className={'gradient__text txt-align' } > Ticket Builder  </h1>
                             <FormControl fullWidth>
@@ -118,6 +119,7 @@ function TicketBuilderForm(props) {
                                     color = 'secondary'
                                     variant="contained"
                                     disabled={!isDisabled}
+                                    endIcon={<SendIcon />}
                                     onClick={ () => generateTicket()}
                                 >To Discord
                                 </LoadingButton>

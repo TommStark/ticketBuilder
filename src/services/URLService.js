@@ -18,6 +18,15 @@ const getProjectByUsers = () => ('/project/by/author');
 
 const getTicketsByAuthor = () =>('/ticket/by/author');
 
+const getAllProjects = () =>('/project/all');
+
+const updateProjectStatus = () =>('/project/update/status');
+
+const sendProjectStatus = () =>('/discBot/push/project');
+
+const scanChannel = () =>('/discBot/scan/channel');
+
+
 export const backend = {
     getUserById,
     postTicketData,
@@ -28,5 +37,9 @@ export const backend = {
     pushTicketToProject,
     sendToDiscordChannel,
     getProjectByUsers,
-    getTicketsByAuthor
+    getTicketsByAuthor,
+    getAllProjects,
+    updateProjectStatus,
+    sendProjectStatus,
+    scanChannel
 };
