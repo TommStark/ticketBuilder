@@ -72,3 +72,17 @@ export const scanChannel = () => axios
     .then((response) => response)
     .catch((err) => { throw new Error(err); });
     
+export const getOtherAuthors = () => axios
+    .get(backend.getOtherAuthors())
+    .then((response) => response)
+    .catch((err) => { throw new Error(err); });   
+
+export const modifyUserInfo = (params) => axios
+    .put(backend.modifyUserInfo(),params.body)
+    .then((response) => response)
+    .catch((err) => { throw new Error(err); });   
+
+export const getUserData = () => axios
+    .get(backend.getUserData())
+    .then((response) => response)
+    .catch((err) => { throw new Error(err); });   

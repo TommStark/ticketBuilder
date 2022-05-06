@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 import React, { useState, useEffect } from 'react' ;
 import '../../App.css';
 import TicketBuilderForm from './TicketBuilderForm';
@@ -5,7 +6,7 @@ import * as BackendAPI from  '../../services/BackendAPI';
 import gtag from 'ga-gtag';
 import Cookies from 'js-cookie';
 import { useNavigate } from 'react-router-dom';
-// eslint-disable-next-line no-undef
+import { Box, Container, Grid, Typography } from '@mui/material';
 const pjson = require('../../../package.json');
 
 function TicketBuilderContainer() {
@@ -38,7 +39,7 @@ function TicketBuilderContainer() {
                 }
             })
             .catch(() => {
-                window.location.reload();
+                // window.location.reload();
             });
     }
 
@@ -121,26 +122,54 @@ function TicketBuilderContainer() {
             {
                 isUserAuth && author ?
                     <>
-                        <TicketBuilderForm
-                            project={projectName}
-                            handleChangeSelect={handleChangeSelect}
-                            PRNumber={PRNumber}
-                            setPRNumber={setPRNumber}
-                            ticketNumber={ticketNumber}
-                            setTicketNumber={setTicketNumber}
-                            details={details}
-                            setDetails={setDetails}
-                            setChecks={setChecks}
-                            isLoading={isLoading}
-                            isDisabled={isDisabled}
-                            generateTicket={generateTicket}
-                            author={author}
-                            projectsData={projectsData}
-                            checks={checks}
-                            isdiscordOpen={isdiscordOpen}
-                            setIsDicordOpen={setIsDicordOpen}
-                            isDataLoading={isDataLoading}
-                        />
+                        <Box
+                            component="main"
+                            sx={{
+                                flexGrow : 1,
+                                py       : 1
+                            }}
+                        >
+                            <Container maxWidth="lg">
+                                <Typography
+                                    sx={{ mb: 3 }}
+                                    variant="h4"
+                                >
+          Ticket builder
+                                </Typography>
+                                <Grid
+                                    container
+                                    spacing={3}
+                                >
+                                    <Grid
+                                        item
+                                        lg={8}
+                                        md={6}
+                                        xs={12}
+                                    >
+                                        <TicketBuilderForm
+                                            project={projectName}
+                                            handleChangeSelect={handleChangeSelect}
+                                            PRNumber={PRNumber}
+                                            setPRNumber={setPRNumber}
+                                            ticketNumber={ticketNumber}
+                                            setTicketNumber={setTicketNumber}
+                                            details={details}
+                                            setDetails={setDetails}
+                                            setChecks={setChecks}
+                                            isLoading={isLoading}
+                                            isDisabled={isDisabled}
+                                            generateTicket={generateTicket}
+                                            author={author}
+                                            projectsData={projectsData}
+                                            checks={checks}
+                                            isdiscordOpen={isdiscordOpen}
+                                            setIsDicordOpen={setIsDicordOpen}
+                                            isDataLoading={isDataLoading}
+                                        />
+                                    </Grid>
+                                </Grid>
+                            </Container>
+                        </Box>
                     </>
                     :null
             }

@@ -9,29 +9,27 @@ function Error({logOut}) {
     const navigate = useNavigate();
 
     function handleOnclick (){
-        logOut;
+        logOut();
         gtag('event', 'ErroPage', { 'ERROR': 'link to home' });
         navigate('/ticketBuilder', {replace: true});
     }
 
 
     return ( 
-        <div className="gradient__bg">
-            <header className="App-header">
-                <Box
-                    sx={{ p: 2, }}
-                >
-                    <h1 className='gradient__text txt-align'>Error Page</h1>
+        <header className="App-header">
+            <Box
+                sx={{ p: 2, }}
+            >
+                <h1 className='gradient__text txt-align'>Error Page</h1>
 
-                    <div className='txt-align' >
-                        <Button 
-                            variant="contained"
-                            color = 'secondary'
-                            onClick={() => handleOnclick() }> Home </Button>
-                    </div>
-                </Box>
-            </header>
-        </div>
+                <div className='txt-align' >
+                    <Button 
+                        variant="contained"
+                        color = 'secondary'
+                        onClick={() => handleOnclick() }> Home </Button>
+                </div>
+            </Box>
+        </header>
     );
 }
 export default Error;

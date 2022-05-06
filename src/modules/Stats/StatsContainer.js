@@ -155,16 +155,6 @@ function StatsContainer() {
                                         sx={{
                                             width           : 400,
                                             maxWidth        : '90%',
-                                            backgroundColor : 'transparent',
-                                            padding         : '30px',
-                                            borderRadius    : '20px',
-                                            margin          : '1vh'
-                                        }}>
-                                    </Box>
-                                    <Box
-                                        sx={{
-                                            width           : 400,
-                                            maxWidth        : '90%',
                                             backgroundColor : 'white',
                                             padding         : '30px',
                                             borderRadius    : '20px',
