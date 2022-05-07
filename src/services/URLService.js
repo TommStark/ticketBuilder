@@ -32,6 +32,12 @@ const modifyUserInfo = () =>('/author/updateInfo');
 
 const getUserData = () =>('/author/myUser');
 
+const removeTicket = (ticketId) =>(`/ticket/${ticketId}`);
+
+const removeTicketFromProject = (ticketId) =>(`/project/${ticketId}`);
+
+const removeTicketFromAuthor = (ticketId) =>(`/author/${ticketId}`);
+
 
 export const backend = {
     getUserById,
@@ -50,5 +56,8 @@ export const backend = {
     scanChannel,
     getOtherAuthors,
     modifyUserInfo,
-    getUserData
+    getUserData,
+    removeTicket,
+    removeTicketFromProject,
+    removeTicketFromAuthor
 };

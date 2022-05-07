@@ -55,6 +55,7 @@ export const SettingsPassword = (props) => {
                     <Button
                         color="primary"
                         variant="contained"
+                        disabled={true}
                     >
             Update
                     </Button>

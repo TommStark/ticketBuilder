@@ -63,6 +63,7 @@ export function ProfileAccount(props) {
                     color="primary"
                     fullWidth
                     variant="text"
+                    disabled={true}
                 >
           Upload picture
                 </Button>

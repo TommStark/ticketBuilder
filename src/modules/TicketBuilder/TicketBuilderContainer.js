@@ -72,8 +72,8 @@ function TicketBuilderContainer() {
         const {checks, details, prLink, ticketLink, _id} = ticket;
 
         return ({
-            pr           : prLink,
-            vpdc         : ticketLink,
+            prLink       : prLink,
+            ticketLink   : ticketLink,
             project      : project.name,
             projectColor : project.color,
             details,

@@ -85,4 +85,21 @@ export const modifyUserInfo = (params) => axios
 export const getUserData = () => axios
     .get(backend.getUserData())
     .then((response) => response)
-    .catch((err) => { throw new Error(err); });   
+    .catch((err) => { throw new Error(err); }); 
+ 
+export const removeTicket = (params) => axios
+    .delete(backend.removeTicket(params.ticket))
+    .then((response) => response)
+    .catch((err) => { throw new Error(err); }); 
+
+
+export const removeTicketFromProject = (params) => axios
+    .delete(backend.removeTicketFromProject(params.ticket),params.body)
+    .then((response) => response)
+    .catch((err) => { throw new Error(err); }); 
+
+export const removeTicketFromAuthor = (params) => axios
+    .delete(backend.removeTicketFromAuthor(params.ticket),params.body)
+    .then((response) => response)
+    .catch((err) => { throw new Error(err); }); 
+    
