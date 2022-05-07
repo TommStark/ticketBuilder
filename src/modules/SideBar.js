@@ -10,13 +10,14 @@ import PersonIcon from '@mui/icons-material/Person';
 import GroupIcon from '@mui/icons-material/Group';
 import SettingsIcon from '@mui/icons-material/Settings';
 import LogoutIcon from '@mui/icons-material/Logout';
+import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
 import { useSelector } from 'react-redux';
 
 const pjson = require('../../package.json');
 
 const items = [
     {
-        href  : '/ticketBuilder/stats',
+        href  : '/ticketBuilder/dashboard',
         title : 'Dashboard',
         icon  : BarChartIcon
     },
@@ -46,6 +47,11 @@ const items = [
         icon  : SettingsIcon
     },
     {
+        href  : '/ticketBuilder/admin',
+        title : 'Admin',
+        icon  : AdminPanelSettingsIcon
+    },
+    {
         href  : '/ticketBuilder/',
         title : 'LogOut',
         icon  : LogoutIcon
@@ -55,7 +61,6 @@ const items = [
 export default function SideBar (props) {
     const { open, onClose } = props;
     const user = useSelector((state)=> state.user?.data);
-    console.log('user: ', user);
     const appVersion = pjson.version;
 
     const content = (

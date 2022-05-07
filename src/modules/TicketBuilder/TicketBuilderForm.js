@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import * as React from 'react';
 import PropTypes from 'prop-types';
 import TextField from '@mui/material/TextField';
@@ -11,13 +10,10 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import FormLabel from '@mui/material/FormLabel';
 import LoadingButton from '@mui/lab/LoadingButton';
 import FormControl from '@mui/material/FormControl';
-import Snackbar from '@mui/material/Snackbar';
-import MuiAlert from '@mui/material/Alert';
 import CircularProgress from '@mui/material/CircularProgress';
 import SendIcon from '@mui/icons-material/Send';
 import {
     Box,
-    Button,
     Card,
     CardContent,
     CardHeader,
@@ -25,13 +21,10 @@ import {
     Grid,
 } from '@mui/material';
 
-const Alert = React.forwardRef(function Alert(props, ref) {
-    return < MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
-});
 function TicketBuilderForm(props) {
     const {
         project, handleChangeSelect, PRNumber, setPRNumber, ticketNumber, setTicketNumber,details,
-        setDetails,setChecks,isLoading,isDisabled,generateTicket, author, projectsData, checks, isdiscordOpen, setIsDicordOpen, isDataLoading
+        setDetails,setChecks,isLoading,isDisabled,generateTicket, author, projectsData, checks, isDataLoading
     } = props;
 
     const MenuItems = React.useMemo(() => projectsData?.map((project,index) => {
@@ -180,11 +173,6 @@ function TicketBuilderForm(props) {
                 </form>
             
             }
-            <Snackbar open={isdiscordOpen} autoHideDuration={2400} onClose={() => setIsDicordOpen(false)}>
-                <Alert onClose={() => setIsDicordOpen(false)} severity="info" sx={{ width: '100%' }}>
-                Ticket Sent to Discord!
-                </Alert>
-            </Snackbar>
         </>
     );}
 

@@ -2,13 +2,16 @@
 import React, { useEffect, useState } from 'react';
 import { Box } from '@mui/material';
 import { styled } from '@mui/material/styles';
+import { useSelector, useDispatch } from 'react-redux';
+import {  Route, Routes } from 'react-router-dom';
+import Snackbar from '@mui/material/Snackbar';
+import MuiAlert from '@mui/material/Alert';
+import Cookies from 'js-cookie';
 import Nav from './Nav/Nav';
 import SideBar from './SideBar';
 import TicketBuilderContainer from './TicketBuilder/TicketBuilderContainer';
 import Login  from './login/login';
-import {  Route, Routes } from 'react-router-dom';
 import Error from './Error';
-import StatsContainer from './Stats/StatsContainer';
 import TicketListContainer from './TicketList/TicketListContainer';
 import AdminPanel from './admin/AdminPanel';
 import ProfileContainer from './Profile/ProfileContainer';
@@ -16,25 +19,39 @@ import SettingsContainer from './Settings/SettingsContainer';
 import TeamContainer from './Team/TeamContainer';
 import { AddUser, addTickets, addUserData } from '../modules/login/loginSlice';
 import { addTeam } from '../modules/Team/TeamSlice';
-import { useDispatch } from 'react-redux';
-import Cookies from 'js-cookie';
+import { ChangeSnackbar } from '../modules/AppSlice';
 import * as BackendAPI from  '../services/BackendAPI';
+import DashboardContainer from './dashboard/DashboardContainer';
 
 const DashboardLayoutRoot = styled('div')(({ theme }) => ({
     display                      : 'flex',
     flex                         : '1 1 auto',
     maxWidth                     : '100%',
-    paddingTop                   : 64,
     [theme.breakpoints.up('lg')] : {
         paddingLeft: 280
     }
 }));
+
+const Alert = React.forwardRef(function Alert(props, ref) {
+    return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
 
 export default function DashboardLayout ({logOut,setUser,user}) {
     const [isSidebarOpen, setSidebarOpen] = useState(true);
     const dispatch = useDispatch();
     const isUserAuth  = localStorage.getItem('user') && JSON.parse(localStorage.getItem('user'));
     const data  = Cookies.get('data') && JSON.parse(Cookies.get('data'));
+    const snack = useSelector((state)=> state.app.snackbar);
+    
+    const handleClose = (event, reason) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+
+        dispatch(ChangeSnackbar({state: false,txt: ''}));
+    };
+
+
 
     useEffect(()=>{
         if(isUserAuth || data){
@@ -91,8 +108,8 @@ export default function DashboardLayout ({logOut,setUser,user}) {
                             }>
                         </Route>
                         <Route
-                            path="/ticketBuilder/stats"
-                            element={<StatsContainer />
+                            path="/ticketBuilder/dashboard"
+                            element={<DashboardContainer />
                             }>
                         </Route>
                         <Route
@@ -129,6 +146,11 @@ export default function DashboardLayout ({logOut,setUser,user}) {
                     </Routes>
                 </Box>
             </DashboardLayoutRoot>
+            <Snackbar open={snack.state} autoHideDuration={2000} onClose={handleClose}>
+                <Alert onClose={handleClose} severity={snack.severity} sx={{ width: '100%' }}>
+                    {snack.txt}
+                </Alert>
+            </Snackbar>
         </>
     );
 }

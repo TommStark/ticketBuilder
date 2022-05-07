@@ -27,7 +27,7 @@ function Login({authenticate}) {
     useEffect(()=>{
         if(isUserAuth){
             dispatch(AddUser(Cookies.get('data')));
-            navigate('stats', {replace: true});
+            navigate('dashboard', {replace: true});
         }
     },[]);
 
@@ -69,7 +69,7 @@ function Login({authenticate}) {
                 gtag('event', 'login', { 'Author': `${email}` });
                 authenticate();
                 resetInput();
-                navigate('stats', {replace: true});
+                navigate('dashboard', {replace: true});
                 setIsLoading(false);
             })
             .catch( () => {

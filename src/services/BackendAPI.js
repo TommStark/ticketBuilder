@@ -103,3 +103,10 @@ export const removeTicketFromAuthor = (params) => axios
     .then((response) => response)
     .catch((err) => { throw new Error(err); }); 
     
+export const getTeamTickets = () => axios
+    .get(backend.getTeamTickets())
+    .then((response) => response)
+    .catch((err) => { throw new Error(err); }); 
+    
+
+    

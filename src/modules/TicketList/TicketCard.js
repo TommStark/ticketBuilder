@@ -4,52 +4,13 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import * as BackendAPI from  '../../services/BackendAPI';
 import { Avatar, Box, Card, CardContent, Divider, Grid, Typography } from '@mui/material';
+import Tooltip from '@mui/material/Tooltip';
 import SendIcon from '@mui/icons-material/Send';
 import ClearIcon from '@mui/icons-material/Clear';
 import IconButton from '@mui/material/IconButton';
+import { formatDate } from '../Utils';
 
-
-function ProductCard ({ product, setIsLoading, isloading, ...rest }) {
-    function formatDate(date){
-        return date.split('T')[0];
-    }
-    
-    function reSendTicket(ticket){
-        setIsLoading(true);
-        const formatTicket = {
-            ...ticket,
-            project      : ticket.project.name,
-            projectColor : ticket.project.color   
-        };
-    
-        BackendAPI.sendToDiscordChannel({body: {'ticket': formatTicket}})
-            .then( () =>{
-                setIsLoading(false);
-            });
-    }
-    
-    function deleteTicket(ticket){
-        setIsLoading(true);
-        const params ={
-            authorId : ticket.author._id,
-            ticket   : ticket._id,
-            body     : {
-                name: ticket.project.name
-            }
-        };
-
-        BackendAPI.removeTicket({ticket: ticket._id})
-            .then( () =>{
-                BackendAPI.removeTicketFromProject(params)
-                    .then(() => {
-                        BackendAPI.removeTicketFromAuthor(params)
-                            .then(() => {
-                                setIsLoading(false);
-                            });
-                    });
-            });
-    }
-    
+function ProductCard ({ product, setIsLoading, isloading, handleClickOpen, reSendTicket, ...rest }) {
     return(
         <>  
             <Card
@@ -85,7 +46,7 @@ function ProductCard ({ product, setIsLoading, isloading, ...rest }) {
                         <p><strong>Jira:</strong>         <a href={product.ticketLink}>{product.ticketLink}</a></p>
                         <p><strong>Details:</strong>      {product.details}</p>
                         <p><strong>Checks:</strong>      {product.checks}</p>
-                        <p><strong>Merged:</strong> {product.isDone ? `Yes on ${formatDate(product.end_date)}` : 'No yet'}</p>
+                        <p><strong>Merged:</strong> {product.isDone ? ` ${formatDate(product.end_date)}` : 'No yet'}</p>
                     </Typography>
                 </CardContent>
                 <Box sx={{ flexGrow: 1 }} />
@@ -103,20 +64,14 @@ function ProductCard ({ product, setIsLoading, isloading, ...rest }) {
                                 display    : 'flex'
                             }}
                         >
-                            <Typography
-                                color="textSecondary"
-                                display="inline"
-                                sx={{ pr: 1 }}
-                                variant="body2"
-                            >
-                        To discord
-                            </Typography>
-                            <IconButton 
-                                aria-label="sendIcon"
-                                onClick={() => reSendTicket(product)}
-                            >
-                                <SendIcon color="action" />
-                            </IconButton>
+                            <Tooltip title="Delete">
+                                <IconButton 
+                                    aria-label="sendIcon"
+                                    onClick={() => handleClickOpen(product)}
+                                >
+                                    <ClearIcon color="action" />
+                                </IconButton>
+                            </Tooltip>
                         </Grid>
                         <Grid
                             item
@@ -125,20 +80,14 @@ function ProductCard ({ product, setIsLoading, isloading, ...rest }) {
                                 display    : 'flex'
                             }}
                         >
-                            <Typography
-                                color="textSecondary"
-                                display="inline"
-                                sx={{ pr: 1 }}
-                                variant="body2"
-                            >
-                        Delete
-                            </Typography>
-                            <IconButton 
-                                aria-label="sendIcon"
-                                onClick={() => deleteTicket(product)}
-                            >
-                                <ClearIcon color="action" />
-                            </IconButton>
+                            <Tooltip title="Sent to Discord">
+                                <IconButton 
+                                    aria-label="sendIcon"
+                                    onClick={() => reSendTicket(product)}
+                                >
+                                    <SendIcon color="action" />
+                                </IconButton>
+                            </Tooltip>
                         </Grid>
                     </Grid>
                 </Box>

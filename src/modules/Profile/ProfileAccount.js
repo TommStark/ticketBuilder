@@ -10,7 +10,6 @@ import {
     Divider,
     Typography
 } from '@mui/material';
-
 import { useSelector } from 'react-redux';
 
 export function ProfileAccount(props) {
@@ -52,13 +51,12 @@ export function ProfileAccount(props) {
                         color="textSecondary"
                         variant="body2"
                     >
-                        {/* {user?.timezone} */}
-                        GTM-7
+                        GTM-3
                     </Typography>
                 </Box>
             </CardContent>
             <Divider />
-            <CardActions>
+            {/* <CardActions>
                 <Button
                     color="primary"
                     fullWidth
@@ -67,7 +65,7 @@ export function ProfileAccount(props) {
                 >
           Upload picture
                 </Button>
-            </CardActions>
+            </CardActions> */}
         </Card>
     );
 }

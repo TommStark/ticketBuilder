@@ -158,7 +158,7 @@ export function ProfileDetails (props){
                         >
                             <TextField
                                 fullWidth
-                                label="state_code"
+                                label="state"
                                 name="state_code"
                                 onChange={handleChange}
                                 required
