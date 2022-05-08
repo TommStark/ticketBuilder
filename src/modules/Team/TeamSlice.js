@@ -1,8 +1,7 @@
 import  {createSlice} from '@reduxjs/toolkit';
 
 const initialState ={
-    users: {
-    }
+    users: []
 };
 
 export const TeamSlice = createSlice({

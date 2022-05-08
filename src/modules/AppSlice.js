@@ -5,8 +5,14 @@ const initialState ={
         state    : false,
         txt      : '',
         severity : 'success'
+    },
+    notification: {
+        saw    : false,
+        isOpen : false,
+    },
+    theme: {
+        darkMode: false,
     }
-
 };
 
 export const AppSlice = createSlice({
@@ -16,9 +22,15 @@ export const AppSlice = createSlice({
         ChangeSnackbar: (state, action) => {
             state.snackbar = { ...action.payload };
         },
+        changeNotificationSaw: (state, action) => {
+            state.notification = { ...action.payload };
+        },
+        toggleTheme: (state, action) => {
+            state.darkMode = action.payload;
+        },
     }
 });
 
-export const { ChangeSnackbar } = AppSlice.actions;
+export const { ChangeSnackbar, changeNotificationSaw, toggleTheme } = AppSlice.actions;
 
 export default AppSlice.reducer;

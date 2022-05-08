@@ -23,7 +23,6 @@ const getInitials = (name = '') => name
     .join('');
 
 export const TeamResults = ({ customers, ...rest }) => {
-    console.log('customers: ', customers);
     const [selectedCustomerIds, setSelectedCustomerIds] = useState([]);
     const [limit, setLimit] = useState(10);
     const [page, setPage] = useState(0);
@@ -80,7 +79,7 @@ export const TeamResults = ({ customers, ...rest }) => {
                                     color="primary"
                                     indeterminate={
                                         selectedCustomerIds.length > 0
-                      && selectedCustomerIds.length < customers?.length
+                                                                        && selectedCustomerIds.length < customers?.length
                                     }
                                     onChange={handleSelectAll}
                                 />
@@ -106,7 +105,7 @@ export const TeamResults = ({ customers, ...rest }) => {
                         {customers?.slice(0, limit).map((customer) => (
                             <TableRow
                                 hover
-                                key={customer.id}
+                                key={customer}
                                 selected={selectedCustomerIds.indexOf(customer.id) !== -1}
                             >
                                 <TableCell padding="checkbox">

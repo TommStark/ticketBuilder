@@ -1,20 +1,15 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable no-unused-vars */
 import React from 'react';
-// import {Chart, ArcElement} from 'chart.js';
 import 'chart.js/auto';
 import { Radar } from 'react-chartjs-2';
 import { Box, Card, CardContent, CardHeader, Divider, Typography, useTheme } from '@mui/material';
-// Chart.register(ArcElement);
 
 export default function DashBoardGraph (props){
     const {allTickets} = props;
-    const projectsName = allTickets.map(pro => pro.subject);
-    const projectsvalueA = allTickets.map(pro => pro.A);
-    const projectsvalueB = allTickets.map(pro => pro.B);
-
-    console.log(allTickets);
-
+    const projectsName = allTickets?.map(pro => pro.subject);
+    const projectsvalueA = allTickets?.map(pro => pro.A);
+    const projectsvalueB = allTickets?.map(pro => pro.B);
 
     const data = {
         datasets: [

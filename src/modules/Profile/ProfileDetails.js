@@ -9,9 +9,10 @@ import {
     Grid,
     TextField
 } from '@mui/material';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import * as BackendAPI from  '../../services/BackendAPI';
 import LoadingButton from '@mui/lab/LoadingButton';
+import { ChangeSnackbar } from '../AppSlice';
 
 
 export function ProfileDetails (props){
@@ -19,7 +20,7 @@ export function ProfileDetails (props){
     const [isBTNLoading, setIsBTNLoading] = useState(false);
     const [isDisabled, setIsDisabled] = useState(true);
     const [values, setValues] = useState({});
-    console.log('values: ', values);
+    const dispatch = useDispatch();
 
     
     useEffect(()=>{
@@ -50,11 +51,13 @@ export function ProfileDetails (props){
                 setIsBTNLoading(false);
                 setIsDisabled(true);
                 setValues(res.data);
+                dispatch(ChangeSnackbar({state: true,txt: ' The update was successfully!'}));
             })
             .catch(
                 () =>  {
                     setIsBTNLoading(false);
                     setIsDisabled(true);
+                    dispatch(ChangeSnackbar({state: true,txt: ' upps something happend!',severity: 'error'}));
                 });
     };
 

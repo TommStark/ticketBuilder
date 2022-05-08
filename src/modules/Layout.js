@@ -4,6 +4,7 @@ import { Box } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { useSelector, useDispatch } from 'react-redux';
 import {  Route, Routes } from 'react-router-dom';
+import { ThemeProvider, createTheme } from '@mui/material/styles';
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
 import Cookies from 'js-cookie';
@@ -22,6 +23,8 @@ import { addTeam } from '../modules/Team/TeamSlice';
 import { ChangeSnackbar } from '../modules/AppSlice';
 import * as BackendAPI from  '../services/BackendAPI';
 import DashboardContainer from './dashboard/DashboardContainer';
+import Drawer from './Drawer';
+import LogOut from './logOut';
 
 const DashboardLayoutRoot = styled('div')(({ theme }) => ({
     display                      : 'flex',
@@ -31,6 +34,8 @@ const DashboardLayoutRoot = styled('div')(({ theme }) => ({
         paddingLeft: 280
     }
 }));
+
+
 
 const Alert = React.forwardRef(function Alert(props, ref) {
     return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
@@ -42,6 +47,13 @@ export default function DashboardLayout ({logOut,setUser,user}) {
     const isUserAuth  = localStorage.getItem('user') && JSON.parse(localStorage.getItem('user'));
     const data  = Cookies.get('data') && JSON.parse(Cookies.get('data'));
     const snack = useSelector((state)=> state.app.snackbar);
+    const isDarkMode = useSelector((state)=> state.app.theme.darkMode);
+
+    const darkTheme = createTheme({
+        palette: {
+            mode: isDarkMode ? 'dark' :  'light',
+        },
+    });
     
     const handleClose = (event, reason) => {
         if (reason === 'clickaway') {
@@ -82,75 +94,87 @@ export default function DashboardLayout ({logOut,setUser,user}) {
 
     return (
         <>
-            { user && <Nav logOut={() => logOut()}/>}
-            { user && <SideBar
-                onClose={() => setSidebarOpen(false)}
-                open={isSidebarOpen}
-            />
-            }
-            <DashboardLayoutRoot>
-                <Box
-                    sx={{
-                        display       : 'flex',
-                        flex          : '1 1 auto',
-                        flexDirection : 'column',
-                        width         : '100%'
-                    }}
-                >
-                    <Routes>
-                        <Route 
-                            path="/ticketBuilder"  
-                            element={ <Login authenticate={() => setUser(true)} />
-                            }/>
-                        <Route
-                            path="/ticketBuilder/factory"
-                            element={<TicketBuilderContainer />
-                            }>
-                        </Route>
-                        <Route
-                            path="/ticketBuilder/dashboard"
-                            element={<DashboardContainer />
-                            }>
-                        </Route>
-                        <Route
-                            path="/ticketBuilder/tickets"
-                            element={<TicketListContainer />
-                            }>
-                        </Route>
-                        <Route
-                            path="/ticketBuilder/admin"
-                            element={<AdminPanel />
-                            }>
-                        </Route>
-                        <Route
-                            path="/ticketBuilder/profile"
-                            element={<ProfileContainer />
-                            }>
-                        </Route>
-                        <Route
-                            path="/ticketBuilder/profile"
-                            element={<ProfileContainer />
-                            }>
-                        </Route>
-                        <Route
-                            path="/ticketBuilder/settings"
-                            element={<SettingsContainer />
-                            }>
-                        </Route>
-                        <Route
-                            path="/ticketBuilder/team"
-                            element={<TeamContainer />
-                            }>
-                        </Route>
-                        <Route path='*' element={<Error logOut={() => logOut()}/>} />
-                    </Routes>
-                </Box>
-            </DashboardLayoutRoot>
-            <Snackbar open={snack.state} autoHideDuration={2000} onClose={handleClose}>
-                <Alert onClose={handleClose} severity={snack.severity} sx={{ width: '100%' }}>
-                    {snack.txt}
-                </Alert>
-            </Snackbar>
+            <ThemeProvider theme={darkTheme}>
+
+                { user && <Nav />}
+                { user && <SideBar
+                    onClose={() => setSidebarOpen(false)}
+                    open={isSidebarOpen}
+                    logOut={() => logOut()}
+                />
+                }
+                <DashboardLayoutRoot>
+                    <Box
+                        sx={{
+                            display       : 'flex',
+                            flex          : '1 1 auto',
+                            flexDirection : 'column',
+                            width         : '100%',
+                        }}
+                    >
+                        <Routes>
+                            <Route 
+                                path="/ticketBuilder"  
+                                element={ <Login authenticate={() => setUser(true)} />
+                                }/>
+                            <Route
+                                path="/ticketBuilder/factory"
+                                element={ user  ? <TicketBuilderContainer /> : <Login authenticate={() => setUser(true)} />
+                                }>
+                            </Route>
+                            <Route
+                                path="/ticketBuilder/dashboard"
+                                element={user  ? <DashboardContainer /> : <Login authenticate={() => setUser(true)} />
+                                }>
+                            </Route>
+                            <Route
+                                path="/ticketBuilder/tickets"
+                                element={user  ? <TicketListContainer /> : <Login authenticate={() => setUser(true)} />
+                                }>
+                            </Route>
+                            <Route
+                                path="/ticketBuilder/admin"
+                                element={user  ? <AdminPanel /> : <Login authenticate={() => setUser(true)} />
+                                }>
+                            </Route>
+                            <Route
+                                path="/ticketBuilder/profile"
+                                element={user ? <ProfileContainer /> : <Login authenticate={() => setUser(true)} />
+                                }>
+                            </Route>
+                            <Route
+                                path="/ticketBuilder/profile"
+                                element={user ? <ProfileContainer /> : <Login authenticate={() => setUser(true)} />
+                                }>
+                            </Route>
+                            <Route
+                                path="/ticketBuilder/settings"
+                                element={user ? <SettingsContainer /> : <Login authenticate={() => setUser(true)} />
+                                }>
+                            </Route>
+                            <Route
+                                path="/ticketBuilder/team"
+                                element={user ? <TeamContainer /> : <Login authenticate={() => setUser(true)} />
+                                }>
+                            </Route>
+                            <Route
+                                path="/ticketBuilder/logOut"
+                                element={<LogOut
+                                    logOut={() => logOut()}
+                                />
+                                }>
+                            </Route>
+                            <Route path='*' element={<Error logOut={() => logOut()}/>} />
+                        </Routes>
+                    </Box>
+                </DashboardLayoutRoot>
+                <Snackbar open={snack.state} autoHideDuration={2000} onClose={handleClose}>
+                    <Alert onClose={handleClose} severity={snack.severity} sx={{ width: '100%' }}>
+                        {snack.txt}
+                    </Alert>
+                </Snackbar>
+                <Drawer />
+            </ThemeProvider>
         </>
     );
 }

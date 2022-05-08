@@ -1,7 +1,5 @@
-/* eslint-disable no-unused-vars */
-/* eslint-disable no-undef */
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
 import PropTypes from 'prop-types';
 import Avatar from '@mui/material/Avatar';
 import Cookies from 'js-cookie';
@@ -16,30 +14,29 @@ import Typography from '@mui/material/Typography';
 import MenuIcon from '@mui/icons-material/Menu';
 import Container from '@mui/material/Container';
 import Badge from '@mui/material/Badge';
-import MailIcon from '@mui/icons-material/Mail';
+import NotificationsIcon from '@mui/icons-material/Notifications';
+import { changeNotificationSaw } from '../AppSlice';
 
 const pages = ['Products', 'Pricing', 'Blog'];
 
-export default function Nav({logOut}){
+export default function Nav(){
     const avatarImg = Cookies.get('img');
     const [anchorElNav, setAnchorElNav] = React.useState(null);
-    const [anchorElUser, setAnchorElUser] = React.useState(null);
+    const dispatch = useDispatch();
+    const DrawerSaw = useSelector((state)=> state.app.notification.saw);
 
     const handleOpenNavMenu = (event) => {
         setAnchorElNav(event.currentTarget);
-    };
-    const handleOpenUserMenu = (event) => {
-        setAnchorElUser(event.currentTarget);
     };
 
     const handleCloseNavMenu = () => {
         setAnchorElNav(null);
     };
 
-    const handleCloseUserMenu = () => {
-        setAnchorElUser(null);
-    };
 
+    const openDrawer = () => {
+        dispatch(changeNotificationSaw({isOpen: open}));
+    };
 
     return(
         <AppBar position="static" style={{paddingLeft: '300px', maxHeight: '64px',backgroundColor: 'white', color: 'grey'}}>
@@ -93,9 +90,12 @@ export default function Nav({logOut}){
                     </Box>
                     <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                         <Tooltip title="Notifications">
-                            <IconButton sx={{ ml: 1 }}>
-                                <Badge  variant="dot" color="primary">
-                                    <MailIcon color="action" />
+                            <IconButton 
+                                onClick={() => openDrawer()}
+                                sx={{ ml: 1 }}
+                            >
+                                <Badge  variant={ DrawerSaw ? '' : 'dot'} color="primary">
+                                    <NotificationsIcon color="action" />
                                 </Badge>
                             </IconButton>
                         </Tooltip>

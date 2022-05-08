@@ -20,7 +20,7 @@ import {formatDate} from '../Utils';
 export const DashBoardLastTickets = (props) => (
     <Card>
         <CardHeader title="Latest tickets" />
-        <Box sx={{ minWidth: 800 }}>
+        <Box sx={{ minWidth: 600 }}>
             <Table>
                 <TableHead>
                     <TableRow>

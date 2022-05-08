@@ -9,6 +9,7 @@ import { DashBoardLastTickets } from './DashBoardLastTickets';
 import GroupIcon from '@mui/icons-material/Group';
 import PersonIcon from '@mui/icons-material/Person';
 import { DashBoardProjectStatus } from './DashBoardProjectStatus';
+import { DashboardChart } from './DashBoardChart';
 
 function DashboardContainer () {
     const [ProjectsByUser, setProjectsByUser] = useState([]);
@@ -19,7 +20,9 @@ function DashboardContainer () {
     const [teamTickes, setTeamTickets]=useState([]);
     const [ProjectsStatus, setProjectsStatus]=useState([]);
 
-    console.log(ProjectsStatus);
+    const x = tickets.map(t =>  new Date(Date.parse(t.start_date)).toJSON().slice(0,10));
+    const y = teamTickes.map(t =>  new Date(Date.parse(t.start_date)).toJSON().slice(0,10));
+
 
     function getTicketsByUsers(){
         BackendAPI.getTicketsByAuthor()
@@ -51,6 +54,7 @@ function DashboardContainer () {
             })
             .catch(() => {
                 setIsLoading(false);
+                window.location.reload();
             });
         BackendAPI.getAllProjects()
             .then(res => {
@@ -128,7 +132,10 @@ function DashboardContainer () {
                             xl={9}
                             xs={12}
                         >
-                            {/* <Sales /> */}
+                            <DashboardChart
+                                x={x}
+                                y={y}
+                            />
                         </Grid>
                         <Grid
                             item

@@ -44,6 +44,7 @@ function ProductCard ({ product, setIsLoading, isloading, handleClickOpen, reSen
                     <Typography variant="body2" color="text.secondary">
                         <p><strong>Pull Request:</strong> <a href={product.prLink}> {(product.prLink).substring(0,50)}</a>...</p>
                         <p><strong>Jira:</strong>         <a href={product.ticketLink}>{product.ticketLink}</a></p>
+                        <p><strong>Date:</strong> {formatDate(product.start_date)} </p>
                         <p><strong>Details:</strong>      {product.details}</p>
                         <p><strong>Checks:</strong>      {product.checks}</p>
                         <p><strong>Merged:</strong> {product.isDone ? ` ${formatDate(product.end_date)}` : 'No yet'}</p>

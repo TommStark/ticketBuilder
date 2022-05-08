@@ -1,4 +1,5 @@
 /* eslint-disable no-undef */
+/* eslint-disable react/prop-types */
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Box, Divider, Drawer, Typography } from '@mui/material';
@@ -12,56 +13,61 @@ import SettingsIcon from '@mui/icons-material/Settings';
 import LogoutIcon from '@mui/icons-material/Logout';
 import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
 import { useSelector } from 'react-redux';
-
 const pjson = require('../../package.json');
 
-const items = [
-    {
-        href  : '/ticketBuilder/dashboard',
-        title : 'Dashboard',
-        icon  : BarChartIcon
-    },
-    {
-        href  : '/ticketBuilder/team',
-        title : 'Dream Team',
-        icon  : GroupIcon
-    },
-    {
-        href  : '/ticketBuilder/factory',
-        title : 'Ticket Builder',
-        icon  : OutboxIcon
-    },
-    {
-        href  : '/ticketBuilder/tickets',
-        title : 'Ticket List',
-        icon  : ListAltIcon
-    },
-    {
-        href  : '/ticketBuilder/profile',
-        title : 'Profile',
-        icon  : PersonIcon
-    },
-    {
-        href  : '/ticketBuilder/settings',
-        title : 'Settings',
-        icon  : SettingsIcon
-    },
-    {
-        href  : '/ticketBuilder/admin',
-        title : 'Admin',
-        icon  : AdminPanelSettingsIcon
-    },
-    {
-        href  : '/ticketBuilder/',
-        title : 'LogOut',
-        icon  : LogoutIcon
-    },
-];
+
 
 export default function SideBar (props) {
     const { open, onClose } = props;
     const user = useSelector((state)=> state.user?.data);
     const appVersion = pjson.version;
+
+
+    const items = [
+        {
+            href  : '/ticketBuilder/dashboard',
+            title : 'Dashboard',
+            icon  : BarChartIcon
+        },
+        {
+            href  : '/ticketBuilder/team',
+            title : 'Dream Team',
+            icon  : GroupIcon
+        },
+        {
+            href  : '/ticketBuilder/factory',
+            title : 'Ticket Builder',
+            icon  : OutboxIcon
+        },
+        {
+            href  : '/ticketBuilder/tickets',
+            title : 'Ticket List',
+            icon  : ListAltIcon
+        },
+        {
+            href  : '/ticketBuilder/profile',
+            title : 'Profile',
+            icon  : PersonIcon
+        },
+        {
+            href  : '/ticketBuilder/settings',
+            title : 'Settings',
+            icon  : SettingsIcon
+        },
+        {
+            href  : '/ticketBuilder/admin',
+            title : 'Admin',
+            icon  : AdminPanelSettingsIcon
+        },
+        {
+            href  : '/ticketBuilder/LogOut',
+            title : 'LogOut',
+            icon  : LogoutIcon,
+        },
+    ];
+
+
+
 
     const content = (
         <>
@@ -160,7 +166,7 @@ export default function SideBar (props) {
                 sx: {
                     backgroundColor : '#111827',
                     color           : '#FFFFFF',
-                    width           : 280,
+                    width           : 260,
                 }
             }}
             sx={{ zIndex: 100 }}
