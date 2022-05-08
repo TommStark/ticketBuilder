@@ -40,7 +40,9 @@ const removeTicketFromAuthor = (ticketId) =>(`/author/${ticketId}`);
 
 const getTeamTickets = () => ('/ticket');
 
+const getNews  = () => ('/news');
 
+const changeUserAppVersion = () => ('/author/appVersion');
 
 export const backend = {
     getUserById,
@@ -63,5 +65,7 @@ export const backend = {
     removeTicket,
     removeTicketFromProject,
     removeTicketFromAuthor,
-    getTeamTickets
+    getTeamTickets,
+    getNews,
+    changeUserAppVersion
 };

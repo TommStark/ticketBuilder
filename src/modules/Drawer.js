@@ -1,51 +1,21 @@
-/* eslint-disable no-unused-vars */
 import * as React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
 import List from '@mui/material/List';
-import Divider from '@mui/material/Divider';
 import Card from '@mui/material/Card';
-import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
-import CardMedia from '@mui/material/CardMedia';
-import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import { changeNotificationSaw } from './AppSlice';
 import Chip from '@mui/material/Chip';
+import { formatDate } from './Utils';
 
-
-const __mock__ = [
-    {
-        title : 'JAVA',
-        text  : ' Java analysis is now 30% faster, on average. One beta tester even shared analyzing his 1 million LoC project dropped from 38 minutes to 18.',
-        date  : 'Apr 07, 2022',
-        color : 'info'
-    },
-    {
-        title : 'Testing',
-        text  : ' Java analysis is now 30% faster, on average. One beta tester even shared analyzing his 1 million LoC project dropped from 38 minutes to 18.',
-        date  : 'Apr 07, 2023',
-        color : 'error'
-    },
-    {
-        title : 'Place Holder',
-        text  : ' Java analysis is now 30% faster, on average. One beta tester even shared analyzing his 1 million LoC project dropped from 38 minutes to 18.',
-        date  : 'Apr 07, 2024',
-        color : 'warning'
-    },
-    {
-        title : 'Testing',
-        text  : ' Java analysis is now 30% faster, on average. One beta tester even shared analyzing his 1 million LoC project dropped from 38 minutes to 18.',
-        date  : 'Apr 07, 2023',
-        color : 'success'
-    },
-];
 
 
 export default function TemporaryDrawer() {
     const dispatch = useDispatch();
     const isOpen = useSelector((state)=> state.app.notification.isOpen);
+    const news = useSelector((state)=> state.app.news);
 
     const toggleDrawer = (anchor, open) => (event) => {
         if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
@@ -68,11 +38,11 @@ export default function TemporaryDrawer() {
                 overflow        : 'hidden',
             }}>
                 <Typography gutterBottom variant="body1" component="div">
-                    {'Whats new on TicketBuilder?'}
+                    {news?.title}
                 </Typography>
             </CardContent>
             <List>
-                {__mock__.map((item, index) => (
+                {news?.posts.map((item) => (
                     <Card sx={{ 
                         maxWidth        : 400,
                         maxHeight       : 200,
@@ -89,7 +59,7 @@ export default function TemporaryDrawer() {
                             textAlign       : 'right',
                         }}>
                             <Typography gutterBottom variant="body2" component="div">
-                                {item.date}
+                                {formatDate(item.date)}
                             </Typography>
                         </CardContent>
                         <CardContent>
@@ -97,7 +67,7 @@ export default function TemporaryDrawer() {
                                 <Chip label={item.title} size="small"  color={item.color}/>
                             </Typography>
                             <Typography variant="body2" color="text.secondary">
-                                {item.text}
+                                {item.body}
                             </Typography>
                         </CardContent>
                     </Card>

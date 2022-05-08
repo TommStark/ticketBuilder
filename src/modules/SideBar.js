@@ -11,7 +11,7 @@ import PersonIcon from '@mui/icons-material/Person';
 import GroupIcon from '@mui/icons-material/Group';
 import SettingsIcon from '@mui/icons-material/Settings';
 import LogoutIcon from '@mui/icons-material/Logout';
-import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
+// import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
 import { useSelector } from 'react-redux';
 const pjson = require('../../package.json');
 
@@ -54,11 +54,11 @@ export default function SideBar (props) {
             title : 'Settings',
             icon  : SettingsIcon
         },
-        {
-            href  : '/ticketBuilder/admin',
-            title : 'Admin',
-            icon  : AdminPanelSettingsIcon
-        },
+        // {
+        //     href  : '/ticketBuilder/admin',
+        //     title : 'Admin',
+        //     icon  : AdminPanelSettingsIcon
+        // },
         {
             href  : '/ticketBuilder/LogOut',
             title : 'LogOut',

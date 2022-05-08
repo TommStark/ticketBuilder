@@ -85,20 +85,20 @@ export const TeamResults = ({ customers, ...rest }) => {
                                 />
                             </TableCell>
                             <TableCell>
-                  Name
+                                    Name
                             </TableCell>
                             <TableCell>
-                  Email
+                                    Email
                             </TableCell>
                             <TableCell>
-                  Location
+                                    Location
                             </TableCell>
                             <TableCell>
-                  Phone
+                                    Phone
                             </TableCell>
-                            {/* <TableCell>
-                  Registration date
-                            </TableCell> */}
+                            <TableCell>
+                                    Rol
+                            </TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
@@ -146,7 +146,7 @@ export const TeamResults = ({ customers, ...rest }) => {
                                     {customer.phone}
                                 </TableCell>
                                 <TableCell>
-                                    {/* {format(customer.createdAt, 'dd/MM/yyyy')} */}
+                                    {customer.rol}
                                 </TableCell>
                             </TableRow>
                         ))}

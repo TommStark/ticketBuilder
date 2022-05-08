@@ -26,7 +26,7 @@ export const DashboardChart = (props) => {
                 borderRadius       : 4,
                 categoryPercentage : 0.5,
                 data               : dataValueX,
-                label              : 'Tickets ammount',
+                label              : 'You',
                 maxBarThickness    : 10
             },
             {

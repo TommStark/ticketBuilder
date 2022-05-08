@@ -38,7 +38,14 @@ export function ProfileAccount(props) {
                         gutterBottom
                         variant="h5"
                     >
-                        {user?.name}
+                        {`${user?.name} ${user?.lastName}`}
+                    </Typography>
+                    <Typography
+                        color="textSecondary"
+                        variant="h6"
+                    >
+                        {`${user?.rol}`}
+
                     </Typography>
                     <Typography
                         color="textSecondary"

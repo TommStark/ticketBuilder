@@ -12,6 +12,11 @@ const initialState ={
     },
     theme: {
         darkMode: false,
+    },
+    news: {
+        version : '',
+        title   : '',
+        posts   : []
     }
 };
 
@@ -28,9 +33,12 @@ export const AppSlice = createSlice({
         toggleTheme: (state, action) => {
             state.darkMode = action.payload;
         },
+        addNews: (state, action) => {
+            state.news = { ...action.payload };
+        },
     }
 });
 
-export const { ChangeSnackbar, changeNotificationSaw, toggleTheme } = AppSlice.actions;
+export const { ChangeSnackbar, changeNotificationSaw, toggleTheme, addNews } = AppSlice.actions;
 
 export default AppSlice.reducer;

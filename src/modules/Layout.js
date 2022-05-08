@@ -21,7 +21,7 @@ import SettingsContainer from './Settings/SettingsContainer';
 import TeamContainer from './Team/TeamContainer';
 import { AddUser, addTickets, addUserData } from '../modules/login/loginSlice';
 import { addTeam } from '../modules/Team/TeamSlice';
-import { ChangeSnackbar } from '../modules/AppSlice';
+import { ChangeSnackbar, addNews } from '../modules/AppSlice';
 import * as BackendAPI from  '../services/BackendAPI';
 import DashboardContainer from './dashboard/DashboardContainer';
 import Drawer from './Drawer';
@@ -42,6 +42,11 @@ export default function DashboardLayout ({logOut,setUser,user}) {
     const data  = Cookies.get('data') && JSON.parse(Cookies.get('data'));
     const snack = useSelector((state)=> state.app.snackbar);
     const isDarkMode = useSelector((state)=> state.app.theme.darkMode);
+
+    const versionData={
+        userVersion : useSelector((state)=> state?.user?.data?.appVersion),
+        appVersion  : useSelector((state)=> state?.app?.news?.version),
+    };
 
     const darkTheme = createTheme({
         palette: {
@@ -64,7 +69,8 @@ export default function DashboardLayout ({logOut,setUser,user}) {
                 flex                         : '1 1 auto',
                 maxWidth                     : '100%',
                 [theme.breakpoints.up('lg')] : {
-                    paddingLeft: 280
+                    paddingLeft : 280,
+                    paddingTop  : 30
                 }
             } :        {
                 display  : 'flex',
@@ -98,6 +104,13 @@ export default function DashboardLayout ({logOut,setUser,user}) {
                     }
                 })
                 .catch();
+            BackendAPI.getNews()
+                .then(res => {
+                    if(res.data){
+                        dispatch(addNews(res.data[0]));
+                    }
+                })
+                .catch();
         }
     },[user,isUserAuth,data]);
 
@@ -105,7 +118,7 @@ export default function DashboardLayout ({logOut,setUser,user}) {
         <>
             <ThemeProvider theme={darkTheme}>
 
-                { user && <Nav />}
+                { user && <Nav versionData={versionData} />}
                 { user && <SideBar
                     onClose={() => setSidebarOpen(false)}
                     open={isSidebarOpen}

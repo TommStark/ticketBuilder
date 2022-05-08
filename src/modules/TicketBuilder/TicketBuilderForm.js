@@ -10,7 +10,7 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import FormLabel from '@mui/material/FormLabel';
 import LoadingButton from '@mui/lab/LoadingButton';
 import FormControl from '@mui/material/FormControl';
-import CircularProgress from '@mui/material/CircularProgress';
+// import CircularProgress from '@mui/material/CircularProgress';
 import SendIcon from '@mui/icons-material/Send';
 import {
     Box,
@@ -34,7 +34,7 @@ function TicketBuilderForm(props) {
     return ( 
         <>  
             {isDataLoading 
-                ? <CircularProgress color="secondary"  size='5rem'/>
+                ? null
                 :
                 <form
                     autoComplete="off"

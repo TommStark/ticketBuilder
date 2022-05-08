@@ -85,7 +85,6 @@ export function ProfileDetails (props){
                         >
                             <TextField
                                 fullWidth
-                                helperText="Please specify the first name"
                                 label="name"
                                 name="name"
                                 onChange={handleChange}
@@ -136,6 +135,38 @@ export function ProfileDetails (props){
                                 onChange={handleChange}
                                 type="number"
                                 value={values.phone}
+                                variant="outlined"
+                            />
+                        </Grid>
+                        <Grid
+                            item
+                            md={6}
+                            xs={12}
+                        >
+                            <TextField
+                                fullWidth
+                                helperText="Please specify your discord ID"
+                                placeholder=' eg: 801452179177078814'
+                                label="discord ID"
+                                name="discordId"
+                                onChange={handleChange}
+                                required
+                                value={values.discordId}
+                                variant="outlined"
+                            />
+                        </Grid>
+                        <Grid
+                            item
+                            md={6}
+                            xs={12}
+                        >
+                            <TextField
+                                fullWidth
+                                label="rol"
+                                name="rol"
+                                onChange={handleChange}
+                                required
+                                value={values.rol}
                                 variant="outlined"
                             />
                         </Grid>

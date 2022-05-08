@@ -6,10 +6,7 @@ import { useSelector } from 'react-redux';
 function TeamContainer () {
     const [teamMates, setTeamMates] = useState([]);
     
-    const team =(useSelector((state)=> state.TeamMates?.users)) ?? [];
-    
-    console.log(team);
-    
+    const team =(useSelector((state)=> state.TeamMates?.users)) ?? [];    
     useEffect(()=>{
         team ? setTeamMates(team) : null;
     },[team]);

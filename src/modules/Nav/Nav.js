@@ -1,5 +1,9 @@
-import React from 'react';
+/* eslint-disable react/prop-types */
+/* eslint-disable no-unused-vars */
+import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import * as BackendAPI from  '../../services/BackendAPI';
+import gtag from 'ga-gtag';
 import PropTypes from 'prop-types';
 import Avatar from '@mui/material/Avatar';
 import Cookies from 'js-cookie';
@@ -17,13 +21,20 @@ import Badge from '@mui/material/Badge';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import { changeNotificationSaw } from '../AppSlice';
 
-const pages = ['Products', 'Pricing', 'Blog'];
+const pages = [''];
 
-export default function Nav(){
+export default function Nav({versionData}){
     const avatarImg = Cookies.get('img');
     const [anchorElNav, setAnchorElNav] = React.useState(null);
     const dispatch = useDispatch();
-    const DrawerSaw = useSelector((state)=> state.app.notification.saw);
+    const [userAppVersion, setUserAppVersion] = useState(versionData?.userVersion);
+    const [appVersion, setAppVersion] =  useState(versionData?.appVersion);
+    const [ShowBadge, setSetShowBadge] = useState(false);
+
+    useEffect(() => {
+        setUserAppVersion(versionData.userVersion);
+        setAppVersion(versionData.appVersion);
+    },[userAppVersion,appVersion]);
 
     const handleOpenNavMenu = (event) => {
         setAnchorElNav(event.currentTarget);
@@ -36,6 +47,11 @@ export default function Nav(){
 
     const openDrawer = () => {
         dispatch(changeNotificationSaw({isOpen: open}));
+        BackendAPI.changeUserAppVersion({body: {version: versionData.appVersion}})
+            .then(res => {
+                gtag('event', 'changeAppVersion', { data: res.data });
+                setSetShowBadge(false);
+            });
     };
 
     return(
@@ -94,7 +110,7 @@ export default function Nav(){
                                 onClick={() => openDrawer()}
                                 sx={{ ml: 1 }}
                             >
-                                <Badge  variant={ DrawerSaw ? '' : 'dot'} color="primary">
+                                <Badge  variant={ShowBadge ? 'dot' : ''} color="primary">
                                     <NotificationsIcon color="action" />
                                 </Badge>
                             </IconButton>

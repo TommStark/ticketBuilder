@@ -92,7 +92,6 @@ export const removeTicket = (params) => axios
     .then((response) => response)
     .catch((err) => { throw new Error(err); }); 
 
-
 export const removeTicketFromProject = (params) => axios
     .delete(backend.removeTicketFromProject(params.ticket),params.body)
     .then((response) => response)
@@ -107,6 +106,13 @@ export const getTeamTickets = () => axios
     .get(backend.getTeamTickets())
     .then((response) => response)
     .catch((err) => { throw new Error(err); }); 
-    
 
-    
+export const getNews = () => axios
+    .get(backend.getNews())
+    .then((response) => response)
+    .catch((err) => { throw new Error(err); }); 
+
+export const changeUserAppVersion = (params) => axios
+    .put(backend.changeUserAppVersion(),params.body)
+    .then((response) => response)
+    .catch((err) => { throw new Error(err); }); 
