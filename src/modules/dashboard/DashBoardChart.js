@@ -22,22 +22,22 @@ export const DashboardChart = (props) => {
             {
                 backgroundColor    : '#1976d2',
                 barPercentage      : 0.5,
-                barThickness       : 22,
-                borderRadius       : 5,
+                barThickness       : 12,
+                borderRadius       : 4,
                 categoryPercentage : 0.5,
                 data               : dataValueX,
                 label              : 'Tickets ammount',
-                maxBarThickness    : 40
+                maxBarThickness    : 10
             },
             {
                 backgroundColor    : '#01030694',
                 barPercentage      : 0.5,
-                barThickness       : 22,
-                borderRadius       : 5,
+                barThickness       : 12,
+                borderRadius       : 4,
                 categoryPercentage : 0.5,
                 data               : dataValueY,
                 label              : 'The Team',
-                maxBarThickness    : 40
+                maxBarThickness    : 10
             }
         ],
         labels: dataLabel

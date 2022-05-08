@@ -1,7 +1,6 @@
 //format day from mongoDB to YYYY/MM/DD HH:MM:SS
 export const formatDate = (date='') =>{
     return new Date(date).toJSON().slice(0,10);
-    // return date?.split('.')[0].split('T').join(' ');
 };
 
 //get last 7 days of the week

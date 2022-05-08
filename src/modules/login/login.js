@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import TextField from '@mui/material/TextField';
-import Box from '@mui/material/Box';
 import LoadingButton from '@mui/lab/LoadingButton';
+import { Box, Container, TextField, Typography } from '@mui/material';
 import * as BackendAPI from  '../../services/BackendAPI';
 import { useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
@@ -90,56 +89,89 @@ function Login({authenticate}) {
     }, [email,password]);
 
     return (
-        <header className="App-header">
+        <>
             <Box
+                component="main"
                 sx={{
-                    width           : 400,
-                    maxWidth        : '90%',
-                    backgroundColor : 'white',
-                    padding         : '30px',
-                    borderRadius    : '20px'
-                }}>
-                <h1 className="gradient__text txt-align" > Login  </h1>
-                <p aria-live='assertive'> 
-                    {authError
-                        ? 'bad credentials <-----urgente un diseñador xD'
-                        :null
-                    }
-                </p>
-                <TextField
-                    id="filled-basic-email"
-                    label="email"
-                    variant="filled"
-                    value={email}
-                    onChange={(event) => {setEmail(event.target.value);}}
-                    fullWidth
-                    margin="normal"
-                />
-
-                <TextField
-                    id="filled-basic-pass"
-                    label="password"
-                    variant="filled"
-                    value={password}
-                    onChange={(event) => {setPassword(event.target.value);}}
-                    fullWidth
-                    type='password'
-                    margin="normal"
-                />
-
-                <div className="txt-align">
-                    <LoadingButton 
-                        loading={isLoading}
-                        variant="contained"
-                        disabled={!isDisabled}
-                        color = 'secondary'
-                        onClick={ () =>{ validateUser();}}
-                    > Log In
-                    </LoadingButton>
-                </div>
-            
+                    alignItems : 'center',
+                    display    : 'flex',
+                    flexGrow   : 1,
+                    minHeight  : '100vh'
+                }}
+            >
+                <Container maxWidth="sm">
+                    <form>
+                        <Box sx={{ my: 3 }}>
+                            <Typography
+                                color="textPrimary"
+                                variant="h4"
+                            >
+                            Sign in
+                            </Typography>
+                            <Typography
+                                color="textSecondary"
+                                gutterBottom
+                                variant="body2"
+                            >
+                                Sign in on the internal platform
+                            </Typography>
+                        </Box>
+                        <Box
+                            sx={{
+                                pb : 1,
+                                pt : 3
+                            }}
+                        >
+                            <Typography
+                                align="center"
+                                color="textSecondary"
+                                variant="body1"
+                            >
+                                login with email address
+                            </Typography>
+                        </Box>
+                        <p aria-live='assertive'> 
+                            {authError
+                                ? 'bad credentials <-----urgente un diseñador xD'
+                                :null
+                            }
+                        </p>
+                        <TextField
+                            id="filled-basic-email"
+                            variant="filled"
+                            fullWidth
+                            margin="normal"
+                            helperText={'email'}
+                            label="email"
+                            value={email}
+                            onChange={(event) => {setEmail(event.target.value);}}
+                        />
+                        <TextField
+                            fullWidth
+                            margin="normal"
+                            id="filled-basic-pass"
+                            label="password"
+                            variant="filled"
+                            value={password}
+                            onChange={(event) => {setPassword(event.target.value);}}
+                            type='password'
+                        />
+                        <Box sx={{ py: 2 }}>
+                            <LoadingButton
+                                color="primary"
+                                fullWidth
+                                loading={isLoading}
+                                variant="contained"
+                                disabled={!isDisabled}
+                                onClick={ () =>{ validateUser();}}
+                            >
+                                Sign In Now
+                            </LoadingButton>
+                        </Box>
+                    </form>
+                </Container>
             </Box>
-        </header>
+        </>
     );
 }
 Login.propTypes = {

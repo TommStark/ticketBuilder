@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
 import React, { useEffect, useState } from 'react';
 import { Box } from '@mui/material';
@@ -26,14 +27,7 @@ import DashboardContainer from './dashboard/DashboardContainer';
 import Drawer from './Drawer';
 import LogOut from './logOut';
 
-const DashboardLayoutRoot = styled('div')(({ theme }) => ({
-    display                      : 'flex',
-    flex                         : '1 1 auto',
-    maxWidth                     : '100%',
-    [theme.breakpoints.up('lg')] : {
-        paddingLeft: 280
-    }
-}));
+
 
 
 
@@ -63,6 +57,21 @@ export default function DashboardLayout ({logOut,setUser,user}) {
         dispatch(ChangeSnackbar({state: false,txt: ''}));
     };
 
+    const DashboardLayoutRoot = styled('div')(({ theme }) => (
+        user ?
+            {
+                display                      : 'flex',
+                flex                         : '1 1 auto',
+                maxWidth                     : '100%',
+                [theme.breakpoints.up('lg')] : {
+                    paddingLeft: 280
+                }
+            } :        {
+                display  : 'flex',
+                flex     : '1 1 auto',
+                maxWidth : '100%',
+            }
+    ));
 
 
     useEffect(()=>{
@@ -105,7 +114,7 @@ export default function DashboardLayout ({logOut,setUser,user}) {
                 }
                 <DashboardLayoutRoot>
                     <Box
-                        sx={{
+                        sx={ {
                             display       : 'flex',
                             flex          : '1 1 auto',
                             flexDirection : 'column',
