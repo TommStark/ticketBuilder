@@ -72,3 +72,47 @@ export const scanChannel = () => axios
     .then((response) => response)
     .catch((err) => { throw new Error(err); });
     
+export const getOtherAuthors = () => axios
+    .get(backend.getOtherAuthors())
+    .then((response) => response)
+    .catch((err) => { throw new Error(err); });   
+
+export const modifyUserInfo = (params) => axios
+    .put(backend.modifyUserInfo(),params.body)
+    .then((response) => response)
+    .catch((err) => { throw new Error(err); });   
+
+export const getUserData = () => axios
+    .get(backend.getUserData())
+    .then((response) => response)
+    .catch((err) => { throw new Error(err); }); 
+ 
+export const removeTicket = (params) => axios
+    .delete(backend.removeTicket(params.ticket))
+    .then((response) => response)
+    .catch((err) => { throw new Error(err); }); 
+
+export const removeTicketFromProject = (params) => axios
+    .delete(backend.removeTicketFromProject(params.ticket),params.body)
+    .then((response) => response)
+    .catch((err) => { throw new Error(err); }); 
+
+export const removeTicketFromAuthor = (params) => axios
+    .delete(backend.removeTicketFromAuthor(params.ticket),params.body)
+    .then((response) => response)
+    .catch((err) => { throw new Error(err); }); 
+    
+export const getTeamTickets = () => axios
+    .get(backend.getTeamTickets())
+    .then((response) => response)
+    .catch((err) => { throw new Error(err); }); 
+
+export const getNews = () => axios
+    .get(backend.getNews())
+    .then((response) => response)
+    .catch((err) => { throw new Error(err); }); 
+
+export const changeUserAppVersion = (params) => axios
+    .put(backend.changeUserAppVersion(),params.body)
+    .then((response) => response)
+    .catch((err) => { throw new Error(err); }); 

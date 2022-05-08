@@ -1,102 +1,175 @@
+/* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from 'react';
-import { Box } from '@mui/material';
-import * as BackendAPI from  '../../services/BackendAPI';
-import Card from '@mui/material/Card';
-import CardHeader from '@mui/material/CardHeader';
-import CardContent from '@mui/material/CardContent';
-import Avatar from '@mui/material/Avatar';
-import Typography from '@mui/material/Typography';
+import { Box, Container, Grid, Pagination } from '@mui/material';
 import CircularProgress from '@mui/material/CircularProgress';
+import { useSelector, useDispatch } from 'react-redux';
+import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+import ProductCard from './TicketCard';
+import * as BackendAPI from  '../../services/BackendAPI';
+import { addTickets } from '../../modules/login/loginSlice';
+import { ChangeSnackbar } from '../AppSlice';
 
-function TicketListContainer() {
+
+function TicketListContainer () {
     const [tickets, SetTickets]=useState([]);
+    const dispatch = useDispatch();
     const [isLoading, setIsLoading]=useState(true);
+    const ticketList = useSelector((state)=> state.user?.tickets?.tickets);
+    const [ticketToDelete, setTicketTodelete] = useState('');
+    const [open, setOpen] = React.useState(false);
 
-    function getTicketsByUsers(){
+    const handleClickOpen = (ticket) => {
+        setOpen(true);
+        setTicketTodelete(ticket);
+    };
+  
+    const handleClose = () => {
+        setOpen(false);
+    };
+
+    const handleDelete = () =>{
+        setIsLoading(true);
+        const params ={
+            authorId : ticketToDelete.author._id,
+            ticket   : ticketToDelete._id,
+            body     : {
+                name: ticketToDelete.project.name
+            }
+        };
+        BackendAPI.removeTicket({ticket: ticketToDelete._id})
+            .then( () =>{
+                BackendAPI.removeTicketFromProject(params)
+                    .then(() => {
+                        BackendAPI.removeTicketFromAuthor(params)
+                            .then(() => {
+                                setIsLoading(false);
+                            });
+                    });
+            });
+        dispatch(ChangeSnackbar({state: true,txt: ' The ticket was successfully delete!'}));
+        setTicketTodelete('');
+        setOpen(false);
+    };
+
+    const reSendTicket = (ticket) => {
+        setIsLoading(true);
+        const formatTicket = {
+            ...ticket,
+            project      : ticket.project.name,
+            projectColor : ticket.project.color,
+            id           : ticket._id  
+        };
+    
+        BackendAPI.sendToDiscordChannel({body: {'ticket': formatTicket}})
+            .then( () =>{
+                setIsLoading(false);
+                dispatch(ChangeSnackbar({state: true,txt: ' Ticket successfully send to Discord!'}));
+            })
+            .catch(() =>{
+                dispatch(ChangeSnackbar({state: true,txt: ' upss something happend!',severity: 'error'}));
+            });
+    };
+    
+    
+
+    useEffect(()=>{
+        ticketList && SetTickets([...ticketList].reverse());
+        setIsLoading(false);
+    },[ticketList]);
+
+    useEffect(() => {
         BackendAPI.getTicketsByAuthor()
             .then(res => {
                 if(res.data){
-                    SetTickets((res.data.tickets).reverse());
-                    setIsLoading(false);
+                    dispatch(addTickets(res.data));
                 }
-            })
-            .catch(() => {
-                setIsLoading(false);});
-    }
-    useEffect(() =>{
-        getTicketsByUsers();
-    },[]);
+            });
+    },[isLoading,setIsLoading]);
 
-    function formatDate(date){
-        return date.split('T')[0];
-    }
-
-    function renderGhostBox(){
-        if (tickets.length % 2 === 1){
-            return <Card sx={{ width: 400, maxWidth: 400, margin: '1vh', borderRadius: '20px', padding: '1vh', backgroundColor: 'transparent' }}/>;
-        }
-        return null;
-    }
-
-    return ( 
+    return (
         <>
-            <div className='txt-align'>
-                {  
-                    tickets.length != 0
-                        ? <h1 className='gradient__text'> Your tickets Through time</h1>
-                        : null
-                }
-            </div>
-            <header className="App-header">
-                {   isLoading 
-                    ?
+            <Box
+                component="main"
+                sx={{
+                    flexGrow : 1,
+                    py       : 8
+                }}
+            >
+                {isLoading
+                    ? 
                     <CircularProgress color="secondary"  size='5rem'/>
                     :
-                    <>
-                        <Box sx={{
-                            display        : 'flex',
-                            flexWrap       : 'wrap',
-                            justifyContent : 'center',
-                            width          : 900,
-                        }}>
-                            {tickets &&
-                    tickets.map( (ticket,index) => 
-                        <Card sx={{ width: 400, maxWidth: 400, margin: '1vh', borderRadius: '20px', padding: '1vh' }} key={ticket.id + index}>
-                            <CardHeader
-                                avatar={
-                                    <Avatar sx={{ bgcolor: ticket.project.color }} aria-label={ticket.author.name}>
-                                        {ticket.project.name[0]}
-                                    </Avatar>
-                                }
-                                title={`Project ${ticket.project.name}`}
-                                subheader={formatDate(ticket.start_date)}
-                            />
-                            <CardContent>
-                                <Typography variant="body2" color="text.secondary">
-                                    <p><strong>Pull Request:</strong> <a href={ticket.prLink}> {(ticket.prLink).substring(0,35)}</a>...</p>
-                                    <p><strong>Jira:</strong>         <a href={ticket.prLink}>{ticket.ticketLink.substring(0,45)}</a>...</p>
-                                    <p><strong>Details:</strong>      {ticket.details.substring(0,35)}...</p>
-                                    <p><strong>Checks:</strong>      {ticket.checks}</p>
-                                    <p><strong>Merged:</strong> {ticket.isDone ? `Yes on ${formatDate(ticket.end_date)}` : 'No yet'}</p>
-                                </Typography>
-                            </CardContent>
-                        </Card>
-                    )
-                            }
-                            {
-                                tickets.length === 0
-                                    ? <h1 className='gradient__text'>You do not have tickets yet</h1>
-                                    : null
-                            }
-                            {
-                                renderGhostBox()
-                            }
+                    <Container maxWidth={false}>
+                        {/* <ProductListToolbar /> */}
+                        <Box sx={{ pt: 3 }}>
+                            <Grid
+                                container
+                                spacing={3}
+                            >
+                                {tickets.map((ticket) => (
+                                    <Grid
+                                        item
+                                        key={ticket.id}
+                                        lg={4}
+                                        md={6}
+                                        xs={12}
+                                    >
+                                        <ProductCard 
+                                            product={ticket} 
+                                            isLoading={isLoading} 
+                                            setIsLoading={setIsLoading} 
+                                            handleClickOpen={handleClickOpen}
+                                            reSendTicket={reSendTicket}
+                                        />
+                                    </Grid>
+                                ))}
+                            </Grid>
                         </Box>
-                    </>
+                        {/* <Box
+                        sx={{
+                            display        : 'flex',
+                            justifyContent : 'center',
+                            pt             : 3
+                        }}
+                    >
+                        <Pagination
+                            color="primary"
+                            count={3}
+                            size="small"
+                        />
+                    </Box> */}
+                    </Container>
                 }
-            </header>
+            </Box>
+            <div>
+                <Dialog
+                    open={open}
+                    onClose={handleClose}
+                    aria-labelledby="alert-dialog-title"
+                    aria-describedby="alert-dialog-description"
+                >
+                    <DialogTitle id="alert-dialog-title">
+                        {'Confirm Delete!'}
+                    </DialogTitle>
+                    <DialogContent>
+                        <DialogContentText id="alert-dialog-description">
+                            Are you sure you want to delete this item?
+                        </DialogContentText>
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onClick={handleClose}>No</Button>
+                        <Button onClick={handleDelete} autoFocus>
+                                Yes
+                        </Button>
+                    </DialogActions>
+                </Dialog>
+            </div>
         </>
     );
 }
-
 export default TicketListContainer;

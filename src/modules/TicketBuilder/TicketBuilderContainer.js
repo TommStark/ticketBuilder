@@ -1,11 +1,15 @@
+/* eslint-disable no-undef */
 import React, { useState, useEffect } from 'react' ;
-import '../../App.css';
-import TicketBuilderForm from './TicketBuilderForm';
-import * as BackendAPI from  '../../services/BackendAPI';
+import { Box, Container, Grid, Typography } from '@mui/material';
+import { useDispatch } from 'react-redux';
 import gtag from 'ga-gtag';
 import Cookies from 'js-cookie';
 import { useNavigate } from 'react-router-dom';
-// eslint-disable-next-line no-undef
+import '../../App.css';
+import TicketBuilderForm from './TicketBuilderForm';
+import * as BackendAPI from  '../../services/BackendAPI';
+import { ChangeSnackbar } from '../AppSlice';
+
 const pjson = require('../../../package.json');
 
 function TicketBuilderContainer() {
@@ -21,8 +25,8 @@ function TicketBuilderContainer() {
     const author = Cookies.get('author');
     const navigate = useNavigate();
     const isUserAuth  = JSON.parse(localStorage.getItem('user'));
-    const [isdiscordOpen, setIsDicordOpen] = React.useState(false);
     const [isDataLoading, setIsDataLoading]=React.useState(true);
+    const dispatch = useDispatch();
 
     
     useEffect(()=>{
@@ -38,7 +42,7 @@ function TicketBuilderContainer() {
                 }
             })
             .catch(() => {
-                window.location.reload();
+                // window.location.reload();
             });
     }
 
@@ -71,8 +75,8 @@ function TicketBuilderContainer() {
         const {checks, details, prLink, ticketLink, _id} = ticket;
 
         return ({
-            pr           : prLink,
-            vpdc         : ticketLink,
+            prLink       : prLink,
+            ticketLink   : ticketLink,
             project      : project.name,
             projectColor : project.color,
             details,
@@ -104,7 +108,8 @@ function TicketBuilderContainer() {
                 BackendAPI.sendToDiscordChannel({body: {'ticket': plainTicket}})
                     .then(() => {
                         gtag('event', 'ClickSentToDiscord', {  'Author': `${author}` });
-                        setIsDicordOpen(true);
+                        // setIsDicordOpen(true);
+                        dispatch(ChangeSnackbar({state: true,txt: ' Ticket successfully send to Discord!'}));
                         reset();
                     })
                     .catch(err => {err;});
@@ -121,26 +126,52 @@ function TicketBuilderContainer() {
             {
                 isUserAuth && author ?
                     <>
-                        <TicketBuilderForm
-                            project={projectName}
-                            handleChangeSelect={handleChangeSelect}
-                            PRNumber={PRNumber}
-                            setPRNumber={setPRNumber}
-                            ticketNumber={ticketNumber}
-                            setTicketNumber={setTicketNumber}
-                            details={details}
-                            setDetails={setDetails}
-                            setChecks={setChecks}
-                            isLoading={isLoading}
-                            isDisabled={isDisabled}
-                            generateTicket={generateTicket}
-                            author={author}
-                            projectsData={projectsData}
-                            checks={checks}
-                            isdiscordOpen={isdiscordOpen}
-                            setIsDicordOpen={setIsDicordOpen}
-                            isDataLoading={isDataLoading}
-                        />
+                        <Box
+                            component="main"
+                            sx={{
+                                flexGrow : 1,
+                                py       : 1
+                            }}
+                        >
+                            <Container maxWidth="lg">
+                                <Typography
+                                    sx={{ mb: 3 }}
+                                    variant="h4"
+                                >
+                                    Ticket builder
+                                </Typography>
+                                <Grid
+                                    container
+                                    spacing={3}
+                                >
+                                    <Grid
+                                        item
+                                        lg={8}
+                                        md={6}
+                                        xs={12}
+                                    >
+                                        <TicketBuilderForm
+                                            project={projectName}
+                                            handleChangeSelect={handleChangeSelect}
+                                            PRNumber={PRNumber}
+                                            setPRNumber={setPRNumber}
+                                            ticketNumber={ticketNumber}
+                                            setTicketNumber={setTicketNumber}
+                                            details={details}
+                                            setDetails={setDetails}
+                                            setChecks={setChecks}
+                                            isLoading={isLoading}
+                                            isDisabled={isDisabled}
+                                            generateTicket={generateTicket}
+                                            author={author}
+                                            projectsData={projectsData}
+                                            checks={checks}
+                                            isDataLoading={isDataLoading}
+                                        />
+                                    </Grid>
+                                </Grid>
+                            </Container>
+                        </Box>
                     </>
                     :null
             }

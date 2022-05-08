@@ -1,37 +1,75 @@
 import * as React from 'react';
-import Box from '@mui/material/Box';
 import { useNavigate } from 'react-router-dom';
 import gtag from 'ga-gtag';
 import { Button } from '@mui/material';
+import { Box, Container, Typography } from '@mui/material';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
 // eslint-disable-next-line react/prop-types
-function Error({logOut}) {
+function Error() {
     const navigate = useNavigate();
 
     function handleOnclick (){
-        logOut;
         gtag('event', 'ErroPage', { 'ERROR': 'link to home' });
         navigate('/ticketBuilder', {replace: true});
     }
 
-
     return ( 
-        <div className="gradient__bg">
-            <header className="App-header">
+        <Box
+            component="main"
+            sx={{
+                alignItems : 'center',
+                display    : 'flex',
+                flexGrow   : 1,
+                minHeight  : '100%'
+            }}
+        >
+            <Container maxWidth="md">
                 <Box
-                    sx={{ p: 2, }}
+                    sx={{
+                        alignItems    : 'center',
+                        display       : 'flex',
+                        flexDirection : 'column'
+                    }}
                 >
-                    <h1 className='gradient__text txt-align'>Error Page</h1>
-
-                    <div className='txt-align' >
-                        <Button 
+                    <Typography
+                        align="center"
+                        color="textPrimary"
+                        variant="h1"
+                    >
+                        404: The page you are looking for isn’t here
+                    </Typography>
+                    <Typography
+                        align="center"
+                        color="textPrimary"
+                        variant="subtitle2"
+                    >
+                        You either tried some shady route or you came here by mistake.
+                        Whichever it is, try using the navigation
+                    </Typography>
+                    <Box sx={{ textAlign: 'center' }}>
+                        <img
+                            alt="Under development"
+                            src="https://material-kit-react.devias.io/static/images/undraw_page_not_found_su7k.svg"
+                            style={{
+                                marginTop : 50,
+                                display   : 'inline-block',
+                                maxWidth  : '100%',
+                                width     : 560
+                            }}
+                        />
+                        <Button
+                            component="a"
+                            startIcon={(<ArrowBackIcon fontSize="small" />)}
+                            sx={{ mt: 3 }}
                             variant="contained"
-                            color = 'secondary'
+                            fullWidth
                             onClick={() => handleOnclick() }> Home </Button>
-                    </div>
+                    </Box>
                 </Box>
-            </header>
-        </div>
+            </Container>
+        </Box>
     );
 }
-export default Error;
+
+export default Error;         

@@ -6,6 +6,8 @@ const authentication = () => ('/auth');
 
 const pushTicketToAuthor = (ticketId) => (`/author/${ticketId}`);
 
+const getOtherAuthors = () => ('/author/others');
+
 const pushTicketToProject = (ticketId) => (`/project/${ticketId}`);
 
 const isLogin = () => ('/auth/login');
@@ -26,6 +28,21 @@ const sendProjectStatus = () =>('/discBot/push/project');
 
 const scanChannel = () =>('/discBot/scan/channel');
 
+const modifyUserInfo = () =>('/author/updateInfo');
+
+const getUserData = () =>('/author/myUser');
+
+const removeTicket = (ticketId) =>(`/ticket/${ticketId}`);
+
+const removeTicketFromProject = (ticketId) =>(`/project/${ticketId}`);
+
+const removeTicketFromAuthor = (ticketId) =>(`/author/${ticketId}`);
+
+const getTeamTickets = () => ('/ticket');
+
+const getNews  = () => ('/news');
+
+const changeUserAppVersion = () => ('/author/appVersion');
 
 export const backend = {
     getUserById,
@@ -41,5 +58,14 @@ export const backend = {
     getAllProjects,
     updateProjectStatus,
     sendProjectStatus,
-    scanChannel
+    scanChannel,
+    getOtherAuthors,
+    modifyUserInfo,
+    getUserData,
+    removeTicket,
+    removeTicketFromProject,
+    removeTicketFromAuthor,
+    getTeamTickets,
+    getNews,
+    changeUserAppVersion
 };
