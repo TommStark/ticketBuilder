@@ -9,8 +9,8 @@ if(token){
 }
 
 const instance = axios.create({
-    baseURL: 'https://arz-ticket-builder.herokuapp.com/api',
-    // baseURL: 'http://localhost:8080/api',
+    baseURL: 'http://localhost:8080/api',
+    // baseURL: 'https://arz-ticket-builder.herokuapp.com/api',
     headers,
 });
 

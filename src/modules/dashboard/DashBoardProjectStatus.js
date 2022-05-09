@@ -11,7 +11,7 @@ export const DashBoardProjectStatus = (props) => (
         <CardContent>
             <Grid
                 container
-                spacing={3}
+                spacing={2}
                 sx={{ justifyContent: 'space-between' }}
             >
                 <Grid item>

@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import * as React from 'react';
 import PropTypes from 'prop-types';
 import TextField from '@mui/material/TextField';
@@ -10,8 +11,9 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import FormLabel from '@mui/material/FormLabel';
 import LoadingButton from '@mui/lab/LoadingButton';
 import FormControl from '@mui/material/FormControl';
-// import CircularProgress from '@mui/material/CircularProgress';
 import SendIcon from '@mui/icons-material/Send';
+import SaveIcon from '@mui/icons-material/Save';
+
 import {
     Box,
     Card,
@@ -19,160 +21,185 @@ import {
     CardHeader,
     Divider,
     Grid,
+    ListSubheader,
 } from '@mui/material';
 
 function TicketBuilderForm(props) {
     const {
         project, handleChangeSelect, PRNumber, setPRNumber, ticketNumber, setTicketNumber,details,
-        setDetails,setChecks,isLoading,isDisabled,generateTicket, author, projectsData, checks, isDataLoading
+        setDetails,setChecks,isLoading,isDisabled,generateTicket, author, projectsData, checks, projectSelected, saveTicket
     } = props;
-
-    const MenuItems = React.useMemo(() => projectsData?.map((project,index) => {
-        return <MenuItem key={ `${index}${project.name}` } value={project.name}> {`${project.icon} ${project.name}`} </MenuItem>;
-    }),[projectsData]); 
+    
+    const projectsFreez = [];
+    const projectsAvailable = [];
+    
+    projectsData?.forEach((project,index) => {
+        if(!project.state){
+            projectsFreez.push(<MenuItem key={ `${index}${project.name}` } value={project.name}> {project.name} </MenuItem>);
+        }else(
+            projectsAvailable.push(<MenuItem key={ `${index}${project.name}` } value={project.name}> {project.name} </MenuItem>)
+        );
+    });
 
     return ( 
-        <>  
-            {isDataLoading 
-                ? null
-                :
-                <form
-                    autoComplete="off"
-                    noValidate
-                >
-                    <Card>
-                        <CardHeader
-                            subheader="Create and send to Discord"
-                            title="Ticket"
-                        />
-                        <Divider />
-                        <CardContent>
-                            <Grid
-                                container
-                                spacing={3}
-                            >
-                                <Grid
-                                    item
-                                    md={6}
-                                    xs={12}
-                                >
-                                    <FormControl fullWidth>
-                                        <InputLabel id="project">Project</InputLabel>
-                                        <Select
-                                            labelId="project"
-                                            id="projectSelector"
-                                            value={project}
-                                            label="Project"
-                                            onChange={handleChangeSelect}
-                                            defaultValue=""
-                                        >   
-                                            {
-                                                MenuItems
-                                            }
-                                        </Select>
-                                    </FormControl>
-                                </Grid>
-                                <Grid
-                                    item
-                                    md={6}
-                                    xs={12}
-                                >
-                                    <TextField
-                                        id="filled-basic-author"
-                                        label="Author"
-                                        variant="filled"
-                                        value={author}
-                                        fullWidth
-                                        disabled
-                                    />
-                                </Grid>
-                                <Grid
-                                    item
-                                    md={6}
-                                    xs={12}
-                                >
-                                    <TextField
-                                        id="filled-basic-pr"
-                                        label="Github PR Number"
-                                        variant="filled"
-                                        value={PRNumber}
-                                        onChange={(event) => setPRNumber(event.target.value)}
-                                        fullWidth
-                                        inputProps={{ inputMode: 'numeric', pattern: '[0-9]*' }}
-                                    />
-                                </Grid>
-                                <Grid
-                                    item
-                                    md={6}
-                                    xs={12}
-                                >
-                                    <TextField
-                                        id="filled-basic-ticket"
-                                        label="Jira Ticket Number"
-                                        variant="filled"
-                                        value={ticketNumber}
-                                        onChange={(event) => setTicketNumber(event.target.value)}
-                                        fullWidth
-                                    /> 
-                                </Grid>
-                                <Grid
-                                    item
-                                    md={6}
-                                    xs={12}
-                                >
-                                    <TextField
-                                        id="filled-basic-details"
-                                        label="Details"
-                                        variant="filled"
-                                        value={details}
-                                        onChange={(event) => setDetails(event.target.value)}
-                                        fullWidth
-                                    /> 
-                                </Grid>
-                                <Grid
-                                    item
-                                    md={6}
-                                    xs={12}
-                                >
-                                    <FormLabel id="demo-row-radio-buttons-group-label" style={{textAlign: 'left'}}>Checks</FormLabel>
-                                    <RadioGroup
-                                        row
-                                        aria-labelledby="demo-row-radio-buttons-group-label"
-                                        name="row-radio-buttons-group"
-                                        onChange={(event) => setChecks(event.target.value)}
-                                        value={checks}
-                                    >
-                                        <FormControlLabel value="1" control={<Radio />} label="1" />
-                                        <FormControlLabel value="2" control={<Radio />} label="2" />
-                                        <FormControlLabel value="3" control={<Radio />} label="3" />
-                                    </RadioGroup>
-                                </Grid>
-                            </Grid>
-                        </CardContent>
-                        <Divider />
-                        <Box
-                            sx={{
-                                display        : 'flex',
-                                justifyContent : 'flex-end',
-                                p              : 2
-                            }}
+        <>                  
+            <form
+                autoComplete="off"
+                noValidate
+            >
+                <Card>
+                    <CardHeader
+                        subheader="Create and send to Discord"
+                        title="Ticket"
+                    />
+                    <Divider />
+                    <CardContent>
+                        <Grid
+                            container
+                            spacing={3}
                         >
-                            <div className="txt-align">
-                                <LoadingButton 
-                                    loading={isLoading}
-                                    color = 'secondary'
-                                    variant="contained"
-                                    disabled={!isDisabled}
-                                    endIcon={<SendIcon />}
-                                    onClick={ () => generateTicket()}
-                                >To Discord
-                                </LoadingButton>
-                            </div>
-                        </Box>
-                    </Card>
-                </form>
-            
-            }
+                            <Grid
+                                item
+                                md={6}
+                                xs={12}
+                            >
+                                <FormControl fullWidth>
+                                    <InputLabel id="project">Project</InputLabel>
+                                    <Select
+                                        labelId="project"
+                                        id="projectSelector"
+                                        value={project}
+                                        label="Project"
+                                        onChange={handleChangeSelect}
+                                        defaultValue=""
+                                    >   
+                                        <ListSubheader>Available</ListSubheader>
+                                        {
+                                            projectsAvailable
+                                        }
+                                        <ListSubheader>Frozen</ListSubheader>
+                                        {
+                                            projectsFreez
+                                        }
+                                    </Select>
+                                </FormControl>
+                            </Grid>
+                            <Grid
+                                item
+                                md={6}
+                                xs={12}
+                            >
+                                <TextField
+                                    id="filled-basic-author"
+                                    label="Author"
+                                    variant="filled"
+                                    value={author}
+                                    fullWidth
+                                    disabled
+                                />
+                            </Grid>
+                            <Grid
+                                item
+                                md={6}
+                                xs={12}
+                            >
+                                <TextField
+                                    id="filled-basic-pr"
+                                    label="Github PR Number"
+                                    variant="filled"
+                                    value={PRNumber}
+                                    onChange={(event) => setPRNumber(event.target.value)}
+                                    fullWidth
+                                    inputProps={{ inputMode: 'numeric', pattern: '[0-9]*' }}
+                                />
+                            </Grid>
+                            <Grid
+                                item
+                                md={6}
+                                xs={12}
+                            >
+                                <TextField
+                                    id="filled-basic-ticket"
+                                    label="Jira Ticket Number"
+                                    variant="filled"
+                                    value={ticketNumber}
+                                    onChange={(event) => setTicketNumber(event.target.value)}
+                                    fullWidth
+                                /> 
+                            </Grid>
+                            <Grid
+                                item
+                                md={6}
+                                xs={12}
+                            >
+                                <TextField
+                                    id="filled-basic-details"
+                                    label="Details"
+                                    variant="filled"
+                                    value={details}
+                                    onChange={(event) => setDetails(event.target.value)}
+                                    fullWidth
+                                /> 
+                            </Grid>
+                            <Grid
+                                item
+                                md={6}
+                                xs={12}
+                            >
+                                <FormLabel id="demo-row-radio-buttons-group-label" style={{textAlign: 'left'}}>Checks</FormLabel>
+                                <RadioGroup
+                                    row
+                                    aria-labelledby="demo-row-radio-buttons-group-label"
+                                    name="row-radio-buttons-group"
+                                    onChange={(event) => setChecks(event.target.value)}
+                                    value={checks}
+                                >
+                                    <FormControlLabel value="1" control={<Radio />} label="1" />
+                                    <FormControlLabel value="2" control={<Radio />} label="2" />
+                                    <FormControlLabel value="3" control={<Radio />} label="3" />
+                                </RadioGroup>
+                            </Grid>
+                        </Grid>
+                    </CardContent>
+                    <Divider />
+                    <Box
+                        sx={{
+                            display        : 'flex',
+                            justifyContent : 'flex-end',
+                            p              : 2
+                        }}
+                    >
+                        <div className="txt-align">
+                            {
+                                projectSelected?.state ?
+
+                                    <LoadingButton 
+                                        loading={isLoading}
+                                        color = 'secondary'
+                                        variant="contained"
+                                        disabled={!isDisabled}
+                                        endIcon={<SendIcon />}
+                                        onClick={ () => generateTicket()}
+                                    >To Discord
+                                    </LoadingButton>
+
+                                    :
+
+                                    <LoadingButton 
+                                        loading={isLoading}
+                                        color = 'primary'
+                                        variant="contained"
+                                        disabled={!isDisabled}
+                                        endIcon={<SaveIcon />}
+                                        onClick={ () => saveTicket()}
+                                    >Save
+                                    </LoadingButton>
+
+                            }
+                        </div>
+                    </Box>
+                </Card>
+            </form>
         </>
     );}
 
@@ -204,5 +231,7 @@ TicketBuilderForm.propTypes = {
     isdiscordOpen      : PropTypes.bool.isRequired,
     isDataLoading      : PropTypes.bool.isRequired,
     setIsDicordOpen    : PropTypes.func.isRequired,
+    projectSelected    : PropTypes.shape({}),
+    saveTicket         : PropTypes.func.isRequired,
 };
 export default TicketBuilderForm;

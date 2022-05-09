@@ -116,3 +116,8 @@ export const changeUserAppVersion = (params) => axios
     .put(backend.changeUserAppVersion(),params.body)
     .then((response) => response)
     .catch((err) => { throw new Error(err); }); 
+
+export const changePendingStatus = (params) => axios
+    .put(backend.changePendingStatus(params.ticket))
+    .then((response) => response)
+    .catch((err) => { throw new Error(err); }); 

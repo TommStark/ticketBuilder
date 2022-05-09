@@ -6,6 +6,7 @@ import { styled } from '@mui/material/styles';
 import { useSelector, useDispatch } from 'react-redux';
 import {  Route, Routes } from 'react-router-dom';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
+import * as BackendAPI from  '../services/BackendAPI';
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
 import Cookies from 'js-cookie';
@@ -20,16 +21,11 @@ import ProfileContainer from './Profile/ProfileContainer';
 import SettingsContainer from './Settings/SettingsContainer';
 import TeamContainer from './Team/TeamContainer';
 import { AddUser, addTickets, addUserData } from '../modules/login/loginSlice';
-import { addTeam } from '../modules/Team/TeamSlice';
+import { addTeam, addProjects, addAvailableProjects, addFrozenProjects  } from '../modules/Team/TeamSlice';
 import { ChangeSnackbar, addNews } from '../modules/AppSlice';
-import * as BackendAPI from  '../services/BackendAPI';
 import DashboardContainer from './dashboard/DashboardContainer';
 import Drawer from './Drawer';
 import LogOut from './logOut';
-
-
-
-
 
 const Alert = React.forwardRef(function Alert(props, ref) {
     return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
@@ -111,6 +107,26 @@ export default function DashboardLayout ({logOut,setUser,user}) {
                     }
                 })
                 .catch();
+            BackendAPI.getProjects()
+                .then(res => {
+                    if(res.data){
+                        dispatch(addProjects(res.data));
+                        
+
+                        const projectsFreez = [];
+                        const projectsAvailable = [];
+
+                        res.data?.forEach((project,index) => {
+                            if(!project.state){
+                                projectsFreez.push(project);
+                            }else(
+                                projectsAvailable.push(project)
+                            );
+                        });
+                        dispatch(addFrozenProjects(projectsFreez));
+                        dispatch(addAvailableProjects(projectsAvailable));
+                    }
+                });
         }
     },[user,isUserAuth,data]);
 

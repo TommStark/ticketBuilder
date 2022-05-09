@@ -38,7 +38,7 @@ export const SeverityPill = (props) => {
             ownerState={ownerState}
             {...other}
         >
-            {children ? 'Merged' : 'Not Merged'}
+            {children}
         </SeverityPillRoot>
     );
 };

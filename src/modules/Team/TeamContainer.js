@@ -1,15 +1,21 @@
 import React, {useEffect, useState} from 'react';
-import { Box, Container } from '@mui/material';
+import { Avatar, Box, Container, Skeleton } from '@mui/material';
 import { TeamResults } from './TeamResult';
 import { useSelector } from 'react-redux';
 
 function TeamContainer () {
     const [teamMates, setTeamMates] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
+    const SkeletonArr = [...Array(5)];
+    const team =(useSelector((state)=> state.TeamMates?.users)) ?? []; 
     
-    const team =(useSelector((state)=> state.TeamMates?.users)) ?? [];    
     useEffect(()=>{
-        team ? setTeamMates(team) : null;
+        if(team.length){
+            setTeamMates(team);
+            setIsLoading(false);
+        }
     },[team]);
+
     return (
         <Box
             component="main"
@@ -20,7 +26,32 @@ function TeamContainer () {
         >
             <Container maxWidth={false}>
                 <Box sx={{ mt: 3 }}>
-                    <TeamResults customers={teamMates} />
+                    {
+                        isLoading
+                            ?
+                            (
+                                <Box>
+                                    <Skeleton width="100%" height={'9vh'}/>
+                                    {SkeletonArr.map((index) => (
+                                        <Box key={index} sx={{ display: 'flex', alignItems: 'center' }}>
+                                            <Box sx={{ margin: 1 }}>
+                                                <Skeleton variant="circular">
+                                                    <Avatar />
+                                                </Skeleton>
+                                            </Box>
+                                            <Box sx={{ width: '100%' }}>
+                                                <Skeleton width="100%" height={'9vh'}/>
+                                            </Box>
+                                        </Box>
+                                    )
+                                    )}
+                                    <Skeleton width="100%" height={'9vh'}/>
+                                </Box>
+                            )
+
+                            :
+                            <TeamResults customers={teamMates} />
+                    }
                 </Box>
             </Container>
         </Box>

@@ -16,6 +16,25 @@ import {
 import { SeverityPill } from '../SeverityPill';
 import {formatDate} from '../Utils';
 
+//TODO refactor these block of code
+function pillStatus(isPending, status){
+    if(isPending)
+        return 'info';
+    if(status){
+        return 'success';
+    }else{
+        return 'error';
+    }
+}
+function pillLabel(isPending, status){
+    if(isPending)
+        return 'Pending';
+    if(status){
+        return 'Merged';
+    }else{
+        return 'Not merge';
+    }
+}
 
 export const DashBoardLastTickets = (props) => (
     <Card>
@@ -65,9 +84,9 @@ export const DashBoardLastTickets = (props) => (
                             </TableCell>
                             <TableCell>
                                 <SeverityPill
-                                    color={ticket.isDone ? 'success' : 'error'}
+                                    color={pillStatus(ticket.pending, ticket.isDone)}
                                 >
-                                    {ticket.isDone}
+                                    {pillLabel(ticket.pending, ticket.isDone)}
                                 </SeverityPill>
                             </TableCell>
                         </TableRow>

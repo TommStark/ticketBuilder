@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 /* eslint-disable no-unused-vars */
 import React from 'react';
 import {
@@ -10,10 +11,9 @@ import {
     Divider,
     Typography
 } from '@mui/material';
-import { useSelector } from 'react-redux';
 
 export function ProfileAccount(props) {
-    const user = useSelector((state)=> state.user?.data);
+    const {user} =props;
 
     return (
         <Card {...props}>

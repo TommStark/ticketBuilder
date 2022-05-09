@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 /* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from 'react';
 import {
@@ -9,57 +10,52 @@ import {
     Grid,
     TextField
 } from '@mui/material';
-import { useSelector, useDispatch } from 'react-redux';
-import * as BackendAPI from  '../../services/BackendAPI';
+import { useDispatch } from 'react-redux';
+// import * as BackendAPI from  '../../services/BackendAPI';
 import LoadingButton from '@mui/lab/LoadingButton';
-import { ChangeSnackbar } from '../AppSlice';
+// import { ChangeSnackbar } from '../AppSlice';
 
 
 export function ProfileDetails (props){
-    const user = useSelector((state)=> state.user.data);
-    const [isBTNLoading, setIsBTNLoading] = useState(false);
-    const [isDisabled, setIsDisabled] = useState(true);
-    const [values, setValues] = useState({});
-    const dispatch = useDispatch();
+    const {user, isBTNLoading, isDisabled, values, handleChange, handleBtnOnClick} = props;
 
-    
-    useEffect(()=>{
-        user &&  setValues(user);
-    },[user]);
+    // const [isBTNLoading, setIsBTNLoading] = useState(false);
+    // const [isDisabled, setIsDisabled] = useState(true);
+    // const [values, setValues] = useState({});
 
-    const handleChange = (event) => {
-        setIsDisabled(false);
-        setValues({
-            ...values,
-            [event.target.name]: event.target.value
-        });
-    };
+    // const handleChange = (event) => {
+    //     setIsDisabled(false);
+    //     setValues({
+    //         ...values,
+    //         [event.target.name]: event.target.value
+    //     });
+    // };
 
-    const handleBtnOnClick = () => {
-        setIsBTNLoading(true);
-        const requestParams = {
-            body: values
-        };
+    // const handleBtnOnClick = () => {
+    //     setIsBTNLoading(true);
+    //     const requestParams = {
+    //         body: values
+    //     };
 
-        delete requestParams.body.jwToken;
-        delete requestParams.body._id;
-        delete requestParams.body.img;
-        delete requestParams.body.__v;
+    //     delete requestParams.body.jwToken;
+    //     delete requestParams.body._id;
+    //     delete requestParams.body.img;
+    //     delete requestParams.body.__v;
 
-        BackendAPI.modifyUserInfo(requestParams)
-            .then( res => {
-                setIsBTNLoading(false);
-                setIsDisabled(true);
-                setValues(res.data);
-                dispatch(ChangeSnackbar({state: true,txt: ' The update was successfully!'}));
-            })
-            .catch(
-                () =>  {
-                    setIsBTNLoading(false);
-                    setIsDisabled(true);
-                    dispatch(ChangeSnackbar({state: true,txt: ' upps something happend!',severity: 'error'}));
-                });
-    };
+    //     BackendAPI.modifyUserInfo(requestParams)
+    //         .then( res => {
+    //             setIsBTNLoading(false);
+    //             setIsDisabled(true);
+    //             setValues(res.data);
+    //             dispatch(ChangeSnackbar({state: true,txt: ' The update was successfully!'}));
+    //         })
+    //         .catch(
+    //             () =>  {
+    //                 setIsBTNLoading(false);
+    //                 setIsDisabled(true);
+    //                 dispatch(ChangeSnackbar({state: true,txt: ' upps something happend!',severity: 'error'}));
+    //             });
+    // };
 
     return (
         <form

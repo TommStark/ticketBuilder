@@ -44,6 +44,9 @@ const getNews  = () => ('/news');
 
 const changeUserAppVersion = () => ('/author/appVersion');
 
+const changePendingStatus = (ticketId) =>(`/ticket/pending/${ticketId}`);
+
+
 export const backend = {
     getUserById,
     postTicketData,
@@ -67,5 +70,6 @@ export const backend = {
     removeTicketFromAuthor,
     getTeamTickets,
     getNews,
-    changeUserAppVersion
+    changeUserAppVersion,
+    changePendingStatus
 };

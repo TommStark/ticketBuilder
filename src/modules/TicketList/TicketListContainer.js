@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from 'react';
-import { Box, Container, Grid, Pagination } from '@mui/material';
-import CircularProgress from '@mui/material/CircularProgress';
+import { Box, Container, Grid, Pagination, Typography } from '@mui/material';
+import Skeleton from '@mui/material/Skeleton';
 import { useSelector, useDispatch } from 'react-redux';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
@@ -27,7 +27,7 @@ function TicketListContainer () {
         setOpen(true);
         setTicketTodelete(ticket);
     };
-  
+
     const handleClose = () => {
         setOpen(false);
     };
@@ -57,7 +57,6 @@ function TicketListContainer () {
     };
 
     const reSendTicket = (ticket) => {
-        setIsLoading(true);
         const formatTicket = {
             ...ticket,
             project      : ticket.project.name,
@@ -67,19 +66,19 @@ function TicketListContainer () {
     
         BackendAPI.sendToDiscordChannel({body: {'ticket': formatTicket}})
             .then( () =>{
-                setIsLoading(false);
                 dispatch(ChangeSnackbar({state: true,txt: ' Ticket successfully send to Discord!'}));
+                BackendAPI.changePendingStatus({ticket: ticket._id });
             })
             .catch(() =>{
                 dispatch(ChangeSnackbar({state: true,txt: ' upss something happend!',severity: 'error'}));
             });
     };
     
-    
-
     useEffect(()=>{
-        ticketList && SetTickets([...ticketList].reverse());
-        setIsLoading(false);
+        if( ticketList ){
+            SetTickets([...ticketList].reverse());
+            setIsLoading(false);
+        } 
     },[ticketList]);
 
     useEffect(() => {
@@ -87,6 +86,7 @@ function TicketListContainer () {
             .then(res => {
                 if(res.data){
                     dispatch(addTickets(res.data));
+                    setIsLoading(false);
                 }
             });
     },[isLoading,setIsLoading]);
@@ -100,37 +100,72 @@ function TicketListContainer () {
                     py       : 8
                 }}
             >
-                {isLoading
-                    ? 
-                    <CircularProgress color="secondary"  size='5rem'/>
-                    :
-                    <Container maxWidth={false}>
-                        {/* <ProductListToolbar /> */}
-                        <Box sx={{ pt: 3 }}>
-                            <Grid
-                                container
-                                spacing={3}
-                            >
-                                {tickets.map((ticket) => (
-                                    <Grid
-                                        item
-                                        key={ticket.id}
-                                        lg={4}
-                                        md={6}
-                                        xs={12}
-                                    >
-                                        <ProductCard 
-                                            product={ticket} 
-                                            isLoading={isLoading} 
-                                            setIsLoading={setIsLoading} 
-                                            handleClickOpen={handleClickOpen}
-                                            reSendTicket={reSendTicket}
-                                        />
-                                    </Grid>
-                                ))}
-                            </Grid>
-                        </Box>
-                        {/* <Box
+                <Container maxWidth={false}>
+                    <Typography
+                        sx={{ mb: 3 }}
+                        variant="h4"
+                    >
+                        {                                    
+                            !isLoading
+                                ?
+                                'Tickets'
+                                :
+                                <Skeleton height={'6vh'}  width={'30%'}/>
+                        }
+                    </Typography>
+                    {/* <ProductListToolbar /> */}
+                    <Box sx={{ pt: 3 }}>
+                        <Grid
+                            container
+                            spacing={3}
+                        >
+                            {                                    
+                                !isLoading
+                                    ?
+                                    (
+                                        tickets.map((ticket) => (
+                                            <Grid
+                                                item
+                                                key={ticket.id}
+                                                lg={4}
+                                                md={6}
+                                                xs={12}
+                                            >
+
+                                                <ProductCard 
+                                                    product={ticket} 
+                                                    isLoading={isLoading} 
+                                                    setIsLoading={setIsLoading} 
+                                                    handleClickOpen={handleClickOpen}
+                                                    reSendTicket={reSendTicket}
+                                                />
+                                            </Grid>))
+                                        
+                                    )
+                                    :
+                                    (
+                                        [...Array(6)].map((index) => (
+                                            <Grid
+                                                item
+                                                key={index}
+                                                lg={4}
+                                                md={6}
+                                                xs={12}
+                                            >
+
+                                                <>
+                                                    <Skeleton variant="rectangular"  height={'28vh'} />
+                                                    <Skeleton height={'9vh'} />
+                                                </>
+
+                                            </Grid>
+                                        )
+                                        ))
+
+                            }
+                        </Grid>
+                    </Box>
+                    {/* <Box
                         sx={{
                             display        : 'flex',
                             justifyContent : 'center',
@@ -143,8 +178,7 @@ function TicketListContainer () {
                             size="small"
                         />
                     </Box> */}
-                    </Container>
-                }
+                </Container>
             </Box>
             <div>
                 <Dialog

@@ -1,7 +1,8 @@
 /* eslint-disable no-undef */
 import React, { useState, useEffect } from 'react' ;
 import { Box, Container, Grid, Typography } from '@mui/material';
-import { useDispatch } from 'react-redux';
+import Skeleton from '@mui/material/Skeleton';
+import { useSelector, useDispatch } from 'react-redux';
 import gtag from 'ga-gtag';
 import Cookies from 'js-cookie';
 import { useNavigate } from 'react-router-dom';
@@ -9,6 +10,7 @@ import '../../App.css';
 import TicketBuilderForm from './TicketBuilderForm';
 import * as BackendAPI from  '../../services/BackendAPI';
 import { ChangeSnackbar } from '../AppSlice';
+import { addProjects } from '../Team/TeamSlice';
 
 const pjson = require('../../../package.json');
 
@@ -21,11 +23,11 @@ function TicketBuilderContainer() {
     const [checks, setChecks] = useState('1');
     const [isLoading, setIsLoading] = useState(false);
     const [isDisabled , setIsDisabled] = useState(true);
-    const [projectsData,SetprojectsData] = useState();
+    const [projectsData,SetprojectsData] = useState(useSelector((state)=> state.TeamMates.projects));
     const author = Cookies.get('author');
     const navigate = useNavigate();
     const isUserAuth  = JSON.parse(localStorage.getItem('user'));
-    const [isDataLoading, setIsDataLoading]=React.useState(true);
+    const [isDataLoading, setIsDataLoading]=useState(true);
     const dispatch = useDispatch();
 
     
@@ -38,15 +40,16 @@ function TicketBuilderContainer() {
             .then(res => {
                 if(res.data){
                     SetprojectsData(res.data);
+                    dispatch(addProjects(res.data));
                     setIsDataLoading(false);
                 }
-            })
-            .catch(() => {
-                // window.location.reload();
             });
     }
 
     useEffect(() =>{
+        if (projectsData.length){
+            setIsDataLoading(false);
+        }
         getProjects();
     },[]);
 
@@ -71,7 +74,7 @@ function TicketBuilderContainer() {
         setIsDisabled(true);
     };
 
-    const getTicket = (ticket) => {
+    const createPlainTicket = (ticket) => {
         const {checks, details, prLink, ticketLink, _id} = ticket;
 
         return ({
@@ -85,6 +88,28 @@ function TicketBuilderContainer() {
             id           : _id,
 
         });
+    };
+    //TODO refactor both methods to simplify code
+    const saveTicket = () => {
+        setIsLoading(true);
+        const requestParams = {
+            body: {
+                prLink     : `https://github.com/Demeure/${project.path}/pull/${PRNumber}`,
+                ticketLink : `https://kognitiv.atlassian.net/browse/VPDC-${ticketNumber}`,
+                project    : project._id,
+                details,
+                checks,
+                pending    : true,
+            },
+        };
+        BackendAPI.postTicketData(requestParams)
+            .then(response => {
+                gtag('event', 'postTicketData', { ...requestParams.body, project: project.name });
+                BackendAPI.pushTicketToAuthor(response.data.ticket._id);
+                BackendAPI.pushTicketToProject( { ticket: response.data.ticket._id, body: { projectId: project._id } } );
+                dispatch(ChangeSnackbar({state: true,txt: ' Ticket successfully Saved!'}));
+            });
+        setIsLoading(false);
     };
     
     const generateTicket = () =>{
@@ -101,14 +126,12 @@ function TicketBuilderContainer() {
         BackendAPI.postTicketData(requestParams)
             .then(response => {
                 gtag('event', 'postTicketData', { ...requestParams.body, project: project.name });
-
-                const plainTicket = getTicket(response.data.ticket);
+                const plainTicket = createPlainTicket(response.data.ticket);
                 BackendAPI.pushTicketToAuthor(response.data.ticket._id);
                 BackendAPI.pushTicketToProject( { ticket: response.data.ticket._id, body: { projectId: project._id } } );
                 BackendAPI.sendToDiscordChannel({body: {'ticket': plainTicket}})
                     .then(() => {
                         gtag('event', 'ClickSentToDiscord', {  'Author': `${author}` });
-                        // setIsDicordOpen(true);
                         dispatch(ChangeSnackbar({state: true,txt: ' Ticket successfully send to Discord!'}));
                         reset();
                     })
@@ -122,9 +145,9 @@ function TicketBuilderContainer() {
     },[isFormValid]);
 
     return (
-        <header className="App-header">
+        <>
             {
-                isUserAuth && author ?
+                !isDataLoading ?
                     <>
                         <Box
                             component="main"
@@ -166,16 +189,43 @@ function TicketBuilderContainer() {
                                             author={author}
                                             projectsData={projectsData}
                                             checks={checks}
-                                            isDataLoading={isDataLoading}
+                                            projectSelected={project}
+                                            saveTicket={saveTicket}
                                         />
                                     </Grid>
                                 </Grid>
                             </Container>
                         </Box>
                     </>
-                    :null
+                    :                        
+                    <Box
+                        component="main"
+                        sx={{
+                            flexGrow : 1,
+                            py       : 1
+                        }}
+                    >
+                        <Container maxWidth="lg">
+                            <Skeleton height={50} width="30%" />
+                            <Grid
+                                container
+                                spacing={3}
+                            >
+                                <Grid
+                                    item
+                                    lg={8}
+                                    md={6}
+                                    xs={12}
+                                >
+                                    <Skeleton variant="rectangular"  height={400} />
+                                    <Skeleton height={30} />
+                                    <Skeleton height={30} width="80%" />
+                                </Grid>
+                            </Grid>
+                        </Container>
+                    </Box>
             }
-        </header>
+        </>
     );
 }
 
