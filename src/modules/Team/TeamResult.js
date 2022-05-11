@@ -1,6 +1,6 @@
+/* eslint-disable no-unused-vars */
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-// import { format } from 'date-fns';
 import {
     Avatar,
     Box,
@@ -74,7 +74,7 @@ export const TeamResults = ({ customers, ...rest }) => {
                     <TableHead>
                         <TableRow>
                             <TableCell padding="checkbox">
-                                <Checkbox
+                                {/* <Checkbox
                                     checked={selectedCustomerIds.length === customers?.length}
                                     color="primary"
                                     indeterminate={
@@ -82,7 +82,7 @@ export const TeamResults = ({ customers, ...rest }) => {
                                                                         && selectedCustomerIds.length < customers?.length
                                     }
                                     onChange={handleSelectAll}
-                                />
+                                /> */}
                             </TableCell>
                             <TableCell>
                                     Name
@@ -109,11 +109,11 @@ export const TeamResults = ({ customers, ...rest }) => {
                                 selected={selectedCustomerIds.indexOf(customer.id) !== -1}
                             >
                                 <TableCell padding="checkbox">
-                                    <Checkbox
+                                    {/* <Checkbox
                                         checked={selectedCustomerIds.indexOf(customer.id) !== -1}
                                         onChange={(event) => handleSelectOne(event, customer.id)}
                                         value="true"
-                                    />
+                                    /> */}
                                 </TableCell>
                                 <TableCell>
                                     <Box

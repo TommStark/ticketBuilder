@@ -17,6 +17,9 @@ const initialState ={
         version : '',
         title   : '',
         posts   : []
+    },
+    tabs: {
+        active: window.location.href.split('#')[1]
     }
 };
 
@@ -36,9 +39,12 @@ export const AppSlice = createSlice({
         addNews: (state, action) => {
             state.news = { ...action.payload };
         },
+        changeActiveTab: (state, action) => {
+            state.tabs = {active: action.payload};
+        },
     }
 });
 
-export const { ChangeSnackbar, changeNotificationSaw, toggleTheme, addNews } = AppSlice.actions;
+export const { ChangeSnackbar, changeNotificationSaw, toggleTheme, addNews, changeActiveTab  } = AppSlice.actions;
 
 export default AppSlice.reducer;

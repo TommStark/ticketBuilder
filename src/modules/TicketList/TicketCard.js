@@ -33,6 +33,7 @@ function ProductCard ({ product, setIsLoading, isloading, handleClickOpen, reSen
             return 'Not merge';
         }
     }
+
     const frozenProjects = useSelector((state)=> state.TeamMates.projectsByState.frozen);
     const  disableButton = frozenProjects.filter( pro => pro.name === product.project.name);
 
@@ -117,9 +118,7 @@ function ProductCard ({ product, setIsLoading, isloading, handleClickOpen, reSen
                             }}
                         >
                             {
-
                                 product.isDone 
-                        
                                     ?
                                     <Tooltip title="Congratulations!">
                                         <IconButton 
@@ -139,7 +138,7 @@ function ProductCard ({ product, setIsLoading, isloading, handleClickOpen, reSen
                                                 onClick={() => reSendTicket(product)}
                                             >
                                                 {
-                                                    disableButton?.length
+                                                    (disableButton?.length && product.pending)
                                                         ?
                                                         <ScheduleSendIcon color="action" />
                                                         :

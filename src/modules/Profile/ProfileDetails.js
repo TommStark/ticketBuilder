@@ -65,7 +65,6 @@ export function ProfileDetails (props){
         >
             <Card>
                 <CardHeader
-                    subheader="The information can be edited"
                     title="Profile"
                 />
                 <Divider />

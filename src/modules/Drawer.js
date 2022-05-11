@@ -81,7 +81,7 @@ export default function TemporaryDrawer() {
         <div>
             <React.Fragment key={'right'}>
                 <Drawer
-                    anchor={ 'right'}
+                    anchor={'right'}
                     open={isOpen}
                     onClose={toggleDrawer( 'right', false)}
                 >

@@ -1,8 +1,9 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable no-undef */
 /* eslint-disable react/prop-types */
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Box, Divider, Drawer, Typography } from '@mui/material';
+import { Box, Divider, Drawer, Typography, useMediaQuery } from '@mui/material';
 import { NavItem } from './Nav/NavItem';
 import OutboxIcon from '@mui/icons-material/Outbox';
 import BarChartIcon from '@mui/icons-material/BarChart';
@@ -15,13 +16,14 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import { useSelector } from 'react-redux';
 const pjson = require('../../package.json');
 
-
-
 export default function SideBar (props) {
     const { open, onClose } = props;
     const user = useSelector((state)=> state.user?.data);
     const appVersion = pjson.version;
-
+    const lgUp = useMediaQuery((theme) => theme.breakpoints.up('lg'), {
+        defaultMatches : true,
+        noSsr          : false
+    });
 
     const items = [
         {
@@ -65,10 +67,11 @@ export default function SideBar (props) {
             icon  : LogoutIcon,
         },
     ];
-
-
-
-
+    const toggleDrawer = (anchor, open) => (event) => {
+        if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
+            return;
+        }
+    };
     const content = (
         <>
             <Box
@@ -102,15 +105,15 @@ export default function SideBar (props) {
                                     color="inherit"
                                     variant="subtitle1"
                                 >
-                  Tomito Inc
+                                Tomito Inc
                                 </Typography>
                                 <Typography
                                     color="neutral.400"
                                     variant="body2"
                                 >
-                  Your tier
+                                    Your tier
                                     {' '}
-                  : {!user?.tier ? 'Developer' : ' PL'}
+                                    : {!user?.tier ? 'Developer' : ' PL'}
                                 </Typography>
                             </div>
                         </Box>
@@ -129,6 +132,7 @@ export default function SideBar (props) {
                             icon={<item.icon/>}
                             href={item.href}
                             title={item.title}
+                            onClick={onClose}
                         />
                     ))}
                 </Box>
@@ -156,7 +160,26 @@ export default function SideBar (props) {
         </>
     );
 
-
+    if (!lgUp) {
+        return (
+            <Drawer
+                anchor="left"
+                open={open}
+                onClose={onClose}
+                variant="temporary"
+                sx={{ zIndex: (theme) => theme.zIndex.appBar + 100 }}
+                PaperProps={{
+                    sx: {
+                        backgroundColor : '#111827',
+                        color           : '#FFFFFF',
+                        width           : 260,
+                    }
+                }}
+            >
+                {content}
+            </Drawer>
+        );
+    }
     return (
         <Drawer
             anchor="left"
@@ -169,7 +192,7 @@ export default function SideBar (props) {
                     width           : 260,
                 }
             }}
-            sx={{ zIndex: 100 }}
+            sx={{ zIndex: (theme) => theme.zIndex.appBar + 100 }}
             variant="permanent"
         >
             {content}

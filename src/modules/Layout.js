@@ -38,6 +38,7 @@ export default function DashboardLayout ({logOut,setUser,user}) {
     const data  = Cookies.get('data') && JSON.parse(Cookies.get('data'));
     const snack = useSelector((state)=> state.app.snackbar);
     const isDarkMode = useSelector((state)=> state.app.theme.darkMode);
+    const [isTabActive, setIsTabActive] = useState(useSelector((state)=> state.app.tabs.active));
 
     const versionData={
         userVersion : useSelector((state)=> state?.user?.data?.appVersion),
@@ -66,7 +67,7 @@ export default function DashboardLayout ({logOut,setUser,user}) {
                 maxWidth                     : '100%',
                 [theme.breakpoints.up('lg')] : {
                     paddingLeft : 280,
-                    paddingTop  : 30
+                    paddingTop  : 120
                 }
             } :        {
                 display  : 'flex',
@@ -134,7 +135,7 @@ export default function DashboardLayout ({logOut,setUser,user}) {
         <>
             <ThemeProvider theme={darkTheme}>
 
-                { user && <Nav versionData={versionData} />}
+                { user && <Nav versionData={versionData}  onSidebarOpen={() => setSidebarOpen(true)}/>}
                 { user && <SideBar
                     onClose={() => setSidebarOpen(false)}
                     open={isSidebarOpen}

@@ -1,6 +1,7 @@
+/* eslint-disable react/prop-types */
 /* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from 'react';
-import { Box, Container, Grid, Skeleton } from '@mui/material';
+import { Box, Container, Grid, Skeleton, Typography } from '@mui/material';
 import { useSelector, useDispatch } from 'react-redux';
 import GroupIcon from '@mui/icons-material/Group';
 import PersonIcon from '@mui/icons-material/Person';
@@ -26,7 +27,7 @@ function DashboardContainer () {
     const y = teamTickes.map(t =>  new Date(Date.parse(t.start_date)).toJSON().slice(0,10));
 
     useEffect(()=>{
-        (!!(tickets.length && teamTickes.length && graph.length && colors.length && ProjectsByUser.length) && setIsLoading(false));
+        (!!(teamTickes.length && graph.length && colors.length && ProjectsByUser.length) && setIsLoading(false));
     },[tickets,teamTickes,graph,colors,ProjectsByUser]);
 
     function getTicketsByUsers(){
@@ -58,7 +59,6 @@ function DashboardContainer () {
             })
             .catch(() => {
                 setIsLoading(false);
-                window.location.reload();
             });
         BackendAPI.getAllProjects()
             .then(res => {
@@ -82,17 +82,29 @@ function DashboardContainer () {
                 component="main"
                 sx={{
                     flexGrow : 1,
-                    py       : 8
+                    py       : 2
                 }}
-            >
+            >   
                 <Container maxWidth={false}>
+                    <Typography
+                        sx={{ mb: 3 }}
+                        variant="h4"
+                    >
+                        {                                    
+                            !isLoading  
+                                ?
+                                'Dashboard'
+                                :
+                                <Skeleton height={'6vh'}  width={'30%'}/>
+                        }
+                    </Typography>
                     <Grid
                         container
                         spacing={3}
                     >
                         <Grid
                             item
-                            lg={6}
+                            lg={12}
                             sm={12}
                             xl={6}
                             xs={12}
@@ -109,7 +121,7 @@ function DashboardContainer () {
                         <Grid
                             item
                             xl={3}
-                            lg={3}
+                            lg={6}
                             sm={6}
                             xs={12}
                         >
@@ -127,7 +139,7 @@ function DashboardContainer () {
                         <Grid
                             item
                             xl={3}
-                            lg={3}
+                            lg={6}
                             sm={6}
                             xs={12}
                         >

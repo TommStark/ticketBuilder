@@ -24,16 +24,17 @@ function TicketBuilderContainer() {
     const [isLoading, setIsLoading] = useState(false);
     const [isDisabled , setIsDisabled] = useState(true);
     const [projectsData,SetprojectsData] = useState(useSelector((state)=> state.TeamMates.projects));
+    const [isDataLoading, setIsDataLoading]=useState(true);
+    const [checked, setChecked]=useState(false);
     const author = Cookies.get('author');
     const navigate = useNavigate();
     const isUserAuth  = JSON.parse(localStorage.getItem('user'));
-    const [isDataLoading, setIsDataLoading]=useState(true);
     const dispatch = useDispatch();
-
     
     useEffect(()=>{
         !isUserAuth && navigate('/ticketBuilder', {replace: true});
     },[]);
+
 
     function getProjects(){
         BackendAPI.getProjects()
@@ -72,6 +73,7 @@ function TicketBuilderContainer() {
         setDetails('');
         setIsLoading(false);
         setIsDisabled(true);
+        setChecked(false);
     };
 
     const createPlainTicket = (ticket) => {
@@ -165,7 +167,7 @@ function TicketBuilderContainer() {
                                 </Typography>
                                 <Grid
                                     container
-                                    spacing={3}
+                                    spacing={1}
                                 >
                                     <Grid
                                         item
@@ -191,6 +193,8 @@ function TicketBuilderContainer() {
                                             checks={checks}
                                             projectSelected={project}
                                             saveTicket={saveTicket}
+                                            checked={checked}
+                                            setChecked={setChecked}
                                         />
                                     </Grid>
                                 </Grid>

@@ -1,9 +1,11 @@
+/* eslint-disable no-undef */
 /* eslint-disable react/prop-types */
 /* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import * as BackendAPI from  '../../services/BackendAPI';
 import gtag from 'ga-gtag';
+import { styled } from '@mui/material/styles';
 import PropTypes from 'prop-types';
 import Avatar from '@mui/material/Avatar';
 import Cookies from 'js-cookie';
@@ -21,9 +23,12 @@ import Badge from '@mui/material/Badge';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import { changeNotificationSaw } from '../AppSlice';
 
-const pages = [''];
+const AppBarRoot = styled(AppBar)(({ theme }) => ({
+    backgroundColor : theme.palette.background.paper,
+    boxShadow       : theme.shadows[3]
+}));
 
-export default function Nav({versionData}){
+export default function Nav({versionData, onSidebarOpen }){
     const avatarImg = Cookies.get('img');
     const [anchorElNav, setAnchorElNav] = React.useState(null);
     const dispatch = useDispatch();
@@ -55,73 +60,70 @@ export default function Nav({versionData}){
     };
 
     return(
-        <AppBar position="static" style={{paddingLeft: '300px', maxHeight: '64px',backgroundColor: 'white', color: 'grey'}}>
-            <Container maxWidth="xxl">
-                <Toolbar disableGutters>
-                    <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
-                        <IconButton
-                            size="large"
-                            aria-label="account of current user"
-                            aria-controls="menu-appbar"
-                            aria-haspopup="true"
-                            onClick={handleOpenNavMenu}
-                            color="inherit"
-                        >
-                            <MenuIcon />
-                        </IconButton>
-                        <Menu
-                            id="menu-appbar"
-                            anchorEl={anchorElNav}
-                            anchorOrigin={{
-                                vertical   : 'bottom',
-                                horizontal : 'left',
-                            }}
-                            keepMounted
-                            transformOrigin={{
-                                vertical   : 'top',
-                                horizontal : 'left',
-                            }}
-                            open={Boolean(anchorElNav)}
-                            onClose={handleCloseNavMenu}
-                            sx={{
-                                display: { xs: 'block', md: 'none' },
-                            }}
-                        >
-                            {pages.map((page) => (
-                                <MenuItem key={page} onClick={handleCloseNavMenu}>
-                                    <Typography textAlign="center">{page}</Typography>
-                                </MenuItem>
-                            ))}
-                        </Menu>
-                    </Box>
-                    <Typography
-                        variant="h6"
-                        noWrap
-                        component="div"
-                        sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}
-                    >
-                        Ticket Builder
-                    </Typography>
-                    <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-                    </Box>
-                    <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                        <Tooltip title="Notifications">
-                            <IconButton 
-                                onClick={() => openDrawer()}
-                                sx={{ ml: 1 }}
+        <AppBarRoot>
+            <AppBar position="static" style={{ maxHeight: '64px',backgroundColor: 'white', color: 'grey'}}>
+                <Container maxWidth="xxl">
+                    <Toolbar disableGutters>
+                        <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
+                            <IconButton
+                                size="large"
+                                aria-label="account of current user"
+                                aria-controls="menu-appbar"
+                                aria-haspopup="true"
+                                onClick={onSidebarOpen}
+                                color="inherit"
                             >
-                                <Badge  variant={ShowBadge ? 'dot' : ''} color="primary">
-                                    <NotificationsIcon color="action" />
-                                </Badge>
+                                <MenuIcon />
                             </IconButton>
-                        </Tooltip>
-                        <Box sx={{ ml: 2 }}>
+                            <Menu
+                                id="menu-appbar"
+                                anchorEl={anchorElNav}
+                                anchorOrigin={{
+                                    vertical   : 'bottom',
+                                    horizontal : 'left',
+                                }}
+                                keepMounted
+                                transformOrigin={{
+                                    vertical   : 'top',
+                                    horizontal : 'left',
+                                }}
+                                open={Boolean(anchorElNav)}
+                                onClose={handleCloseNavMenu}
+                                sx={{
+                                    display: { xs: 'block', md: 'none' },
+                                }}
+                            >
+                            </Menu>
                         </Box>
-                        <Avatar alt="Remy Sharp" src={avatarImg} />
-                    </Box>
-                </Toolbar>
-            </Container>
-        </AppBar>
+                        <Typography
+                            variant="h6"
+                            noWrap
+                            component="div"
+                            sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}
+                        >
+                        Ticket Builder
+                        </Typography>
+                        <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
+                        </Box>
+                        <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                            <Tooltip title="Notifications">
+                                <IconButton 
+                                    onClick={() => openDrawer()}
+                                    sx={{ ml: 1 }}
+                                >
+                                    <Badge  variant={ShowBadge ? 'dot' : ''} color="primary">
+                                        <NotificationsIcon color="action" />
+                                    </Badge>
+                                </IconButton>
+                            </Tooltip>
+                            <Box sx={{ ml: 2 }}>
+                            </Box>
+                            <Avatar alt="Remy Sharp" src={avatarImg} />
+                        </Box>
+                    </Toolbar>
+                </Container>
+            </AppBar>
+        </AppBarRoot>
     );
 }
 Nav.propTypes = {

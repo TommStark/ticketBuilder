@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 /* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from 'react';
 import { Box, Container, Grid, Pagination, Typography } from '@mui/material';
@@ -13,6 +14,7 @@ import ProductCard from './TicketCard';
 import * as BackendAPI from  '../../services/BackendAPI';
 import { addTickets } from '../../modules/login/loginSlice';
 import { ChangeSnackbar } from '../AppSlice';
+const pjson = require('../../../package.json');
 
 
 function TicketListContainer () {
@@ -61,7 +63,8 @@ function TicketListContainer () {
             ...ticket,
             project      : ticket.project.name,
             projectColor : ticket.project.color,
-            id           : ticket._id  
+            id           : ticket._id,
+            version      : pjson.version,
         };
     
         BackendAPI.sendToDiscordChannel({body: {'ticket': formatTicket}})
@@ -96,8 +99,7 @@ function TicketListContainer () {
             <Box
                 component="main"
                 sx={{
-                    flexGrow : 1,
-                    py       : 8
+                    flexGrow: 1,
                 }}
             >
                 <Container maxWidth={false}>
@@ -106,9 +108,9 @@ function TicketListContainer () {
                         variant="h4"
                     >
                         {                                    
-                            !isLoading
+                            !isLoading  
                                 ?
-                                'Tickets'
+                                (ticketList.length ? 'Tickets' : 'you do not have tickets yet')
                                 :
                                 <Skeleton height={'6vh'}  width={'30%'}/>
                         }

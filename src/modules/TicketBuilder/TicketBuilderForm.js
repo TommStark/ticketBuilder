@@ -13,6 +13,8 @@ import LoadingButton from '@mui/lab/LoadingButton';
 import FormControl from '@mui/material/FormControl';
 import SendIcon from '@mui/icons-material/Send';
 import SaveIcon from '@mui/icons-material/Save';
+import Checkbox from '@mui/material/Checkbox';
+import FormGroup from '@mui/material/FormGroup';
 
 import {
     Box,
@@ -27,7 +29,7 @@ import {
 function TicketBuilderForm(props) {
     const {
         project, handleChangeSelect, PRNumber, setPRNumber, ticketNumber, setTicketNumber,details,
-        setDetails,setChecks,isLoading,isDisabled,generateTicket, author, projectsData, checks, projectSelected, saveTicket
+        setDetails,setChecks,isLoading,isDisabled,generateTicket, author, projectsData, checks, projectSelected, saveTicket, checked, setChecked
     } = props;
     
     const projectsFreez = [];
@@ -40,6 +42,8 @@ function TicketBuilderForm(props) {
             projectsAvailable.push(<MenuItem key={ `${index}${project.name}` } value={project.name}> {project.name} </MenuItem>)
         );
     });
+    
+    const isEmpty = Object.keys(projectSelected).length === 0;
 
     return ( 
         <>                  
@@ -73,11 +77,11 @@ function TicketBuilderForm(props) {
                                         onChange={handleChangeSelect}
                                         defaultValue=""
                                     >   
-                                        <ListSubheader>Available</ListSubheader>
+                                        <ListSubheader>{projectsAvailable.length ? 'Available' : ''}</ListSubheader>
                                         {
                                             projectsAvailable
                                         }
-                                        <ListSubheader>Frozen</ListSubheader>
+                                        <ListSubheader>{projectsFreez.length ? 'Frozen' : null}</ListSubheader>
                                         {
                                             projectsFreez
                                         }
@@ -159,6 +163,26 @@ function TicketBuilderForm(props) {
                                     <FormControlLabel value="3" control={<Radio />} label="3" />
                                 </RadioGroup>
                             </Grid>
+                            
+                            {                           
+                                !isEmpty && !projectSelected?.state
+                                    ?
+                                    <Grid
+                                        item
+                                        md={6}
+                                        xs={12}
+                                    >
+                                        <FormGroup>
+                                            <FormControlLabel control={
+                                                <Checkbox
+                                                    checked={checked}
+                                                    onChange={(event) => setChecked(event.target.checked)}
+                                                    inputProps={{ 'aria-label': 'controlled' }}
+                                                />} label="Deployment Label" />
+                                        </FormGroup>
+                                    </Grid>
+                                    : null
+                            }
                         </Grid>
                     </CardContent>
                     <Divider />
@@ -171,8 +195,8 @@ function TicketBuilderForm(props) {
                     >
                         <div className="txt-align">
                             {
-                                projectSelected?.state ?
-
+                                (projectSelected?.state || checked) 
+                                    ?
                                     <LoadingButton 
                                         loading={isLoading}
                                         color = 'secondary'
@@ -180,11 +204,9 @@ function TicketBuilderForm(props) {
                                         disabled={!isDisabled}
                                         endIcon={<SendIcon />}
                                         onClick={ () => generateTicket()}
-                                    >To Discord
+                                    >Save & Discord
                                     </LoadingButton>
-
                                     :
-
                                     <LoadingButton 
                                         loading={isLoading}
                                         color = 'primary'
@@ -194,7 +216,6 @@ function TicketBuilderForm(props) {
                                         onClick={ () => saveTicket()}
                                     >Save
                                     </LoadingButton>
-
                             }
                         </div>
                     </Box>

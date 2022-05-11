@@ -54,7 +54,7 @@ export default function DashboardByProject (props){
 
     return (
         <Card {...props}>
-            <CardHeader title="Tickets by Projects" />
+            <CardHeader title={'Tickets by Projects'} />
             <Divider />
             <CardContent>
                 <Box

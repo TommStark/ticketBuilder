@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import { Avatar, Box, Container, Skeleton } from '@mui/material';
+import { Avatar, Box, Container, Skeleton, Typography } from '@mui/material';
 import { TeamResults } from './TeamResult';
 import { useSelector } from 'react-redux';
 
@@ -25,6 +25,18 @@ function TeamContainer () {
             }}
         >
             <Container maxWidth={false}>
+                <Typography
+                    sx={{ mb: 3 }}
+                    variant="h4"
+                >
+                    {                                    
+                        !isLoading  
+                            ?
+                            'Dream Team'
+                            :
+                            <Skeleton height={'6vh'}  width={'30%'}/>
+                    }
+                </Typography>
                 <Box sx={{ mt: 3 }}>
                     {
                         isLoading
