@@ -7,7 +7,6 @@ import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 export const DashBoardTotalTickets = (props) => (
     <Card
         sx={{ height: '100%' }}
-        {...props}
     >
         <CardContent>
             <Grid

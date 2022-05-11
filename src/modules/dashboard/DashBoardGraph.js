@@ -42,7 +42,7 @@ export default function DashBoardGraph (props){
         },
     };
     return (
-        <Card {...props}>
+        <Card>
             <CardContent>
                 <CardHeader title="Radar Ticket" />
                 <Divider />

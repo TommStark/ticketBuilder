@@ -93,12 +93,12 @@ export const removeTicket = (params) => axios
     .catch((err) => { throw new Error(err); }); 
 
 export const removeTicketFromProject = (params) => axios
-    .delete(backend.removeTicketFromProject(params.ticket),params.body)
+    .put(backend.removeTicketFromProject(params.ticket),params.body)
     .then((response) => response)
     .catch((err) => { throw new Error(err); }); 
 
 export const removeTicketFromAuthor = (params) => axios
-    .delete(backend.removeTicketFromAuthor(params.ticket),params.body)
+    .put(backend.removeTicketFromAuthor(params.ticket),params.body)
     .then((response) => response)
     .catch((err) => { throw new Error(err); }); 
     
@@ -121,3 +121,9 @@ export const changePendingStatus = (params) => axios
     .put(backend.changePendingStatus(params.ticket))
     .then((response) => response)
     .catch((err) => { throw new Error(err); }); 
+
+export const changeTheme = (params) => axios
+    .put(backend.changeTheme(),params.body)
+    .then((response) => response)
+    .catch((err) => { throw new Error(err); }); 
+    

@@ -1,8 +1,6 @@
-/* eslint-disable no-undef */
 /* eslint-disable react/prop-types */
-/* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import * as BackendAPI from  '../../services/BackendAPI';
 import gtag from 'ga-gtag';
 import { styled } from '@mui/material/styles';
@@ -10,7 +8,6 @@ import PropTypes from 'prop-types';
 import Avatar from '@mui/material/Avatar';
 import Cookies from 'js-cookie';
 import IconButton from '@mui/material/IconButton';
-import MenuItem from '@mui/material/MenuItem';
 import Menu from '@mui/material/Menu';
 import Tooltip from '@mui/material/Tooltip';
 import Box from '@mui/material/Box';
@@ -35,15 +32,12 @@ export default function Nav({versionData, onSidebarOpen }){
     const [userAppVersion, setUserAppVersion] = useState(versionData?.userVersion);
     const [appVersion, setAppVersion] =  useState(versionData?.appVersion);
     const [ShowBadge, setSetShowBadge] = useState(false);
+    const isDarkMode = useSelector((state)=> state.user.data.darkMode);
 
     useEffect(() => {
         setUserAppVersion(versionData.userVersion);
         setAppVersion(versionData.appVersion);
     },[userAppVersion,appVersion]);
-
-    const handleOpenNavMenu = (event) => {
-        setAnchorElNav(event.currentTarget);
-    };
 
     const handleCloseNavMenu = () => {
         setAnchorElNav(null);
@@ -61,7 +55,7 @@ export default function Nav({versionData, onSidebarOpen }){
 
     return(
         <AppBarRoot>
-            <AppBar position="static" style={{ maxHeight: '64px',backgroundColor: 'white', color: 'grey'}}>
+            <AppBar position="static" style={{ maxHeight: '64px', backgroundColor: isDarkMode? '#272727' : '#FFFFFF'}}>
                 <Container maxWidth="xxl">
                     <Toolbar disableGutters>
                         <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
@@ -127,5 +121,5 @@ export default function Nav({versionData, onSidebarOpen }){
     );
 }
 Nav.propTypes = {
-    logOut: PropTypes.func.isRequired,
+    logOut: PropTypes.func,
 };

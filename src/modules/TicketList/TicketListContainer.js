@@ -37,22 +37,15 @@ function TicketListContainer () {
     const handleDelete = () =>{
         setIsLoading(true);
         const params ={
-            authorId : ticketToDelete.author._id,
-            ticket   : ticketToDelete._id,
-            body     : {
+            ticket : ticketToDelete._id,
+            body   : {
                 name: ticketToDelete.project.name
             }
         };
-        BackendAPI.removeTicket({ticket: ticketToDelete._id})
-            .then( () =>{
-                BackendAPI.removeTicketFromProject(params)
-                    .then(() => {
-                        BackendAPI.removeTicketFromAuthor(params)
-                            .then(() => {
-                                setIsLoading(false);
-                            });
-                    });
-            });
+        BackendAPI.removeTicket({ticket: ticketToDelete._id});
+        BackendAPI.removeTicketFromProject(params);
+        BackendAPI.removeTicketFromAuthor(params);
+        setIsLoading(false);
         dispatch(ChangeSnackbar({state: true,txt: ' The ticket was successfully delete!'}));
         setTicketTodelete('');
         setOpen(false);
@@ -85,13 +78,19 @@ function TicketListContainer () {
     },[ticketList]);
 
     useEffect(() => {
+        let unmounted = false;
         BackendAPI.getTicketsByAuthor()
             .then(res => {
                 if(res.data){
-                    dispatch(addTickets(res.data));
-                    setIsLoading(false);
+                    if (!unmounted) {
+                        dispatch(addTickets(res.data));
+                        setIsLoading(false);
+                    }
                 }
             });
+        return function () {
+            unmounted = true;
+        };
     },[isLoading,setIsLoading]);
 
     return (
@@ -125,10 +124,10 @@ function TicketListContainer () {
                                 !isLoading
                                     ?
                                     (
-                                        tickets.map((ticket) => (
+                                        tickets.map((ticket, index) => (
                                             <Grid
                                                 item
-                                                key={ticket.id}
+                                                key={ticket + index + new Date()}
                                                 lg={4}
                                                 md={6}
                                                 xs={12}
@@ -146,7 +145,7 @@ function TicketListContainer () {
                                     )
                                     :
                                     (
-                                        [...Array(6)].map((index) => (
+                                        [...Array(6)].map((_item,index) => (
                                             <Grid
                                                 item
                                                 key={index}

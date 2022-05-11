@@ -71,7 +71,7 @@ export const DashBoardLastTickets = (props) => (
                     {props.tickets.map((ticket) => (
                         <TableRow
                             hover
-                            key={ticket.id}
+                            key={ticket.start_date}
                         >
                             <TableCell>
                                 {ticket.project.name}

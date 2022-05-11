@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Box, Button, Card, CardContent, CardHeader, Divider, TextField } from '@mui/material';
 
-export const SettingsPassword = (props) => {
+export const SettingsPassword = () => {
     const [values, setValues] = useState({
         password : '',
         confirm  : ''
@@ -15,7 +15,7 @@ export const SettingsPassword = (props) => {
     };
 
     return (
-        <form {...props}>
+        <form>
             <Card>
                 <CardHeader
                     subheader="Update password"

@@ -16,7 +16,7 @@ export function ProfileAccount(props) {
     const {user} =props;
 
     return (
-        <Card {...props}>
+        <Card>
             <CardContent>
                 <Box
                     sx={{

@@ -13,7 +13,7 @@ import ScheduleSendIcon from '@mui/icons-material/ScheduleSend';
 import { formatDate } from '../Utils';
 import { SeverityPill } from '../SeverityPill';
 
-function ProductCard ({ product, setIsLoading, isloading, handleClickOpen, reSendTicket, ...rest }) {
+function ProductCard ({ product, setIsLoading, isloading, handleClickOpen, reSendTicket, }) {
     //TODO refactor these block of code
     function pillStatus(isPending, status){
         if(isPending)
@@ -45,7 +45,6 @@ function ProductCard ({ product, setIsLoading, isloading, handleClickOpen, reSen
                     flexDirection : 'column',
                     height        : '100%'
                 }}
-                {...rest}
             >
                 <CardContent>
                     <Box
@@ -77,9 +76,9 @@ function ProductCard ({ product, setIsLoading, isloading, handleClickOpen, reSen
                             {pillLabel(product.pending, product.isDone)}
                         </SeverityPill>
                     </Typography>
-                    <Typography variant="body2" color="text.secondary">
+                    <Typography  component={'span'} variant="body2" color="text.secondary">
                         <p><strong>Project:</strong>      {product.project.name}</p>
-                        <p><strong>Pull Request:</strong> <a href={product.prLink}> {(product.prLink).substring(0,50)}</a>...</p>
+                        <p><strong>Pull Request:</strong>  <a href={product.prLink}> {(product.prLink).substring(0,50)}</a>...</p>
                         <p><strong>Jira:</strong>         <a href={product.ticketLink}>{product.ticketLink}</a></p>
                         <p><strong>Details:</strong>      {product.details}</p>
                         <p><strong>Date:</strong> {formatDate(product.start_date)} </p>
@@ -134,7 +133,7 @@ function ProductCard ({ product, setIsLoading, isloading, handleClickOpen, reSen
                                         <span>
                                             <IconButton 
                                                 aria-label="sendIcon"
-                                                disabled={disableButton?.length || false}
+                                                disabled={!!disableButton?.length || false}
                                                 onClick={() => reSendTicket(product)}
                                             >
                                                 {

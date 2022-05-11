@@ -33,7 +33,7 @@ const renderCustomizedLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, per
 };
 
 function StatsContainer() {
-    const [ProjectsByUser, setProjectsByUser] = useState([]);
+    const [projectsByUser, setProjectsByUser] = useState([]);
     const [colors, setColors] = useState([]);
     const [graph, setGraph] = useState([]);
     const [isLoading, setIsLoadin]=useState(true);
@@ -107,7 +107,7 @@ function StatsContainer() {
                                             <div style={{display: 'flex',flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>
                                                 <PieChart width={250} height={200}>
                                                     <Pie
-                                                        data={ProjectsByUser}
+                                                        data={projectsByUser}
                                                         cx="50%"
                                                         cy="50%"
                                                         labelLine={false}
@@ -118,7 +118,7 @@ function StatsContainer() {
                                                         dataKey="value"
                                                         paddingAngle={5}
                                                     >
-                                                        {ProjectsByUser?.map((entry, index) => (
+                                                        {projectsByUser?.map((entry, index) => (
                                                             <Cell key={`cell-${index}`} fill={colors[index % colors.length]} />
                                                         ))}
                                                     </Pie>
@@ -134,7 +134,7 @@ function StatsContainer() {
                                                         </TableRow>
                                                     </TableHead>
                                                     <TableBody>
-                                                        {ProjectsByUser.map((p) => (
+                                                        {projectsByUser.map((p) => (
                                                             <TableRow
                                                                 key={p.name}
                                                                 sx={{ '&:last-child td, &:last-child th': { border: 0 } }}

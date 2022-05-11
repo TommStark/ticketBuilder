@@ -6,7 +6,6 @@ import { useSelector } from 'react-redux';
 function TeamContainer () {
     const [teamMates, setTeamMates] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
-    const SkeletonArr = [...Array(5)];
     const team =(useSelector((state)=> state.TeamMates?.users)) ?? []; 
     
     useEffect(()=>{
@@ -44,8 +43,11 @@ function TeamContainer () {
                             (
                                 <Box>
                                     <Skeleton width="100%" height={'9vh'}/>
-                                    {SkeletonArr.map((index) => (
-                                        <Box key={index} sx={{ display: 'flex', alignItems: 'center' }}>
+                                    {[...Array(6)].map((_item, index) => (
+                                        <Box 
+                                            key={index} 
+                                            sx={{ display: 'flex', alignItems: 'center' }}
+                                        >
                                             <Box sx={{ margin: 1 }}>
                                                 <Skeleton variant="circular">
                                                     <Avatar />
@@ -55,6 +57,7 @@ function TeamContainer () {
                                                 <Skeleton width="100%" height={'9vh'}/>
                                             </Box>
                                         </Box>
+
                                     )
                                     )}
                                     <Skeleton width="100%" height={'9vh'}/>

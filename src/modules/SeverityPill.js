@@ -30,13 +30,12 @@ const SeverityPillRoot = styled('span')(({ theme, ownerState }) => {
 });
 
 export const SeverityPill = (props) => {
-    const { color = 'primary', children, ...other } = props;
+    const { color = 'primary', children, } = props;
     const ownerState = { color };
 
     return (
         <SeverityPillRoot
             ownerState={ownerState}
-            {...other}
         >
             {children}
         </SeverityPillRoot>

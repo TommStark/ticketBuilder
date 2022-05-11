@@ -22,7 +22,7 @@ const getInitials = (name = '') => name
     .map((v) => v && v[0].toUpperCase())
     .join('');
 
-export const TeamResults = ({ customers, ...rest }) => {
+export const TeamResults = ({ customers}) => {
     const [selectedCustomerIds, setSelectedCustomerIds] = useState([]);
     const [limit, setLimit] = useState(10);
     const [page, setPage] = useState(0);
@@ -68,7 +68,7 @@ export const TeamResults = ({ customers, ...rest }) => {
     };
 
     return (
-        <Card {...rest}>
+        <Card>
             <Box sx={{ minWidth: 1050 }}>
                 <Table>
                     <TableHead>
@@ -102,10 +102,10 @@ export const TeamResults = ({ customers, ...rest }) => {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {customers?.slice(0, limit).map((customer) => (
+                        {customers?.slice(0, limit).map((customer, index) => (
                             <TableRow
                                 hover
-                                key={customer}
+                                key={customer.img+customer._id}
                                 selected={selectedCustomerIds.indexOf(customer.id) !== -1}
                             >
                                 <TableCell padding="checkbox">

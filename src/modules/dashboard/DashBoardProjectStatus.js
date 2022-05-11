@@ -7,7 +7,6 @@ import { SeverityPill } from '../SeverityPill';
 export const DashBoardProjectStatus = (props) => (
     <Card
         sx={{ height: '100%' }}
-        {...props}
     >
         <CardContent>
             <Grid
@@ -30,7 +29,7 @@ export const DashBoardProjectStatus = (props) => (
                         Status
                     </Typography>
                 </Grid>
-                {props.ProjectsStatus.map(({
+                {props.projectsStatus.map(({
                     name,
                     state 
                 }) => (

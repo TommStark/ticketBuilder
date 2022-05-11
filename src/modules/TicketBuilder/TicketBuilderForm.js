@@ -225,8 +225,9 @@ function TicketBuilderForm(props) {
     );}
 
 TicketBuilderForm.defaultProps = {
-    project      : '',
-    projectsData : [],
+    project       : '',
+    projectsData  : [],
+    isDataLoading : true,
 };
 
 TicketBuilderForm.propTypes = {
@@ -249,9 +250,7 @@ TicketBuilderForm.propTypes = {
     PRNumber           : PropTypes.string.isRequired,
     details            : PropTypes.string.isRequired,
     checks             : PropTypes.string.isRequired,
-    isdiscordOpen      : PropTypes.bool.isRequired,
-    isDataLoading      : PropTypes.bool.isRequired,
-    setIsDicordOpen    : PropTypes.func.isRequired,
+    isDataLoading      : PropTypes.bool,
     projectSelected    : PropTypes.shape({}),
     saveTicket         : PropTypes.func.isRequired,
 };

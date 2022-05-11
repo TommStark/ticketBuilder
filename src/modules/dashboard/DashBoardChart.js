@@ -93,7 +93,7 @@ export const DashboardChart = (props) => {
     };
 
     return (
-        <Card {...props}>      
+        <Card>      
             <CardHeader
                 title="Last seven days"
             />

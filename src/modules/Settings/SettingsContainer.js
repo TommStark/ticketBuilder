@@ -1,6 +1,6 @@
 import React from 'react';
 import { Box, Container, Typography } from '@mui/material';
-// import { SettingsNotifications } from './SettingsNotifications';
+import { SettingsNotifications } from './SettingsNotifications';
 import { SettingsPassword } from './SettingsPassword';
 
 const Settings = () => (
@@ -19,7 +19,7 @@ const Settings = () => (
                 >
           Settings
                 </Typography>
-                {/* <SettingsNotifications /> */}
+                <SettingsNotifications />
                 <Box sx={{ pt: 3 }}>
                     <SettingsPassword />
                 </Box>

@@ -9,9 +9,9 @@ import { Box, Card, CardContent, CardHeader, Divider, Typography, useTheme } fro
 
 export default function DashboardByProject (props){
     const theme = useTheme();
-    const {colors, ProjectsByUser} = props;
+    const {projectsByUser} = props;
 
-    const projectFiltered = ProjectsByUser.filter(pro => pro.value > 0);
+    const projectFiltered = projectsByUser.filter(pro => pro.value > 0);
     const colorsFiltered = projectFiltered.map(pro => pro.color);
     const projectsName = projectFiltered.map(pro => pro.name);
     const projectsvalue = projectFiltered.map(pro => pro.value);
@@ -53,7 +53,7 @@ export default function DashboardByProject (props){
     };
 
     return (
-        <Card {...props}>
+        <Card>
             <CardHeader title={'Tickets by Projects'} />
             <Divider />
             <CardContent>

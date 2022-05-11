@@ -1,5 +1,3 @@
-/* eslint-disable react/react-in-jsx-scope */
-import Typography from '@mui/material/Typography';
 
 //format day from mongoDB to YYYY/MM/DD HH:MM:SS
 export const formatDate = (date='') =>{
@@ -38,9 +36,3 @@ export const getLast7ticketsAmmount = (X,dataLabels,dataValue) => {
         dataValue.push(value.length ? value[0][1] : 0 );
     });
 };
-
-//Label when you jave not tickets
-
-export function showZeroTicketsLabel(){
-    return <Typography> You do not have tickets yet </Typography>;
-}

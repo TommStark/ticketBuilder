@@ -38,7 +38,6 @@ export const NavItem = (props) => {
                 to={href}
             >
                 <Button
-                    component="a"
                     startIcon={icon}
                     disableRipple
                     onClick={() => onClick()}

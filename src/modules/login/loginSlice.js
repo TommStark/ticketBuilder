@@ -1,6 +1,13 @@
 import  {createSlice} from '@reduxjs/toolkit';
 
 const initialState ={
+    tickets: {
+        tickets : [],
+        total   : 0
+    },
+    log  : {},
+    data : {}
+    
 
 };
 
@@ -17,9 +24,15 @@ export const loginSlice = createSlice({
         addUserData: (state, action) => {
             state.data = action.payload;
         },
+        toggleTheme: (state, action) => {
+            state.data = { 
+                ...state.data,
+                darkMode: action.payload 
+            };
+        },
     }
 });
 
-export const { AddUser, addTickets, addUserData } = loginSlice.actions;
+export const { AddUser, addTickets, addUserData, toggleTheme } = loginSlice.actions;
 
 export default loginSlice.reducer;

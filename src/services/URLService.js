@@ -34,9 +34,9 @@ const getUserData = () =>('/author/myUser');
 
 const removeTicket = (ticketId) =>(`/ticket/${ticketId}`);
 
-const removeTicketFromProject = (ticketId) =>(`/project/${ticketId}`);
+const removeTicketFromProject = (ticketId) =>(`/project/delete/${ticketId}`);
 
-const removeTicketFromAuthor = (ticketId) =>(`/author/${ticketId}`);
+const removeTicketFromAuthor = (ticketId) =>(`/author/delete/${ticketId}`);
 
 const getTeamTickets = () => ('/ticket');
 
@@ -45,6 +45,8 @@ const getNews  = () => ('/news');
 const changeUserAppVersion = () => ('/author/appVersion');
 
 const changePendingStatus = (ticketId) =>(`/ticket/pending/${ticketId}`);
+
+const changeTheme = () => ('/author/theme');
 
 
 export const backend = {
@@ -71,5 +73,6 @@ export const backend = {
     getTeamTickets,
     getNews,
     changeUserAppVersion,
-    changePendingStatus
+    changePendingStatus,
+    changeTheme
 };

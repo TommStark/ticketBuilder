@@ -1,11 +1,9 @@
 /* eslint-disable react/prop-types */
-/* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from 'react';
 import { Box, Container, Grid, Skeleton, Typography } from '@mui/material';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import GroupIcon from '@mui/icons-material/Group';
 import PersonIcon from '@mui/icons-material/Person';
-import * as BackendAPI from  '../../services/BackendAPI';
 import DashboardByProject from './DashboardByProject';
 import DashBoardGraph from './DashBoardGraph';
 import { DashBoardTotalTickets } from './DashBoardTotalTickets';
@@ -14,67 +12,19 @@ import { DashBoardProjectStatus } from './DashBoardProjectStatus';
 import { DashboardChart } from './DashBoardChart';
 
 function DashboardContainer () {
-    const [ProjectsByUser, setProjectsByUser] = useState([]);
-    const [colors, setColors] = useState([]);
-    const [graph, setGraph] = useState([]);
     const [isLoading, setIsLoading]=useState(true);
-    const [tickets, SetTickets]=useState([]);
-    const [teamTickes, setTeamTickets]=useState([]);
-    const [ProjectsStatus, setProjectsStatus]=useState([]);
-    const dispatch = useDispatch();
-    
+    const tickets = useSelector((state)=> state.user.tickets.tickets);
+    const teamTickes = useSelector((state)=> state.DashBoard.teamTickets);
+    const projectsStatus = useSelector((state)=> state.TeamMates.projects);
+    const projectsByUser = useSelector((state)=> state.DashBoard.projectsByUsers.userProjects);
+    const colors  = useSelector((state)=> state.DashBoard.projectsByUsers.colors);
+    const graph = useSelector((state)=> state.DashBoard.projectsByUsers.graph);
     const x = tickets.map(t =>  new Date(Date.parse(t.start_date)).toJSON().slice(0,10));
     const y = teamTickes.map(t =>  new Date(Date.parse(t.start_date)).toJSON().slice(0,10));
 
     useEffect(()=>{
-        (!!(teamTickes.length && graph.length && colors.length && ProjectsByUser.length) && setIsLoading(false));
-    },[tickets,teamTickes,graph,colors,ProjectsByUser]);
-
-    function getTicketsByUsers(){
-        BackendAPI.getTicketsByAuthor()
-            .then(res => {
-                if(res.data){
-                    SetTickets(res.data.tickets);
-                }
-            });
-        BackendAPI.getTeamTickets()
-            .then(res => {
-                if(res.data){
-                    setTeamTickets(res.data.tickets);
-                }
-            });
-    }
-    useEffect(() =>{
-        getTicketsByUsers();
-    },[]);
-
-    function getProjectByUsers(){
-        BackendAPI.getProjectByUsers()
-            .then(res => {
-                if(res.data){
-                    setGraph(res.data.stats.radarChart);
-                    setColors(res.data.stats.colors);
-                    setProjectsByUser(res.data.stats.pieChart);
-                }
-            })
-            .catch(() => {
-                setIsLoading(false);
-            });
-        BackendAPI.getAllProjects()
-            .then(res => {
-                if(res.data){
-                    setProjectsStatus(res.data);
-                }
-            })
-            .catch(() => {
-                setIsLoading(false);
-            });
-    }
-
-    useEffect(() =>{
-        getProjectByUsers();
-    },[]);
-
+        (!!(colors.length || projectsStatus.length) && setIsLoading(false));
+    },[tickets,teamTickes,graph,colors,projectsByUser]);
 
     return (
         <>
@@ -114,7 +64,7 @@ function DashboardContainer () {
                                     ? <Skeleton variant="rectangular" height={'12vh'} sx={{margin: 0}}/>
                                     :
                                     <DashBoardProjectStatus
-                                        ProjectsStatus={ProjectsStatus}
+                                        projectsStatus={projectsStatus}
                                         title={'Project Status'}
                                     />}
                         </Grid>
@@ -185,7 +135,7 @@ function DashboardContainer () {
                                     <DashboardByProject 
                                         sx={{ height: '100%' }} 
                                         colors={colors}
-                                        ProjectsByUser={ProjectsByUser}
+                                        projectsByUser={projectsByUser}
                                     />
                             }
                         </Grid>

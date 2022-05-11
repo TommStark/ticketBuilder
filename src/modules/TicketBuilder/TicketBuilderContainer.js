@@ -5,7 +5,6 @@ import Skeleton from '@mui/material/Skeleton';
 import { useSelector, useDispatch } from 'react-redux';
 import gtag from 'ga-gtag';
 import Cookies from 'js-cookie';
-import { useNavigate } from 'react-router-dom';
 import '../../App.css';
 import TicketBuilderForm from './TicketBuilderForm';
 import * as BackendAPI from  '../../services/BackendAPI';
@@ -27,31 +26,27 @@ function TicketBuilderContainer() {
     const [isDataLoading, setIsDataLoading]=useState(true);
     const [checked, setChecked]=useState(false);
     const author = Cookies.get('author');
-    const navigate = useNavigate();
-    const isUserAuth  = JSON.parse(localStorage.getItem('user'));
     const dispatch = useDispatch();
-    
-    useEffect(()=>{
-        !isUserAuth && navigate('/ticketBuilder', {replace: true});
-    },[]);
-
-
-    function getProjects(){
-        BackendAPI.getProjects()
-            .then(res => {
-                if(res.data){
-                    SetprojectsData(res.data);
-                    dispatch(addProjects(res.data));
-                    setIsDataLoading(false);
-                }
-            });
-    }
 
     useEffect(() =>{
+        let unmounted = false;
+
         if (projectsData.length){
             setIsDataLoading(false);
         }
-        getProjects();
+        BackendAPI.getProjects()
+            .then(res => {
+                if(res.data){
+                    if (!unmounted) {
+                        SetprojectsData(res.data);
+                        dispatch(addProjects(res.data));
+                        setIsDataLoading(false);
+                    }
+                }
+            });
+        return function () {
+            unmounted = true;
+        };
     },[]);
 
     const handleChangeSelect = (event) => {
@@ -128,9 +123,13 @@ function TicketBuilderContainer() {
         BackendAPI.postTicketData(requestParams)
             .then(response => {
                 gtag('event', 'postTicketData', { ...requestParams.body, project: project.name });
+                
                 const plainTicket = createPlainTicket(response.data.ticket);
+
                 BackendAPI.pushTicketToAuthor(response.data.ticket._id);
+
                 BackendAPI.pushTicketToProject( { ticket: response.data.ticket._id, body: { projectId: project._id } } );
+
                 BackendAPI.sendToDiscordChannel({body: {'ticket': plainTicket}})
                     .then(() => {
                         gtag('event', 'ClickSentToDiscord', {  'Author': `${author}` });

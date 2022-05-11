@@ -61,7 +61,6 @@ export function ProfileDetails (props){
         <form
             autoComplete="off"
             noValidate
-            {...props}
         >
             <Card>
                 <CardHeader
