@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/ticketBuilder/static/css/main.b92ce371.css",
-    "main.js": "/ticketBuilder/static/js/main.2f5ed463.js",
+    "main.css": "/ticketBuilder/static/css/main.c150f3e9.css",
+    "main.js": "/ticketBuilder/static/js/main.6ee4bae0.js",
     "static/media/roboto-all-500-normal.woff": "/ticketBuilder/static/media/roboto-all-500-normal.52cb737b682eb9661ee1.woff",
     "static/media/roboto-all-700-normal.woff": "/ticketBuilder/static/media/roboto-all-700-normal.ef6d1d09b20b877fee4e.woff",
     "static/media/roboto-all-400-normal.woff": "/ticketBuilder/static/media/roboto-all-400-normal.376ea5d93f71583052f6.woff",
@@ -35,11 +35,11 @@
     "static/media/roboto-greek-ext-300-normal.woff2": "/ticketBuilder/static/media/roboto-greek-ext-300-normal.04e05839d6a35e046c13.woff2",
     "static/media/roboto-greek-ext-700-normal.woff2": "/ticketBuilder/static/media/roboto-greek-ext-700-normal.9674bc0ae12c2551d9d1.woff2",
     "index.html": "/ticketBuilder/index.html",
-    "main.b92ce371.css.map": "/ticketBuilder/static/css/main.b92ce371.css.map",
-    "main.2f5ed463.js.map": "/ticketBuilder/static/js/main.2f5ed463.js.map"
+    "main.c150f3e9.css.map": "/ticketBuilder/static/css/main.c150f3e9.css.map",
+    "main.6ee4bae0.js.map": "/ticketBuilder/static/js/main.6ee4bae0.js.map"
   },
   "entrypoints": [
-    "static/css/main.b92ce371.css",
-    "static/js/main.2f5ed463.js"
+    "static/css/main.c150f3e9.css",
+    "static/js/main.6ee4bae0.js"
   ]
 }
