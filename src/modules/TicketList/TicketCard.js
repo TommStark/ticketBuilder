@@ -35,7 +35,7 @@ function ProductCard ({ product, setIsLoading, isloading, handleClickOpen, reSen
     }
 
     const frozenProjects = useSelector((state)=> state.TeamMates.projectsByState.frozen);
-    const  disableButton = frozenProjects.filter( pro => pro.name === product.project.name);
+    const disableButton = frozenProjects.filter( pro => pro.name === product.project.name);
 
     return(
         <>  
@@ -102,7 +102,7 @@ function ProductCard ({ product, setIsLoading, isloading, handleClickOpen, reSen
                         >
                             <Tooltip title="Delete">
                                 <IconButton 
-                                    aria-label="sendIcon"
+                                    aria-label="Delete"
                                     onClick={() => handleClickOpen(product)}
                                 >
                                     <ClearIcon color="action" />

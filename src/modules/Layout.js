@@ -13,10 +13,10 @@ import Cookies from 'js-cookie';
 import Nav from './Nav/Nav';
 import SideBar from './SideBar';
 import TicketBuilderContainer from './TicketBuilder/TicketBuilderContainer';
+import TicketListContainer from './TicketList/TicketListContainer';
 import Login  from './login/login';
 import Error from './Error';
-import TicketListContainer from './TicketList/TicketListContainer';
-import AdminPanel from './admin/AdminPanel';
+import AdminPanel from './admin/AdminPanelContainer';
 import ProfileContainer from './Profile/ProfileContainer';
 import SettingsContainer from './Settings/SettingsContainer';
 import TeamContainer from './Team/TeamContainer';
@@ -39,11 +39,10 @@ export default function DashboardLayout ({logOut,setUser,user}) {
     const isUserAuth  = localStorage.getItem('user') && JSON.parse(localStorage.getItem('user'));
     const data  = Cookies.get('data') && JSON.parse(Cookies.get('data'));
     const snack = useSelector((state)=> state.app.snackbar);
-    
+    const userId = useSelector((state)=> state.user.data._id);
+
     const isDarkMode = useSelector((state)=> state.user.data.darkMode);
     const palletMode = isDarkMode ? 'dark' :  'light';
-
-    
 
     const versionData={
         userVersion : useSelector((state)=> state?.user?.data?.appVersion),
@@ -193,7 +192,7 @@ export default function DashboardLayout ({logOut,setUser,user}) {
                             </Route>
                             <Route
                                 path="/ticketBuilder/admin"
-                                element={user  ? <AdminPanel /> : <Login authenticate={() => setUser(true)} />
+                                element={(user && (userId  === '6267170f8df19de071b278fc' || userId === '626b22d24d0ffea24d6ccc2e') )  ? <AdminPanel /> : <Login authenticate={() => setUser(true)} />
                                 }>
                             </Route>
                             <Route

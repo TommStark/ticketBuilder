@@ -13,12 +13,15 @@ export const dates = [...Array(7)].map((_, i) => {
 
 //get the last 7 days of tickets and their ammount
 export const getLast7ticketsAmmount = (X,dataLabels,dataValue) => {
+    if(!X){
+        return;
+    }
     const day2 = dates.map(d => d.toJSON().slice(0,10));
 
     const from = day2[0];
     const to = day2[6];
 
-    const occurrences = X.reduce( (acc, curr) => {
+    const occurrences = X?.reduce( (acc, curr) => {
         return acc[curr] ? ++acc[curr] : acc[curr] = 1, acc;
     }, {});
 
@@ -34,5 +37,39 @@ export const getLast7ticketsAmmount = (X,dataLabels,dataValue) => {
         const value = finalValue.filter( item => item?.includes(entry));
         dataLabels.push(entry);
         dataValue.push(value.length ? value[0][1] : 0 );
+    });
+};
+
+//createPlain Ticket
+export const createPlainTicket = (ticket, project, pjson) => {
+    const {checks, details, prLink, ticketLink, _id} = ticket;
+
+    return ({
+        prLink       : prLink,
+        ticketLink   : ticketLink,
+        project      : project.name,
+        projectColor : project.color,
+        details,
+        checks,
+        version      : pjson.version,
+        id           : _id,
+
+    });
+};
+
+export const createPlainTicketWithAuthor = (ticket, project, pjson, authorAdmin) => {
+    const {checks, details, prLink, ticketLink, _id} = ticket;
+
+    return ({
+        prLink       : prLink,
+        ticketLink   : ticketLink,
+        project      : project.name,
+        projectColor : project.color,
+        details,
+        checks,
+        version      : pjson.version,
+        id           : _id,
+        userId       : authorAdmin._id,
+        user         : authorAdmin
     });
 };

@@ -45,9 +45,9 @@ function TicketListContainer () {
         BackendAPI.removeTicket({ticket: ticketToDelete._id});
         BackendAPI.removeTicketFromProject(params);
         BackendAPI.removeTicketFromAuthor(params);
-        setIsLoading(false);
         dispatch(ChangeSnackbar({state: true,txt: ' The ticket was successfully delete!'}));
         setTicketTodelete('');
+        setIsLoading(false);
         setOpen(false);
     };
 
@@ -71,7 +71,7 @@ function TicketListContainer () {
     };
     
     useEffect(()=>{
-        if( ticketList ){
+        if( ticketList.length ){
             SetTickets([...ticketList].reverse());
             setIsLoading(false);
         } 
@@ -109,7 +109,7 @@ function TicketListContainer () {
                         {                                    
                             !isLoading  
                                 ?
-                                (ticketList.length ? 'Tickets' : 'you do not have tickets yet')
+                                (ticketList.length ? 'Tickets' : null)
                                 :
                                 <Skeleton height={'6vh'}  width={'30%'}/>
                         }

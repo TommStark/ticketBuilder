@@ -12,7 +12,7 @@ import PersonIcon from '@mui/icons-material/Person';
 import GroupIcon from '@mui/icons-material/Group';
 import SettingsIcon from '@mui/icons-material/Settings';
 import LogoutIcon from '@mui/icons-material/Logout';
-// import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
+import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
 import { useSelector } from 'react-redux';
 const pjson = require('../../package.json');
 
@@ -56,17 +56,28 @@ export default function SideBar (props) {
             title : 'Settings',
             icon  : SettingsIcon
         },
-        // {
-        //     href  : '/ticketBuilder/admin',
-        //     title : 'Admin',
-        //     icon  : AdminPanelSettingsIcon
-        // },
+    ];
+
+    if (user._id === '6267170f8df19de071b278fc' || user._id === '626b22d24d0ffea24d6ccc2e'){
+        items.push(
+            {
+                href  : '/ticketBuilder/admin',
+                title : 'Admin',
+                icon  : AdminPanelSettingsIcon
+            },
+        );
+    }
+
+    items.push(
         {
             href  : '/ticketBuilder/LogOut',
             title : 'LogOut',
             icon  : LogoutIcon,
         },
-    ];
+    );
+
+    
+
     const toggleDrawer = (anchor, open) => (event) => {
         if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
             return;
@@ -105,7 +116,7 @@ export default function SideBar (props) {
                                     color="inherit"
                                     variant="subtitle1"
                                 >
-                                Tomito Inc
+                                TriOptimum Corporation
                                 </Typography>
                                 <Typography
                                     color="neutral.400"
@@ -113,7 +124,7 @@ export default function SideBar (props) {
                                 >
                                     Your tier
                                     {' '}
-                                    : {!user?.tier ? 'Developer' : ' PL'}
+                                    : {user.rol}
                                 </Typography>
                             </div>
                         </Box>

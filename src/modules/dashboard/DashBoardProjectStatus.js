@@ -14,21 +14,6 @@ export const DashBoardProjectStatus = (props) => (
                 spacing={2}
                 sx={{ justifyContent: 'space-between'}}
             >
-                <Grid item>
-                    <Typography
-                        color="textPrimary"
-                        gutterBottom
-                        // variant="overline"
-                    >
-                        Project
-                    </Typography>
-                    <Typography
-                        color="textPrimary"
-                        variant="h6"
-                    >
-                        Status
-                    </Typography>
-                </Grid>
                 {props.projectsStatus.map(({
                     name,
                     state 

@@ -16,19 +16,8 @@ export const DashboardChart = (props) => {
     getLast7ticketsAmmount(props.y,dataLabelsY,dataValueY);
     const dataLabel = dataLabelsY.map(d => (new Date(d).toUTCString()).split(' ').slice(0,3).join(' ') );
 
-
     const data = {
         datasets: [
-            {
-                backgroundColor    : '#1976d2',
-                barPercentage      : 0.5,
-                barThickness       : 12,
-                borderRadius       : 4,
-                categoryPercentage : 0.5,
-                data               : dataValueX,
-                label              : 'You',
-                maxBarThickness    : 10
-            },
             {
                 backgroundColor    : '#01030694',
                 barPercentage      : 0.5,
@@ -38,10 +27,47 @@ export const DashboardChart = (props) => {
                 data               : dataValueY,
                 label              : 'The Team',
                 maxBarThickness    : 10
-            }
+            },
         ],
         labels: dataLabel
     };
+
+    if(!props.admin){
+        const settings = {
+            backgroundColor    : '#1976d2',
+            barPercentage      : 0.5,
+            barThickness       : 12,
+            borderRadius       : 4,
+            categoryPercentage : 0.5,
+            data               : dataValueX,
+            label              : 'You',
+            maxBarThickness    : 10
+        };
+        data.datasets.push(settings);
+    }
+
+    if(props.admin){
+        props.team.forEach((user,_index) => {
+            const dataValue = [];
+            const dataLabels = [];
+
+            const usertickets = user?.tickets?.map(t =>  new Date(Date.parse(t.start_date)).toJSON().slice(0,10));
+
+            getLast7ticketsAmmount(usertickets,dataLabels,dataValue);
+
+            const settings = {
+                backgroundColor    : props.colors[_index],
+                barPercentage      : 0.5,
+                barThickness       : 12,
+                borderRadius       : 4,
+                categoryPercentage : 0.5,
+                data               : dataValue,
+                label              : user.name,
+                maxBarThickness    : 10
+            };
+            data.datasets.push(settings);
+        });
+    }   
 
     const options = {
         animation           : false,
@@ -56,8 +82,8 @@ export const DashboardChart = (props) => {
                     fontColor: theme.palette.text.secondary
                 },
                 gridLines: {
-                    display    : false,
-                    drawBorder : false
+                    display    : true,
+                    drawBorder : true
                 }
             }
         ],
@@ -72,7 +98,7 @@ export const DashboardChart = (props) => {
                     borderDash               : [2],
                     borderDashOffset         : [2],
                     color                    : theme.palette.divider,
-                    drawBorder               : false,
+                    drawBorder               : true,
                     zeroLineBorderDash       : [2],
                     zeroLineBorderDashOffset : [2],
                     zeroLineColor            : theme.palette.divider

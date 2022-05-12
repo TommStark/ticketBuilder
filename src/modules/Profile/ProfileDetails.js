@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable no-unused-vars */
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import {
     Box,
     Card,
@@ -10,53 +10,16 @@ import {
     Grid,
     TextField
 } from '@mui/material';
-import { useDispatch } from 'react-redux';
-// import * as BackendAPI from  '../../services/BackendAPI';
+import { useDispatch, useSelector } from 'react-redux';
 import LoadingButton from '@mui/lab/LoadingButton';
-// import { ChangeSnackbar } from '../AppSlice';
-
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select from '@mui/material/Select';
 
 export function ProfileDetails (props){
-    const {user, isBTNLoading, isDisabled, values, handleChange, handleBtnOnClick} = props;
-
-    // const [isBTNLoading, setIsBTNLoading] = useState(false);
-    // const [isDisabled, setIsDisabled] = useState(true);
-    // const [values, setValues] = useState({});
-
-    // const handleChange = (event) => {
-    //     setIsDisabled(false);
-    //     setValues({
-    //         ...values,
-    //         [event.target.name]: event.target.value
-    //     });
-    // };
-
-    // const handleBtnOnClick = () => {
-    //     setIsBTNLoading(true);
-    //     const requestParams = {
-    //         body: values
-    //     };
-
-    //     delete requestParams.body.jwToken;
-    //     delete requestParams.body._id;
-    //     delete requestParams.body.img;
-    //     delete requestParams.body.__v;
-
-    //     BackendAPI.modifyUserInfo(requestParams)
-    //         .then( res => {
-    //             setIsBTNLoading(false);
-    //             setIsDisabled(true);
-    //             setValues(res.data);
-    //             dispatch(ChangeSnackbar({state: true,txt: ' The update was successfully!'}));
-    //         })
-    //         .catch(
-    //             () =>  {
-    //                 setIsBTNLoading(false);
-    //                 setIsDisabled(true);
-    //                 dispatch(ChangeSnackbar({state: true,txt: ' upps something happend!',severity: 'error'}));
-    //             });
-    // };
-
+    const { isBTNLoading, isDisabled, values, handleChange, handleBtnOnClick} = props;
+    const userId = useSelector((state)=> state.user.data._id);
     return (
         <form
             autoComplete="off"
@@ -154,15 +117,27 @@ export function ProfileDetails (props){
                             md={6}
                             xs={12}
                         >
-                            <TextField
-                                fullWidth
-                                label="rol"
-                                name="rol"
-                                onChange={handleChange}
-                                required
-                                value={values.rol}
-                                variant="outlined"
-                            />
+                            <FormControl fullWidth>
+                                <InputLabel id="rol">Rol * </InputLabel>
+                                <Select
+                                    fullWidth
+                                    id="RolSelector"
+                                    labelId="rol"
+                                    label="rol"
+                                    name="rol"
+                                    onChange={handleChange}
+                                    required
+                                    value={values.rol}
+                                >   
+                                    <MenuItem value={'Developer'}> Developer </MenuItem>
+                                    <MenuItem value={'Casi Hacker'}> Casi Hacker </MenuItem>
+                                    {
+                                        (userId  === '6267170f8df19de071b278fc' || userId === '626b22d24d0ffea24d6ccc2e')
+                                            ? <MenuItem value={'Project lider'}>Project lider</MenuItem>
+                                            : null
+                                    }
+                                </Select>
+                            </FormControl>
                         </Grid>
                         <Grid
                             item

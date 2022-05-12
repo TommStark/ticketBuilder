@@ -1,20 +1,21 @@
+/* eslint-disable react/prop-types */
+/* eslint-disable no-unused-vars */
 /* eslint-disable no-undef */
 import React, { useState, useEffect } from 'react' ;
-import { Box, Container, Grid, Typography } from '@mui/material';
+import { Box, Container, Grid } from '@mui/material';
 import Skeleton from '@mui/material/Skeleton';
 import { useSelector, useDispatch } from 'react-redux';
 import gtag from 'ga-gtag';
-import Cookies from 'js-cookie';
 import '../../App.css';
-import TicketBuilderForm from './TicketBuilderForm';
+import TicketBuilderForm from '../TicketBuilder/TicketBuilderForm';
 import * as BackendAPI from  '../../services/BackendAPI';
 import { ChangeSnackbar } from '../AppSlice';
 import { addProjects } from '../Team/TeamSlice';
-import { createPlainTicket } from '../Utils';
+import { createPlainTicketWithAuthor } from '../Utils';
 
 const pjson = require('../../../package.json');
 
-function TicketBuilderContainer() {
+function AdminPanelTicketBuilder({projectsStatus}) {
     const [project, setproject] = useState({});
     const [projectName, setProjectName] = useState('');
     const [PRNumber, setPRNumber] = useState('');
@@ -23,32 +24,17 @@ function TicketBuilderContainer() {
     const [checks, setChecks] = useState('1');
     const [isLoading, setIsLoading] = useState(false);
     const [isDisabled , setIsDisabled] = useState(true);
-    const [projectsData,SetprojectsData] = useState(useSelector((state)=> state.TeamMates.projects));
-    const user = useSelector((state)=> state.user.data);
+    const projectsData = projectsStatus;
+    const team =(useSelector((state)=> state.TeamMates?.users)) ?? []; 
     const [isDataLoading, setIsDataLoading]=useState(true);
     const [checked, setChecked]=useState(false);
-    const author = Cookies.get('author');
+    const [authorAdmin, setAuthorAdmin] = useState([]);
     const dispatch = useDispatch();
 
     useEffect(() =>{
-        let unmounted = false;
-
         if (projectsData.length){
             setIsDataLoading(false);
         }
-        BackendAPI.getProjects()
-            .then(res => {
-                if(res.data){
-                    if (!unmounted) {
-                        SetprojectsData(res.data);
-                        dispatch(addProjects(res.data));
-                        setIsDataLoading(false);
-                    }
-                }
-            });
-        return function () {
-            unmounted = true;
-        };
     },[]);
 
     const handleChangeSelect = (event) => {
@@ -57,8 +43,14 @@ function TicketBuilderContainer() {
         setproject(data[0]);
     };
 
+    const handleAuthorChangeSelect = (event) => {
+        const data = team.filter(user => user.name === event.target.value);
+        setAuthorAdmin(data);
+    };
+
+
     const isFormValid = () => {
-        return project?.name && PRNumber && ticketNumber && details && checks;
+        return project?.name && PRNumber && ticketNumber && details && checks && authorAdmin.length;
     };
     
     const reset = () =>{
@@ -73,6 +65,8 @@ function TicketBuilderContainer() {
         setChecked(false);
     };
 
+    
+
     //TODO refactor both methods to simplify code
     const saveTicket = () => {
         setIsLoading(true);
@@ -84,17 +78,18 @@ function TicketBuilderContainer() {
                 details,
                 checks,
                 pending    : true,
-                UserId     : user._id
+                UserId     : authorAdmin[0]._id
             },
         };
         BackendAPI.postTicketData(requestParams)
             .then(response => {
                 gtag('event', 'postTicketData', { ...requestParams.body, project: project.name });
-                BackendAPI.pushTicketToAuthor({ticketId: response.data.ticket._id, body: {email: user.email}});
+                BackendAPI.pushTicketToAuthor({ticketId: response.data.ticket._id, body: {email: authorAdmin[0].email}});
                 BackendAPI.pushTicketToProject( { ticket: response.data.ticket._id, body: { projectId: project._id } } );
                 dispatch(ChangeSnackbar({state: true,txt: ' Ticket successfully Saved!'}));
+                setIsLoading(false);
+                reset();
             });
-        setIsLoading(false);
     };
     
     const generateTicket = () =>{
@@ -106,25 +101,25 @@ function TicketBuilderContainer() {
                 project    : project._id,
                 details,
                 checks,
-                UserId     : user._id
+                UserId     : authorAdmin[0]._id
+
             },
         };
         BackendAPI.postTicketData(requestParams)
             .then(response => {
                 gtag('event', 'postTicketData', { ...requestParams.body, project: project.name });
-                
-                const plainTicket = createPlainTicket(response.data.ticket,project,pjson); 
-                BackendAPI.pushTicketToAuthor({ticketId: response.data.ticket._id, body: {email: user.email}});
+                const plainTicket = createPlainTicketWithAuthor(response.data.ticket,project,pjson,authorAdmin[0]);
+                BackendAPI.pushTicketToAuthor({ticketId: response.data.ticket._id, body: {email: authorAdmin[0].email}});
                 BackendAPI.pushTicketToProject( { ticket: response.data.ticket._id, body: { projectId: project._id } } );
                 BackendAPI.sendToDiscordChannel({body: {'ticket': plainTicket}})
                     .then(() => {
-                        gtag('event', 'ClickSentToDiscord', {  'Author': `${user.name}` });
+                        gtag('event', 'ClickSentToDiscord/ADMIN', {  'Author': `${authorAdmin[0].name}` });
                         dispatch(ChangeSnackbar({state: true,txt: ' Ticket successfully send to Discord!'}));
+                        setIsLoading(false);
                         reset();
                     })
                     .catch(err => {err;});
             });
-        setIsLoading(false);
     };
 
     useEffect(() => {
@@ -138,52 +133,31 @@ function TicketBuilderContainer() {
                     <>
                         <Box
                             component="main"
-                            sx={{
-                                flexGrow : 1,
-                                py       : 1
-                            }}
                         >
-                            <Container maxWidth="lg">
-                                <Typography
-                                    sx={{ mb: 3 }}
-                                    variant="h4"
-                                >
-                                    Ticket builder
-                                </Typography>
-                                <Grid
-                                    container
-                                    spacing={1}
-                                >
-                                    <Grid
-                                        item
-                                        lg={8}
-                                        md={6}
-                                        xs={12}
-                                    >
-                                        <TicketBuilderForm
-                                            project={projectName}
-                                            handleChangeSelect={handleChangeSelect}
-                                            PRNumber={PRNumber}
-                                            setPRNumber={setPRNumber}
-                                            ticketNumber={ticketNumber}
-                                            setTicketNumber={setTicketNumber}
-                                            details={details}
-                                            setDetails={setDetails}
-                                            setChecks={setChecks}
-                                            isLoading={isLoading}
-                                            isDisabled={isDisabled}
-                                            generateTicket={generateTicket}
-                                            author={author}
-                                            projectsData={projectsData}
-                                            checks={checks}
-                                            projectSelected={project}
-                                            saveTicket={saveTicket}
-                                            checked={checked}
-                                            setChecked={setChecked}
-                                        />
-                                    </Grid>
-                                </Grid>
-                            </Container>
+                            <TicketBuilderForm
+                                project={projectName}
+                                handleChangeSelect={handleChangeSelect}
+                                PRNumber={PRNumber}
+                                setPRNumber={setPRNumber}
+                                ticketNumber={ticketNumber}
+                                setTicketNumber={setTicketNumber}
+                                details={details}
+                                setDetails={setDetails}
+                                setChecks={setChecks}
+                                isLoading={isLoading}
+                                isDisabled={isDisabled}
+                                generateTicket={generateTicket}
+                                projectsData={projectsData}
+                                checks={checks}
+                                projectSelected={project}
+                                saveTicket={saveTicket}
+                                checked={checked}
+                                setChecked={setChecked}
+                                admin={true}
+                                team={team}
+                                author={authorAdmin.length ? authorAdmin[0].name : ' '}
+                                handleAuthorChangeSelect={handleAuthorChangeSelect}
+                            />
                         </Box>
                     </>
                     :                        
@@ -218,4 +192,4 @@ function TicketBuilderContainer() {
     );
 }
 
-export default TicketBuilderContainer;
+export default AdminPanelTicketBuilder;

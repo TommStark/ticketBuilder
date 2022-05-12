@@ -18,7 +18,7 @@ export const authentication = (params) => axios
     .catch((err) => { throw new Error(err); });
 
 export const pushTicketToAuthor = (params) => axios
-    .put(backend.pushTicketToAuthor(params))
+    .put(backend.pushTicketToAuthor(params.ticketId),params.body)
     .then((response) => response)
     .catch((err) => { throw new Error(err); });
 
@@ -62,8 +62,8 @@ export const updateProjectStatus = (params) => axios
     .then((response) => response)
     .catch((err) => { throw new Error(err); });
 
-export const sendProjectStatus = () => axios
-    .post(backend.sendProjectStatus())
+export const sendProjectStatus = (params) => axios
+    .post(backend.sendProjectStatus(),params.body)
     .then((response) => response)
     .catch((err) => { throw new Error(err); });
 

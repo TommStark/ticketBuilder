@@ -1,4 +1,3 @@
-/* eslint-disable react/prop-types */
 import * as React from 'react';
 import PropTypes from 'prop-types';
 import TextField from '@mui/material/TextField';
@@ -29,12 +28,16 @@ import {
 function TicketBuilderForm(props) {
     const {
         project, handleChangeSelect, PRNumber, setPRNumber, ticketNumber, setTicketNumber,details,
-        setDetails,setChecks,isLoading,isDisabled,generateTicket, author, projectsData, checks, projectSelected, saveTicket, checked, setChecked
+        setDetails,setChecks,isLoading,isDisabled,generateTicket, author, projectsData, checks, projectSelected, saveTicket, checked, setChecked, admin, team,handleAuthorChangeSelect
     } = props;
     
     const projectsFreez = [];
     const projectsAvailable = [];
     
+    const teamMenu = team.map( (user, index) => {
+        return (<MenuItem key={ `${index}${user.name}` } value={user.name}> {user.name} </MenuItem>);
+    });
+
     projectsData?.forEach((project,index) => {
         if(!project.state){
             projectsFreez.push(<MenuItem key={ `${index}${project.name}` } value={project.name}> {project.name} </MenuItem>);
@@ -93,14 +96,32 @@ function TicketBuilderForm(props) {
                                 md={6}
                                 xs={12}
                             >
-                                <TextField
-                                    id="filled-basic-author"
-                                    label="Author"
-                                    variant="filled"
-                                    value={author}
-                                    fullWidth
-                                    disabled
-                                />
+                                {
+                                    admin
+                                        ?
+                                        <FormControl fullWidth>
+                                            <InputLabel id="Author">Author</InputLabel>
+                                            <Select
+                                                labelId="Author"
+                                                id="AuthorSelector"
+                                                value={author}
+                                                label="Author"
+                                                onChange={handleAuthorChangeSelect}
+                                                defaultValue=""
+                                            >   
+                                                {teamMenu}
+                                            </Select>
+                                        </FormControl>
+                                        :
+                                        <TextField
+                                            id="filled-basic-author"
+                                            label="Author"
+                                            variant="filled"
+                                            value={author}
+                                            fullWidth
+                                            disabled
+                                        />
+                                }
                             </Grid>
                             <Grid
                                 item
@@ -124,7 +145,7 @@ function TicketBuilderForm(props) {
                             >
                                 <TextField
                                     id="filled-basic-ticket"
-                                    label="Jira Ticket Number"
+                                    label="VPDC-"
                                     variant="filled"
                                     value={ticketNumber}
                                     onChange={(event) => setTicketNumber(event.target.value)}
@@ -228,6 +249,9 @@ TicketBuilderForm.defaultProps = {
     project       : '',
     projectsData  : [],
     isDataLoading : true,
+    admin         : false,
+    team          : []
+
 };
 
 TicketBuilderForm.propTypes = {
@@ -237,21 +261,29 @@ TicketBuilderForm.propTypes = {
         icon : PropTypes.string,
 
     })),
-    isLoading          : PropTypes.bool.isRequired,
-    isDisabled         : PropTypes.bool.isRequired,
-    setPRNumber        : PropTypes.func.isRequired,
-    setDetails         : PropTypes.func.isRequired,
-    setChecks          : PropTypes.func.isRequired,
-    generateTicket     : PropTypes.func.isRequired,
-    setTicketNumber    : PropTypes.func.isRequired,
-    handleChangeSelect : PropTypes.func.isRequired,
-    author             : PropTypes.string.isRequired,
-    ticketNumber       : PropTypes.string.isRequired,
-    PRNumber           : PropTypes.string.isRequired,
-    details            : PropTypes.string.isRequired,
-    checks             : PropTypes.string.isRequired,
-    isDataLoading      : PropTypes.bool,
-    projectSelected    : PropTypes.shape({}),
-    saveTicket         : PropTypes.func.isRequired,
+    isLoading                : PropTypes.bool.isRequired,
+    isDisabled               : PropTypes.bool.isRequired,
+    setPRNumber              : PropTypes.func.isRequired,
+    handleAuthorChangeSelect : PropTypes.func.isRequired,
+    setDetails               : PropTypes.func.isRequired,
+    setChecks                : PropTypes.func.isRequired,
+    generateTicket           : PropTypes.func.isRequired,
+    setTicketNumber          : PropTypes.func.isRequired,
+    handleChangeSelect       : PropTypes.func.isRequired,
+    checked                  : PropTypes.func.isRequired,
+    setChecked               : PropTypes.func.isRequired,
+    author                   : PropTypes.string.isRequired,
+    ticketNumber             : PropTypes.string.isRequired,
+    PRNumber                 : PropTypes.string.isRequired,
+    details                  : PropTypes.string.isRequired,
+    checks                   : PropTypes.string.isRequired,
+    isDataLoading            : PropTypes.bool,
+    projectSelected          : PropTypes.shape({
+        state: PropTypes.bool, 
+    }),
+    saveTicket : PropTypes.func.isRequired,
+    admin      : PropTypes.bool,
+    team       : PropTypes.arrayOf(PropTypes.shape({})),
+
 };
 export default TicketBuilderForm;

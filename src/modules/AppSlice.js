@@ -17,7 +17,8 @@ const initialState ={
     },
     tabs: {
         active: window.location.href.split('#')[1]
-    }
+    },
+    colors: ['#828DF8','#3FC79A','#246A73','#64B6F7','#FFBF4C','#FFC6D9','#DA6868','#ED254E']
 };
 
 export const AppSlice = createSlice({
