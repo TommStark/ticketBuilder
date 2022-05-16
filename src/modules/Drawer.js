@@ -19,7 +19,7 @@ export default function TemporaryDrawer() {
     const isOpen = useSelector((state)=> state.app.notification.isOpen);
     const news = useSelector((state)=> state.app.news);
     const theme = useTheme();
-
+    const postsSort = [...news.posts].reverse();
     const toggleDrawer = (anchor, open) => (event) => {
         if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
             return;
@@ -52,7 +52,7 @@ export default function TemporaryDrawer() {
                 </Stack>
             </CardContent>
             <List>
-                {news?.posts.map((item) => (
+                {postsSort.map((item) => (
                     <Card sx={{ 
                         maxWidth        : 400,
                         maxHeight       : 200,
@@ -71,7 +71,7 @@ export default function TemporaryDrawer() {
 
                         }}>
                             <Typography gutterBottom variant="body2" component="div" color={theme.palette.text.secondary}>
-                                {formatDate(new Date())}
+                                {formatDate(item.date)}
                             </Typography>
                         </CardContent>
                         <Divider />
