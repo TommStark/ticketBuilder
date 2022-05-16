@@ -12,7 +12,6 @@ import { ChangeSnackbar } from '../AppSlice';
 import { addProjects } from '../Team/TeamSlice';
 import { createPlainTicket } from '../Utils';
 
-const pjson = require('../../../package.json');
 
 function TicketBuilderContainer() {
     const [project, setproject] = useState({});
@@ -29,6 +28,7 @@ function TicketBuilderContainer() {
     const [checked, setChecked]=useState(false);
     const author = Cookies.get('author');
     const dispatch = useDispatch();
+    const appVersion = useSelector((state)=> state.app.news.version);
 
     useEffect(() =>{
         let unmounted = false;
@@ -113,7 +113,7 @@ function TicketBuilderContainer() {
             .then(response => {
                 gtag('event', 'postTicketData', { ...requestParams.body, project: project.name });
                 
-                const plainTicket = createPlainTicket(response.data.ticket,project,pjson); 
+                const plainTicket = createPlainTicket(response.data.ticket,project,appVersion); 
                 BackendAPI.pushTicketToAuthor({ticketId: response.data.ticket._id, body: {email: user.email}});
                 BackendAPI.pushTicketToProject( { ticket: response.data.ticket._id, body: { projectId: project._id } } );
                 BackendAPI.sendToDiscordChannel({body: {'ticket': plainTicket}})

@@ -3,7 +3,7 @@
 /* eslint-disable react/prop-types */
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Box, Divider, Drawer, Typography, useMediaQuery } from '@mui/material';
+import { Box, Divider, Drawer, Typography, useMediaQuery, useTheme } from '@mui/material';
 import { NavItem } from './Nav/NavItem';
 import OutboxIcon from '@mui/icons-material/Outbox';
 import BarChartIcon from '@mui/icons-material/BarChart';
@@ -13,13 +13,14 @@ import GroupIcon from '@mui/icons-material/Group';
 import SettingsIcon from '@mui/icons-material/Settings';
 import LogoutIcon from '@mui/icons-material/Logout';
 import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
+import FeedIcon from '@mui/icons-material/Feed';
 import { useSelector } from 'react-redux';
-const pjson = require('../../package.json');
-
 export default function SideBar (props) {
     const { open, onClose } = props;
     const user = useSelector((state)=> state.user?.data);
-    const appVersion = pjson.version;
+    const appVersion = useSelector((state)=> state.app.news.version);
+    const theme = useTheme();
+
     const lgUp = useMediaQuery((theme) => theme.breakpoints.up('lg'), {
         defaultMatches : true,
         noSsr          : false
@@ -58,12 +59,22 @@ export default function SideBar (props) {
         },
     ];
 
-    if (user._id === '6267170f8df19de071b278fc' || user._id === '626b22d24d0ffea24d6ccc2e'){
+    if (user.admin && user.superAdmin){
         items.push(
             {
-                href  : '/ticketBuilder/admin',
+                href  : '/ticketBuilder/panoptico',
                 title : 'Admin',
                 icon  : AdminPanelSettingsIcon
+            },
+        );
+    }
+
+    if (user.admin){
+        items.push(
+            {
+                href  : '/ticketBuilder/news',
+                title : 'News Builder',
+                icon  : FeedIcon
             },
         );
     }

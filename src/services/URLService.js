@@ -48,6 +48,9 @@ const changePendingStatus = (ticketId) =>(`/ticket/pending/${ticketId}`);
 
 const changeTheme = () => ('/author/theme');
 
+const createPost = ({newsId}) => (`/posts/${newsId}`);
+
+const sendVersion = ({id,version}) =>(`news/${version}/${id}`);
 
 export const backend = {
     getUserById,
@@ -74,5 +77,7 @@ export const backend = {
     getNews,
     changeUserAppVersion,
     changePendingStatus,
-    changeTheme
+    changeTheme,
+    createPost,
+    sendVersion
 };

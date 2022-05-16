@@ -126,4 +126,14 @@ export const changeTheme = (params) => axios
     .put(backend.changeTheme(),params.body)
     .then((response) => response)
     .catch((err) => { throw new Error(err); }); 
+
+export const createPost = (params) => axios
+    .post(backend.createPost(params),params.body)
+    .then((response) => response)
+    .catch((err) => { throw new Error(err); });
+
+export const sendVersion = (params) => axios
+    .put(backend.sendVersion(params))
+    .then((response) => response)
+    .catch((err) => { throw new Error(err); });
     

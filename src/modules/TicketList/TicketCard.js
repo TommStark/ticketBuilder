@@ -124,7 +124,7 @@ function ProductCard ({ product, setIsLoading, isloading, handleClickOpen, reSen
                                             aria-label="star"
                                             onClick={() => {}}
                                         >
-                                            <StarsIcon color="action" />
+                                            <StarsIcon color="success" />
                                         </IconButton>
                                     </Tooltip>
 
@@ -139,7 +139,7 @@ function ProductCard ({ product, setIsLoading, isloading, handleClickOpen, reSen
                                                 {
                                                     (disableButton?.length && product.pending)
                                                         ?
-                                                        <ScheduleSendIcon color="action" />
+                                                        <ScheduleSendIcon color="primary" />
                                                         :
                                                         <SendIcon color="action" />
                                                 }

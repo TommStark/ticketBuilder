@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import * as BackendAPI from  '../../services/BackendAPI';
 import gtag from 'ga-gtag';
 import { styled } from '@mui/material/styles';
@@ -19,6 +19,7 @@ import Container from '@mui/material/Container';
 import Badge from '@mui/material/Badge';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import { changeNotificationSaw } from '../AppSlice';
+import { useTheme } from '@mui/material';
 
 const AppBarRoot = styled(AppBar)(({ theme }) => ({
     backgroundColor : theme.palette.background.paper,
@@ -29,16 +30,17 @@ export default function Nav({versionData, onSidebarOpen }){
     const avatarImg = Cookies.get('img');
     const [anchorElNav, setAnchorElNav] = React.useState(null);
     const dispatch = useDispatch();
-    const [userAppVersion, setUserAppVersion] = useState(versionData?.userVersion);
-    const [appVersion, setAppVersion] =  useState(versionData?.appVersion);
+    let userAppVersion = versionData?.userVersion;
+    let appVersion = versionData?.appVersion;
     const [ShowBadge, setSetShowBadge] = useState(false);
-    const isDarkMode = useSelector((state)=> state.user.data.darkMode);
+    const theme = useTheme();
 
-    useEffect(() => {
-        setUserAppVersion(versionData.userVersion);
-        setAppVersion(versionData.appVersion);
-    },[userAppVersion,appVersion]);
-
+    useEffect(()=>{
+        if(userAppVersion && appVersion){
+            if(userAppVersion < appVersion)
+                setSetShowBadge(true);
+        }
+    },[userAppVersion,appVersion,ShowBadge]);
     const handleCloseNavMenu = () => {
         setAnchorElNav(null);
     };
@@ -49,13 +51,15 @@ export default function Nav({versionData, onSidebarOpen }){
         BackendAPI.changeUserAppVersion({body: {version: versionData.appVersion}})
             .then(res => {
                 gtag('event', 'changeAppVersion', { data: res.data });
+                userAppVersion = versionData?.userVersion;
+                appVersion = versionData?.appVersion;
                 setSetShowBadge(false);
             });
     };
 
     return(
         <AppBarRoot>
-            <AppBar position="static" style={{ maxHeight: '64px', backgroundColor: isDarkMode? '#272727' : '#FFFFFF'}}>
+            <AppBar position="static" style={{ maxHeight: '64px', backgroundColor: theme.palette.background.paper}}>
                 <Container maxWidth="xxl">
                     <Toolbar disableGutters>
                         <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
@@ -65,7 +69,6 @@ export default function Nav({versionData, onSidebarOpen }){
                                 aria-controls="menu-appbar"
                                 aria-haspopup="true"
                                 onClick={onSidebarOpen}
-                                color="inherit"
                             >
                                 <MenuIcon />
                             </IconButton>
@@ -93,6 +96,7 @@ export default function Nav({versionData, onSidebarOpen }){
                             variant="h6"
                             noWrap
                             component="div"
+                            color={theme.palette.text.secondary}
                             sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}
                         >
                         Ticket Builder

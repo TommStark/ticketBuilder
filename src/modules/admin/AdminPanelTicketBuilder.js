@@ -13,7 +13,6 @@ import { ChangeSnackbar } from '../AppSlice';
 import { addProjects } from '../Team/TeamSlice';
 import { createPlainTicketWithAuthor } from '../Utils';
 
-const pjson = require('../../../package.json');
 
 function AdminPanelTicketBuilder({projectsStatus}) {
     const [project, setproject] = useState({});
@@ -30,6 +29,7 @@ function AdminPanelTicketBuilder({projectsStatus}) {
     const [checked, setChecked]=useState(false);
     const [authorAdmin, setAuthorAdmin] = useState([]);
     const dispatch = useDispatch();
+    const appVersion = useSelector((state)=> state.app.news.version);
 
     useEffect(() =>{
         if (projectsData.length){
@@ -108,7 +108,7 @@ function AdminPanelTicketBuilder({projectsStatus}) {
         BackendAPI.postTicketData(requestParams)
             .then(response => {
                 gtag('event', 'postTicketData', { ...requestParams.body, project: project.name });
-                const plainTicket = createPlainTicketWithAuthor(response.data.ticket,project,pjson,authorAdmin[0]);
+                const plainTicket = createPlainTicketWithAuthor(response.data.ticket,project,appVersion,authorAdmin[0]);
                 BackendAPI.pushTicketToAuthor({ticketId: response.data.ticket._id, body: {email: authorAdmin[0].email}});
                 BackendAPI.pushTicketToProject( { ticket: response.data.ticket._id, body: { projectId: project._id } } );
                 BackendAPI.sendToDiscordChannel({body: {'ticket': plainTicket}})

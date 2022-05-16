@@ -14,7 +14,6 @@ import ProductCard from './TicketCard';
 import * as BackendAPI from  '../../services/BackendAPI';
 import { addTickets } from '../../modules/login/loginSlice';
 import { ChangeSnackbar } from '../AppSlice';
-const pjson = require('../../../package.json');
 
 
 function TicketListContainer () {
@@ -24,6 +23,7 @@ function TicketListContainer () {
     const ticketList = useSelector((state)=> state.user?.tickets?.tickets);
     const [ticketToDelete, setTicketTodelete] = useState('');
     const [open, setOpen] = React.useState(false);
+    const appVersion = useSelector((state)=> state.app.news.version);
 
     const handleClickOpen = (ticket) => {
         setOpen(true);
@@ -57,7 +57,7 @@ function TicketListContainer () {
             project      : ticket.project.name,
             projectColor : ticket.project.color,
             id           : ticket._id,
-            version      : pjson.version,
+            version      : appVersion,
         };
     
         BackendAPI.sendToDiscordChannel({body: {'ticket': formatTicket}})

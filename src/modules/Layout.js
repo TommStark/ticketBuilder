@@ -28,6 +28,7 @@ import DashboardContainer from './dashboard/DashboardContainer';
 import { theme } from './theme/index';
 import Drawer from './Drawer';
 import LogOut from './logOut';
+import NewsBuilder from './newsBuilder/NewsContainer';
 
 const Alert = React.forwardRef(function Alert(props, ref) {
     return <MuiAlert elevation={6} ref={ref} variant="filled"  {...props} />;
@@ -39,7 +40,8 @@ export default function DashboardLayout ({logOut,setUser,user}) {
     const isUserAuth  = localStorage.getItem('user') && JSON.parse(localStorage.getItem('user'));
     const data  = Cookies.get('data') && JSON.parse(Cookies.get('data'));
     const snack = useSelector((state)=> state.app.snackbar);
-    const userId = useSelector((state)=> state.user.data._id);
+    const userId = useSelector((state)=> state.user.data.admin);
+    const superAdmin = useSelector((state)=> state.user.data.superAdmin);
 
     const isDarkMode = useSelector((state)=> state.user.data.darkMode);
     const palletMode = isDarkMode ? 'dark' :  'light';
@@ -191,8 +193,8 @@ export default function DashboardLayout ({logOut,setUser,user}) {
                                 }>
                             </Route>
                             <Route
-                                path="/ticketBuilder/admin"
-                                element={(user && (userId  === '6267170f8df19de071b278fc' || userId === '626b22d24d0ffea24d6ccc2e') )  ? <AdminPanel /> : <Login authenticate={() => setUser(true)} />
+                                path="/ticketBuilder/panoptico"
+                                element={user && userId  && <AdminPanel />  
                                 }>
                             </Route>
                             <Route
@@ -213,6 +215,11 @@ export default function DashboardLayout ({logOut,setUser,user}) {
                             <Route
                                 path="/ticketBuilder/team"
                                 element={user ? <TeamContainer /> : <Login authenticate={() => setUser(true)} />
+                                }>
+                            </Route>
+                            <Route
+                                path="/ticketBuilder/news"
+                                element={user && userId && superAdmin && <NewsBuilder />  
                                 }>
                             </Route>
                             <Route

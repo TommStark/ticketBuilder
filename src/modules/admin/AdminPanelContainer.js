@@ -7,6 +7,7 @@ import  AdminPanelStatus from './AdminPanelStatus';
 import DashboardByProject from './AdminPanelRadar';
 import AdminPanelTicketBuilder from './AdminPanelTicketBuilder';
 import { DashboardChart } from '../dashboard/DashBoardChart';
+import { DashBoardProjectStatus } from '../dashboard/DashBoardProjectStatus';
 
 function DashboardContainer () {
     const [isLoading, setIsLoading]=useState(true);
@@ -49,6 +50,22 @@ function DashboardContainer () {
                         container
                         spacing={3}
                     >
+                        <Grid
+                            item
+                            lg={12}
+                            md={12}
+                            xl={12}
+                            xs={12}
+                        >
+                            {
+                                isLoading
+                                    ? <Skeleton variant="rectangular" height={140} sx={{margin: 0}}/>
+                                    :
+                                    <DashBoardProjectStatus
+                                        projectsStatus={projectsStatus}
+                                    />
+                            }
+                        </Grid>
                         <Grid
                             item
                             lg={6}

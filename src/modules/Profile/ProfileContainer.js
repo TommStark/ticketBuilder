@@ -7,6 +7,7 @@ import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
 import * as BackendAPI from  '../../services/BackendAPI';
 import { ChangeSnackbar } from '../AppSlice';
+import { hasInvalidChars } from '../Utils';
 
 
 function Account (){
@@ -16,12 +17,19 @@ function Account (){
     const [isBTNLoading, setIsBTNLoading] = useState(false);
     const [isDisabled, setIsDisabled] = useState(true);
     const [values, setValues] = useState({});
+    
+    const [invalidFields, setInvalidFields] = useState([]);
+    
+    const checkInvalidField = (field) => invalidFields.indexOf(field) !== -1;
 
     useEffect(()=>{
         if(user){
             setValues(user);
             setIsLoading(false);
         }
+        return function () {
+            setInvalidFields([]);
+        };
     },[user]);
 
     const handleChange = (event) => {
@@ -34,28 +42,34 @@ function Account (){
 
     const handleBtnOnClick = () => {
         setIsBTNLoading(true);
-        const requestParams = {
-            body: values
-        };
+        const invalidFieldsValues = hasInvalidChars(values);
+        if (!invalidFieldsValues.length) {
+            setInvalidFields([]);
+            const requestParams = {
+                body: values
+            };
 
-        delete requestParams.body.jwToken;
-        delete requestParams.body._id;
-        delete requestParams.body.img;
-        delete requestParams.body.__v;
+            delete requestParams.body.jwToken;
+            delete requestParams.body._id;
+            delete requestParams.body.img;
+            delete requestParams.body.__v;
 
-        BackendAPI.modifyUserInfo(requestParams)
-            .then( res => {
-                setIsBTNLoading(false);
-                setIsDisabled(true);
-                setValues(res.data);
-                dispatch(ChangeSnackbar({state: true,txt: ' The update was successfully!'}));
-            })
-            .catch(
-                () =>  {
+            BackendAPI.modifyUserInfo(requestParams)
+                .then( res => {
                     setIsBTNLoading(false);
                     setIsDisabled(true);
-                    dispatch(ChangeSnackbar({state: true,txt: ' upps something happend!',severity: 'error'}));
-                });
+                    setValues(res.data);
+                    dispatch(ChangeSnackbar({state: true,txt: ' The update was successfully!'}));
+                })
+                .catch(
+                    () =>  {
+                        setIsBTNLoading(false);
+                        setIsDisabled(true);
+                        dispatch(ChangeSnackbar({state: true,txt: ' upps something happend!',severity: 'error'}));
+                    });
+        }
+        setInvalidFields(invalidFieldsValues);
+        setIsBTNLoading(false);
     };
 
     return(
@@ -114,6 +128,7 @@ function Account (){
                                         handleChange={handleChange}
                                         isBTNLoading={isBTNLoading}
                                         isDisabled={isDisabled}
+                                        checkInvalidField={checkInvalidField}
                                     />
                             }
                         </Grid>

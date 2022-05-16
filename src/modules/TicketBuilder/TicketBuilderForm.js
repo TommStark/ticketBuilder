@@ -133,7 +133,7 @@ function TicketBuilderForm(props) {
                                     label="Github PR Number"
                                     variant="filled"
                                     value={PRNumber}
-                                    onChange={(event) => setPRNumber(event.target.value)}
+                                    onChange={(event) => setPRNumber((v) => ( event.target.validity.valid ? event.target.value : v))}
                                     fullWidth
                                     inputProps={{ inputMode: 'numeric', pattern: '[0-9]*' }}
                                 />
@@ -148,8 +148,9 @@ function TicketBuilderForm(props) {
                                     label="VPDC-"
                                     variant="filled"
                                     value={ticketNumber}
-                                    onChange={(event) => setTicketNumber(event.target.value)}
+                                    onChange={(event) => setTicketNumber((v) => ( event.target.validity.valid ? event.target.value : v))}
                                     fullWidth
+                                    inputProps={{ inputMode: 'numeric', pattern: '[0-9]*' }}
                                 /> 
                             </Grid>
                             <Grid

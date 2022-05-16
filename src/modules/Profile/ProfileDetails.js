@@ -18,8 +18,10 @@ import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 
 export function ProfileDetails (props){
-    const { isBTNLoading, isDisabled, values, handleChange, handleBtnOnClick} = props;
-    const userId = useSelector((state)=> state.user.data._id);
+    const { isBTNLoading, isDisabled, values, handleChange, handleBtnOnClick, checkInvalidField} = props;
+    const userId = useSelector((state)=> state.user.data.admin);
+    const superAdmin = useSelector((state)=> state.user.data.superAdmin);
+
     return (
         <form
             autoComplete="off"
@@ -48,6 +50,8 @@ export function ProfileDetails (props){
                                 required
                                 value={values.name}
                                 variant="outlined"
+                                error={checkInvalidField('name')}
+
                             />
                         </Grid>
                         <Grid
@@ -63,6 +67,7 @@ export function ProfileDetails (props){
                                 required
                                 value={values.lastName}
                                 variant="outlined"
+                                error={checkInvalidField('lastName')}
                             />
                         </Grid>
                         <Grid
@@ -78,6 +83,7 @@ export function ProfileDetails (props){
                                 required
                                 value={values.email}
                                 variant="outlined"
+                                error={checkInvalidField('email')}
                             />
                         </Grid>
                         <Grid
@@ -93,6 +99,7 @@ export function ProfileDetails (props){
                                 type="number"
                                 value={values.phone}
                                 variant="outlined"
+                                error={checkInvalidField('phone')}
                             />
                         </Grid>
                         <Grid
@@ -110,6 +117,8 @@ export function ProfileDetails (props){
                                 required
                                 value={values.discordId}
                                 variant="outlined"
+                                error={checkInvalidField('discordId')}
+                                inputProps={{ inputMode: 'numeric', pattern: '[0-9]*' }}
                             />
                         </Grid>
                         <Grid
@@ -128,12 +137,17 @@ export function ProfileDetails (props){
                                     onChange={handleChange}
                                     required
                                     value={values.rol}
+                                    error={checkInvalidField('rol')}
                                 >   
                                     <MenuItem value={'Developer'}> Developer </MenuItem>
-                                    <MenuItem value={'Casi Hacker'}> Casi Hacker </MenuItem>
                                     {
-                                        (userId  === '6267170f8df19de071b278fc' || userId === '626b22d24d0ffea24d6ccc2e')
+                                        (userId)
                                             ? <MenuItem value={'Project lider'}>Project lider</MenuItem>
+                                            : null
+                                    }
+                                    {
+                                        (superAdmin)
+                                            ?  <MenuItem value={'Casi Hacker'}> Casi Hacker </MenuItem>
                                             : null
                                     }
                                 </Select>
@@ -152,6 +166,7 @@ export function ProfileDetails (props){
                                 required
                                 value={values.country}
                                 variant="outlined"
+                                error={checkInvalidField('country')}
                             />
                         </Grid>
                         <Grid
@@ -167,6 +182,7 @@ export function ProfileDetails (props){
                                 required
                                 value={values.state_code}
                                 variant="outlined"
+                                error={checkInvalidField('state_code')}
                             />
                         </Grid>
                     </Grid>

@@ -41,7 +41,7 @@ export const getLast7ticketsAmmount = (X,dataLabels,dataValue) => {
 };
 
 //createPlain Ticket
-export const createPlainTicket = (ticket, project, pjson) => {
+export const createPlainTicket = (ticket, project, appVersion) => {
     const {checks, details, prLink, ticketLink, _id} = ticket;
 
     return ({
@@ -51,13 +51,13 @@ export const createPlainTicket = (ticket, project, pjson) => {
         projectColor : project.color,
         details,
         checks,
-        version      : pjson.version,
+        version      : appVersion,
         id           : _id,
 
     });
 };
 
-export const createPlainTicketWithAuthor = (ticket, project, pjson, authorAdmin) => {
+export const createPlainTicketWithAuthor = (ticket, project, appVersion, authorAdmin) => {
     const {checks, details, prLink, ticketLink, _id} = ticket;
 
     return ({
@@ -67,9 +67,25 @@ export const createPlainTicketWithAuthor = (ticket, project, pjson, authorAdmin)
         projectColor : project.color,
         details,
         checks,
-        version      : pjson.version,
+        version      : appVersion,
         id           : _id,
         userId       : authorAdmin._id,
         user         : authorAdmin
     });
+};
+
+export const hasInvalidChars = (obj) => {
+    const isAlphanumeric = (txt) => {
+        const letters = /^[a-zA-Z0-9 !@#$%^&*/)(+=._-]+$/;
+        if (letters.test(txt)) {
+            return true;
+        }
+        return false;
+    };
+    const keyNotExcluded = (fieldKey) => ['img'].indexOf(fieldKey) === -1;
+    const values = Object.values(obj);
+    const keys = Object.keys(obj);
+
+    const invalidFieldsKeys = values.map((value, i) => (!isAlphanumeric(value) && keyNotExcluded(keys[i]) ? keys[i] : false));
+    return invalidFieldsKeys.filter(field => !!field);
 };

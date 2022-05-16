@@ -25,13 +25,13 @@ import { createPlainTicketWithAuthor } from '../Utils';
 import * as BackendAPI from  '../../services/BackendAPI';
 import { ChangeSnackbar } from '../AppSlice';
 // eslint-disable-next-line no-undef
-const pjson = require('../../../package.json');
 
 
 export const DashBoardLastTickets = (props) =>{
-    const  userId = useSelector((state)=> state.user.data._id); 
-    const isAdmin = (userId  === '6267170f8df19de071b278fc' || userId === '626b22d24d0ffea24d6ccc2e');
+    const userAdmin = useSelector((state)=> state.user.data.admin); 
+    const isAdmin = userAdmin;
     const dispatch = useDispatch();
+    const appVersion = useSelector((state)=> state.app.news.version);
 
     //TODO refactor these block of code
     function pillStatus(isPending, status){
@@ -65,7 +65,7 @@ export const DashBoardLastTickets = (props) =>{
 
         
     function sendToDiscordChannel(ticket,project,authorAdmin){
-        const plainTicket = createPlainTicketWithAuthor(ticket,project,pjson,authorAdmin);
+        const plainTicket = createPlainTicketWithAuthor(ticket,project,appVersion,authorAdmin);
         
         BackendAPI.sendToDiscordChannel({body: {'ticket': plainTicket}})
             .then( () =>{
@@ -128,7 +128,6 @@ export const DashBoardLastTickets = (props) =>{
                     <TableBody>
                         {props.tickets.map((ticket) => {
                             const disableButton = frozenProjects.filter( pro => pro.name === ticket.project.name);
-
                             return (
                                 <TableRow
                                     hover
@@ -171,22 +170,22 @@ export const DashBoardLastTickets = (props) =>{
                                                         aria-label="star"
                                                         onClick={() => {}}
                                                     >
-                                                        <StarsIcon color="action" />
+                                                        <StarsIcon color="success" />
                                                     </IconButton>
                                                 </Tooltip>
 
                                                 :
-                                                <Tooltip title={disableButton?.length ? 'Frozen Project' : 'Sent to Discord'}>
+                                                <Tooltip title={(disableButton?.length && ticket.pending) ? 'Frozen Project' : 'Sent to Discord'}>
                                                     <span>
                                                         <IconButton 
                                                             aria-label="sendIcon"
-                                                            disabled={!!disableButton?.length || false}
+                                                            disabled={!!(disableButton?.length && ticket.pending) || false}
                                                             onClick={() => sendToDiscordChannel(ticket,ticket.project,ticket.author)}
                                                         >
                                                             {
                                                                 (disableButton?.length && ticket.pending)
                                                                     ?
-                                                                    <ScheduleSendIcon color="action" />
+                                                                    <ScheduleSendIcon color="primary" />
                                                                     :
                                                                     <SendIcon color="action" />
                                                             }

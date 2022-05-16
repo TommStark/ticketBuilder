@@ -1,5 +1,9 @@
 import React, { useState } from 'react';
-import { Box, Button, Card, CardContent, CardHeader, Divider, TextField } from '@mui/material';
+import { Box, Button, Card, CardContent, CardHeader, Divider, FilledInput, InputLabel, FormControl } from '@mui/material';
+import IconButton from '@mui/material/IconButton';
+import InputAdornment from '@mui/material/InputAdornment';
+import Visibility from '@mui/icons-material/Visibility';
+import VisibilityOff from '@mui/icons-material/VisibilityOff';
 
 export const SettingsPassword = () => {
     const [values, setValues] = useState({
@@ -7,12 +11,20 @@ export const SettingsPassword = () => {
         confirm  : ''
     });
 
+    const [showPassword, setShowPassword]=useState(false);
+
     const handleChange = (event) => {
         setValues({
             ...values,
             [event.target.name]: event.target.value
         });
     };
+
+    const handleClickShowPassword = () => {
+        setShowPassword(!showPassword);
+    };
+    
+
 
     return (
         <form>
@@ -23,26 +35,53 @@ export const SettingsPassword = () => {
                 />
                 <Divider />
                 <CardContent>
-                    <TextField
-                        fullWidth
-                        label="Password"
-                        margin="normal"
-                        name="password"
-                        onChange={handleChange}
-                        type="password"
-                        value={values.password}
-                        variant="outlined"
-                    />
-                    <TextField
-                        fullWidth
-                        label="Confirm password"
-                        margin="normal"
-                        name="confirm"
-                        onChange={handleChange}
-                        type="password"
-                        value={values.confirm}
-                        variant="outlined"
-                    />
+                    <FormControl fullWidth variant="filled">
+                        <InputLabel htmlFor="filled">Password</InputLabel>
+                        <FilledInput
+                            fullWidth
+                            margin="normal"
+                            name="password"
+                            onChange={handleChange}
+                            type={showPassword ? 'text' : 'password'}   
+                            value={values.password}
+                            endAdornment={
+                                <InputAdornment position="end">
+                                    <IconButton
+                                        aria-label="toggle password visibility"
+                                        onClick={handleClickShowPassword}
+                                        edge="end"
+                                    >
+                                        {showPassword ? <VisibilityOff /> : <Visibility />}
+                                    </IconButton>
+                                </InputAdornment>
+                            }
+                            label="Password"
+                        />
+                    </FormControl>
+                    <FormControl fullWidth variant="filled">
+                        <InputLabel htmlFor="filled">Confirm password</InputLabel>
+                        <FilledInput
+                            fullWidth
+                            label="Confirm password"
+                            margin="normal"
+                            name="confirm"
+                            onChange={handleChange}
+                            type={showPassword ? 'text' : 'password'}   
+                            value={values.confirm}
+                            variant="outlined"
+                            endAdornment={
+                                <InputAdornment position="end">
+                                    <IconButton
+                                        aria-label="toggle password visibility"
+                                        onClick={handleClickShowPassword}
+                                        edge="end"
+                                    >
+                                        {showPassword ? <VisibilityOff /> : <Visibility />}
+                                    </IconButton>
+                                </InputAdornment>
+                            }
+                        />
+                    </FormControl>
                 </CardContent>
                 <Divider />
                 <Box

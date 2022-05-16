@@ -1,14 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import LoadingButton from '@mui/lab/LoadingButton';
-import { Box, Container, TextField, Typography } from '@mui/material';
+import { Box, Container, TextField, Typography,InputLabel } from '@mui/material';
 import * as BackendAPI from  '../../services/BackendAPI';
 import { useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
 import gtag, { install } from 'ga-gtag';
 import {AddUser} from './loginSlice';
 import { useDispatch } from 'react-redux';
-
+import { FilledInput } from '@mui/material';
+import IconButton from '@mui/material/IconButton';
+import InputAdornment from '@mui/material/InputAdornment';
+import Visibility from '@mui/icons-material/Visibility';
+import VisibilityOff from '@mui/icons-material/VisibilityOff';
+import FormHelperText from '@mui/material/FormHelperText';
+import FormControl from '@mui/material/FormControl';
 install('G-PCTGS2X60L');
 
 function Login({authenticate}) {
@@ -19,7 +25,13 @@ function Login({authenticate}) {
     const [authError, setAuthError] = useState(false);
     const navigate = useNavigate();
     const isUserAuth  = JSON.parse(localStorage.getItem('user'));
+    const [showPassword, setShowPassword]=useState(false);
 
+
+    const handleClickShowPassword = () => {
+        setShowPassword(!showPassword);
+    };
+    
 
     const dispatch = useDispatch();
 
@@ -146,16 +158,30 @@ function Login({authenticate}) {
                             value={email}
                             onChange={(event) => {setEmail(event.target.value);}}
                         />
-                        <TextField
-                            fullWidth
-                            margin="normal"
-                            id="filled-basic-pass"
-                            label="password"
-                            variant="filled"
-                            value={password}
-                            onChange={(event) => {setPassword(event.target.value);}}
-                            type='password'
-                        />
+                        <FormControl fullWidth variant="filled">
+                            <InputLabel htmlFor="filled">Password</InputLabel>
+                            <FilledInput
+                                fullWidth
+                                margin="normal"
+                                id="filled-basic-pass"
+                                value={password}
+                                onChange={(event) => {setPassword(event.target.value);}}
+                                type={showPassword ? 'text' : 'password'}   
+                                endAdornment={
+                                    <InputAdornment position="end">
+                                        <IconButton
+                                            aria-label="toggle password visibility"
+                                            onClick={handleClickShowPassword}
+                                            edge="end"
+                                        >
+                                            {showPassword ? <VisibilityOff /> : <Visibility />}
+                                        </IconButton>
+                                    </InputAdornment>
+                                }
+                                label="Password"
+                            />
+                            <FormHelperText id="filled-weight-helper-text">Password</FormHelperText>
+                        </FormControl>
                         <Box sx={{ py: 2 }}>
                             <LoadingButton
                                 color="primary"
