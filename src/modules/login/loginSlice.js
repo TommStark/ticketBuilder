@@ -2,8 +2,13 @@ import  {createSlice} from '@reduxjs/toolkit';
 
 const initialState ={
     tickets: {
-        tickets : [],
-        total   : 0
+        tickets   : [],
+        total     : 0,
+        paginated : {
+            pages   : 0,
+            result  : {},
+            tickets : []
+        }
     },
     log  : {},
     data : {}
@@ -30,9 +35,12 @@ export const loginSlice = createSlice({
                 darkMode: action.payload 
             };
         },
+        addTicketsPaginate: (state, action) => {
+            state.tickets.paginated = {...action.payload};
+        },
     }
 });
 
-export const { AddUser, addTickets, addUserData, toggleTheme } = loginSlice.actions;
+export const { AddUser, addTickets, addUserData, toggleTheme, addTicketsPaginate  } = loginSlice.actions;
 
 export default loginSlice.reducer;

@@ -199,23 +199,5 @@ export const DashBoardLastTickets = (props) =>{
                     </TableBody>
                 </Table>
             </Box>
-            {/* <Box
-            sx={{
-                display        : 'flex',
-                justifyContent : 'flex-end',
-                p              : 2
-            }}
-        >
-                                                    
-
-            <Button
-                color="primary"
-                endIcon={<ArrowRightIcon fontSize="small" />}
-                size="small"
-                variant="text"
-            >
-        View all
-            </Button>
-        </Box> */}
         </Card>
     );};

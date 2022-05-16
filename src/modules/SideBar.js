@@ -59,7 +59,7 @@ export default function SideBar (props) {
         },
     ];
 
-    if (user.admin && user.superAdmin){
+    if (user.admin){
         items.push(
             {
                 href  : '/ticketBuilder/panoptico',
@@ -69,7 +69,7 @@ export default function SideBar (props) {
         );
     }
 
-    if (user.admin){
+    if (user.admin && user.superAdmin){
         items.push(
             {
                 href  : '/ticketBuilder/news',

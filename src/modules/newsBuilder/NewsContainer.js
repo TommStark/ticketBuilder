@@ -20,7 +20,6 @@ function NewsContainer (){
     const [isDisabled, setIsDisabled] = useState(true);
     const [values, setValues] = useState({});
     const [newVersionTxt, setNewVersionTxt] = useState('');
-    console.log('newVersionTxt: ', newVersionTxt);
 
     useEffect(()=>{
         if(news){

@@ -52,6 +52,8 @@ const createPost = ({newsId}) => (`/posts/${newsId}`);
 
 const sendVersion = ({id,version}) =>(`news/${version}/${id}`);
 
+const ticketsUserPagination = ({from, limit}) => (`/ticket/author?from=${from}&limit=${limit}`);
+
 export const backend = {
     getUserById,
     postTicketData,
@@ -79,5 +81,6 @@ export const backend = {
     changePendingStatus,
     changeTheme,
     createPost,
-    sendVersion
+    sendVersion,
+    ticketsUserPagination
 };

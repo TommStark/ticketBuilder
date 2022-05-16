@@ -136,4 +136,9 @@ export const sendVersion = (params) => axios
     .put(backend.sendVersion(params))
     .then((response) => response)
     .catch((err) => { throw new Error(err); });
+
+export const ticketsUserPagination = (params) => axios
+    .get(backend.ticketsUserPagination(params))
+    .then((response) => response)
+    .catch((err) => { throw new Error(err); });
     

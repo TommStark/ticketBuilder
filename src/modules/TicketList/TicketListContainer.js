@@ -1,5 +1,3 @@
-/* eslint-disable no-undef */
-/* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from 'react';
 import { Box, Container, Grid, Pagination, Typography } from '@mui/material';
 import Skeleton from '@mui/material/Skeleton';
@@ -12,7 +10,7 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import ProductCard from './TicketCard';
 import * as BackendAPI from  '../../services/BackendAPI';
-import { addTickets } from '../../modules/login/loginSlice';
+import { addTicketsPaginate } from '../../modules/login/loginSlice';
 import { ChangeSnackbar } from '../AppSlice';
 
 
@@ -20,10 +18,13 @@ function TicketListContainer () {
     const [tickets, SetTickets]=useState([]);
     const dispatch = useDispatch();
     const [isLoading, setIsLoading]=useState(true);
-    const ticketList = useSelector((state)=> state.user?.tickets?.tickets);
     const [ticketToDelete, setTicketTodelete] = useState('');
     const [open, setOpen] = React.useState(false);
     const appVersion = useSelector((state)=> state.app.news.version);
+    const [page, setPage] = useState(1);
+    const [totalPages, setTotalPages] = useState(1);
+    const perPage = 6;
+    const ticketListPaginate = useSelector((state)=> state.user.tickets?.paginated?.tickets);
 
     const handleClickOpen = (ticket) => {
         setOpen(true);
@@ -71,19 +72,23 @@ function TicketListContainer () {
     };
     
     useEffect(()=>{
-        if( ticketList.length ){
-            SetTickets([...ticketList].reverse());
+        if( ticketListPaginate && ticketListPaginate?.length ){
+            SetTickets(ticketListPaginate);
             setIsLoading(false);
         } 
-    },[ticketList]);
+    },[ticketListPaginate]);
 
+    const handleChange = (_event, value) => {
+        setPage(value);
+    };
     useEffect(() => {
         let unmounted = false;
-        BackendAPI.getTicketsByAuthor()
+        BackendAPI.ticketsUserPagination({from: page,limit: perPage})
             .then(res => {
                 if(res.data){
                     if (!unmounted) {
-                        dispatch(addTickets(res.data));
+                        dispatch(addTicketsPaginate(res.data));
+                        setTotalPages(res.data.pages);
                         setIsLoading(false);
                     }
                 }
@@ -91,7 +96,7 @@ function TicketListContainer () {
         return function () {
             unmounted = true;
         };
-    },[isLoading,setIsLoading]);
+    },[isLoading,setIsLoading,page]);
 
     return (
         <>
@@ -109,12 +114,11 @@ function TicketListContainer () {
                         {                                    
                             !isLoading  
                                 ?
-                                (ticketList.length ? 'Tickets' : null)
+                                (ticketListPaginate && ticketListPaginate.length ? 'Tickets' : null)
                                 :
                                 <Skeleton height={'6vh'}  width={'30%'}/>
                         }
                     </Typography>
-                    {/* <ProductListToolbar /> */}
                     <Box sx={{ pt: 3 }}>
                         <Grid
                             container
@@ -166,19 +170,22 @@ function TicketListContainer () {
                             }
                         </Grid>
                     </Box>
-                    {/* <Box
+                    <Box
                         sx={{
                             display        : 'flex',
                             justifyContent : 'center',
-                            pt             : 3
+                            pt             : 4,
+                            pb             : 4,
                         }}
                     >
                         <Pagination
                             color="primary"
-                            count={3}
+                            count={totalPages}
                             size="small"
+                            page={page} 
+                            onChange={handleChange}
                         />
-                    </Box> */}
+                    </Box>
                 </Container>
             </Box>
             <div>
