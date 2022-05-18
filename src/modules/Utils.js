@@ -89,3 +89,4 @@ export const hasInvalidChars = (obj) => {
     const invalidFieldsKeys = values.map((value, i) => (!isAlphanumeric(value) && keyNotExcluded(keys[i]) ? keys[i] : false));
     return invalidFieldsKeys.filter(field => !!field);
 };
+

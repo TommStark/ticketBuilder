@@ -42,7 +42,7 @@ export default function DashboardLayout ({logOut,setUser,user}) {
     const snack = useSelector((state)=> state.app.snackbar);
     const userId = useSelector((state)=> state.user.data.admin);
     const superAdmin = useSelector((state)=> state.user.data.superAdmin);
-
+    const token =  Cookies.get('token');
     const isDarkMode = useSelector((state)=> state.user.data.darkMode);
     const palletMode = isDarkMode ? 'dark' :  'light';
 
@@ -85,8 +85,9 @@ export default function DashboardLayout ({logOut,setUser,user}) {
 
 
     useEffect(()=>{
-        if(isUserAuth || data){
+        if(token && (isUserAuth || data)){
             dispatch(AddUser(data));
+
             BackendAPI.getOtherAuthors()
                 .then( result => {
                     dispatch(addTeam(result.data));
