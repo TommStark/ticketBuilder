@@ -22,11 +22,13 @@ function App() {
     },[user]);
 
     function logOut(){
-        setUser(false);
         Cookies.remove('token');
         Cookies.remove('author');
         Cookies.remove('data');
         localStorage.removeItem('user');
+        window.localStorage.clear();
+        document.cookie.split(';').forEach(function(c) { document.cookie = c.replace(/^ +/, '').replace(/=.*/, '=;expires=' + new Date().toUTCString() + ';path=/'); });
+        setUser(false);
     }
 
     return (
