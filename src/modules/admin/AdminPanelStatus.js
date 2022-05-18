@@ -26,8 +26,7 @@ export default function DashboardByProject ({projectsStatus}){
         };
         BackendAPI.updateProjectStatus(requestParams).then( () => {
             gtag('event', 'changeProjectStatus', { ...requestParams.body});
-        })
-            .catch(err => {err;});
+        });
         setIsLoading(false);
     };
     
