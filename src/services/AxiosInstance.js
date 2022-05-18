@@ -8,8 +8,8 @@ export const getToken = () => Cookies.get('token')
 export const getAuthorizationHeader = () => getToken();
 
 const instance = axios.create({
-    // baseURL : 'https://arz-ticket-builder.herokuapp.com/api',
-    baseURL : 'http://localhost:8080/api',
+    baseURL : 'https://arz-ticket-builder.herokuapp.com/api',
+    // baseURL : 'http://localhost:8080/api',
     headers : { Authorization: getAuthorizationHeader() },
 });
 
