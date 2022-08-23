@@ -15,6 +15,11 @@ import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import FormHelperText from '@mui/material/FormHelperText';
 import FormControl from '@mui/material/FormControl';
+import { useCountdown } from '../../hooks/useCountdown';
+import { ShowCounter } from '../ShowCounter';
+import useSound from 'use-sound';
+import boopSfx from '../../sound/sad.mp3';
+
 install('G-PCTGS2X60L');
 
 function Login({authenticate}) {
@@ -26,7 +31,9 @@ function Login({authenticate}) {
     const navigate = useNavigate();
     const isUserAuth  = JSON.parse(localStorage.getItem('user'));
     const [showPassword, setShowPassword]=useState(false);
-
+    const [days, hours, minutes, seconds] = useCountdown('2022-09-30');
+    const [play, { stop }] = useSound(boopSfx);
+    const [isPlaying, setIsPlaying] = useState(false);
 
     const handleClickShowPassword = () => {
         setShowPassword(!showPassword);
@@ -82,6 +89,7 @@ function Login({authenticate}) {
                 resetInput();
                 navigate('dashboard', {replace: true});
                 setIsLoading(false);
+                stop();
             })
             .catch( () => {
                 setIsLoading(false);
@@ -100,46 +108,55 @@ function Login({authenticate}) {
         };
     }, [email,password]);
 
+    const playMusic = () => {
+        play();
+        setIsPlaying(true);
+    };
+    
+
     return (
         <>
             <Box
                 component="main"
                 sx={{
-                    alignItems : 'center',
-                    display    : 'flex',
-                    flexGrow   : 1,
-                    minHeight  : '100vh'
+                    alignItems      : 'center',
+                    display         : 'flex',
+                    flexGrow        : 1,
+                    minHeight       : '100vh',
+                    backgroundColor : 'rgba(250,250,250,.3)'
                 }}
             >
                 <Container maxWidth="sm">
+                    <img src={'https://www.popoptiq.com/wp-content/uploads/2014/01/2.WoodyeBuzz.jpg'}
+                        style={{
+                            marginTop    : 50,
+                            display      : 'inline-block',
+                            maxWidth     : '100%',
+                            width        : 560,
+                            borderRadius : '30px 30px 0px 0px',
+                        }}
+                    />
                     <form>
-                        <Box sx={{ my: 3 }}>
+                        <Box sx={{ my: 3, textAlign: 'center' }}>
                             <Typography
                                 color="textPrimary"
                                 variant="h4"
                             >
-                            Sign in
+                            It has been one hell of a ride...
                             </Typography>
                             <Typography
                                 color="textSecondary"
                                 gutterBottom
                                 variant="body2"
                             >
-                                Sign in on the internal platform
-                            </Typography>
-                        </Box>
-                        <Box
-                            sx={{
-                                pb : 1,
-                                pt : 3
-                            }}
-                        >
-                            <Typography
-                                align="center"
-                                color="textSecondary"
-                                variant="body1"
-                            >
-                                login with email address
+                                <Typography color='red' variant="h4" >
+                                    <ShowCounter
+                                        days={days}
+                                        hours={hours}
+                                        minutes={minutes}
+                                        seconds={seconds}
+                                    />    
+                                </Typography>
                             </Typography>
                         </Box>
                         <p aria-live='assertive'> 
@@ -157,6 +174,7 @@ function Login({authenticate}) {
                             label="email"
                             value={email}
                             onChange={(event) => {setEmail(event.target.value);}}
+                            onMouseEnter={() => isPlaying ? null : playMusic()}
                         />
                         <FormControl fullWidth variant="filled">
                             <InputLabel htmlFor="filled">Password</InputLabel>
