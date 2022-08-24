@@ -32,7 +32,7 @@ function Login({authenticate}) {
     const isUserAuth  = JSON.parse(localStorage.getItem('user'));
     const [showPassword, setShowPassword]=useState(false);
     const [days, hours, minutes, seconds] = useCountdown('2022-09-30');
-    const [play, { stop }] = useSound(boopSfx);
+    const [play] = useSound(boopSfx);
     const [isPlaying, setIsPlaying] = useState(false);
 
     const handleClickShowPassword = () => {
@@ -89,7 +89,6 @@ function Login({authenticate}) {
                 resetInput();
                 navigate('dashboard', {replace: true});
                 setIsLoading(false);
-                stop();
             })
             .catch( () => {
                 setIsLoading(false);
@@ -113,7 +112,6 @@ function Login({authenticate}) {
         setIsPlaying(true);
     };
     
-
     return (
         <>
             <Box
@@ -126,7 +124,10 @@ function Login({authenticate}) {
                     backgroundColor : 'rgba(250,250,250,.3)'
                 }}
             >
-                <Container maxWidth="sm">
+                <Container 
+                    maxWidth="sm"                
+                    onMouseEnter={() => isPlaying ? null : playMusic()}
+                >
                     <img src={'https://www.popoptiq.com/wp-content/uploads/2014/01/2.WoodyeBuzz.jpg'}
                         style={{
                             marginTop    : 50,
@@ -161,7 +162,7 @@ function Login({authenticate}) {
                         </Box>
                         <p aria-live='assertive'> 
                             {authError
-                                ? 'bad credentials <-----urgente un diseñador xD'
+                                ? 'bad credentials'
                                 :null
                             }
                         </p>
@@ -174,7 +175,6 @@ function Login({authenticate}) {
                             label="email"
                             value={email}
                             onChange={(event) => {setEmail(event.target.value);}}
-                            onMouseEnter={() => isPlaying ? null : playMusic()}
                         />
                         <FormControl fullWidth variant="filled">
                             <InputLabel htmlFor="filled">Password</InputLabel>
