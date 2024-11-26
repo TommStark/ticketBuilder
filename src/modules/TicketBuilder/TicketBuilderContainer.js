@@ -121,8 +121,7 @@ function TicketBuilderContainer() {
                         gtag('event', 'ClickSentToDiscord', {  'Author': `${user.name}` });
                         dispatch(ChangeSnackbar({state: true,txt: ' Ticket successfully send to Discord!'}));
                         reset();
-                    })
-                    .catch(err => {err;});
+                    });
             });
         setIsLoading(false);
     };

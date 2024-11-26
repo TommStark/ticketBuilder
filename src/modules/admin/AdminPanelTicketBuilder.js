@@ -117,8 +117,7 @@ function AdminPanelTicketBuilder({projectsStatus}) {
                         dispatch(ChangeSnackbar({state: true,txt: ' Ticket successfully send to Discord!'}));
                         setIsLoading(false);
                         reset();
-                    })
-                    .catch(err => {err;});
+                    });
             });
     };
 
